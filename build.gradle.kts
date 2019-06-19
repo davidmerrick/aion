@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 group = "com.merricklabs.aion"
 
 repositories {
@@ -28,6 +30,7 @@ dependencies {
     implementation(Libs.jackson_databind)
     implementation(Libs.jackson_annotations)
     implementation(Libs.jackson_module_kotlin)
+    implementation("net.sf.biweekly:biweekly:0.6.3")
 
     testImplementation(Libs.testng)
     testImplementation(Libs.koin_test)
@@ -51,4 +54,12 @@ deployPrd.dependsOn(tasks.getByName("shadowJar"))
 
 tasks.test {
     useTestNG()
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }
