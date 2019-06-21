@@ -1,0 +1,59 @@
+service: aion
+
+custom:
+  tableName: ${self:service}-${self:provider.stage}
+  dynamoEndpoint: https://dynamodb.us-west-2.amazonaws.com
+
+provider:
+  name: aws
+  runtime: java8
+  stage: ${opt:stage, "dev"}
+  region: us-west-2
+  memorySize: 512
+  timeout: 20
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:Scan
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:*:*:table/${self:custom.tableName}
+  environment:
+    DYNAMODB_ENDPOINT: ${self:custom.dynamoEndpoint}
+    DYNAMODB_TABLE_NAME: ${self:custom.tableName}
+
+package:
+  artifact: build/libs/${self:service}.jar
+
+functions:
+  calendar:
+    handler: com.merricklabs.aion.handlers.CalendarHandler
+    events:
+      - http:
+          path: /filter
+          method: post
+      - http:
+          path: /filter/{id}/calendar
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+
+resources:
+  Resources:
+    RidesDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tableName}

@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build:
+    branches:
+      only:
+        - master
+    docker:
+      - image: circleci/openjdk:11.0.3-stretch
+    working_directory: ~/repo
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+    steps:
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y curl
+      - run: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+      - run: sudo apt-get install -y build-essential nodejs
+      - run: sudo npm install -g serverless
+      - checkout
+      - run: ./gradlew test
+      - deploy:
+          name: Deploy to AWS
+          command: ./gradlew deployPrd
