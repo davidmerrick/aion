@@ -56,12 +56,12 @@ object Libs {
             Versions.com_github_johnrengelman_shadow_gradle_plugin
 
     /**
-     * https://github.com/square/okhttp */
-    const val okhttp: String = "com.squareup.okhttp3:okhttp:" + Versions.okhttp
+     * https://github.com/google/guava */
+    const val guava: String = "com.google.guava:guava:" + Versions.guava
 
     /**
-     * https://www.twilio.com */
-    const val twilio: String = "com.twilio.sdk:twilio:" + Versions.twilio
+     * https://github.com/square/okhttp */
+    const val okhttp: String = "com.squareup.okhttp3:okhttp:" + Versions.okhttp
 
     const val de_fayard_buildsrcversions_gradle_plugin: String =
             "de.fayard.buildSrcVersions:de.fayard.buildSrcVersions.gradle.plugin:" +
@@ -76,6 +76,10 @@ object Libs {
      * http://www.github.com/kotlintest/kotlintest */
     const val kotlintest_runner_junit5: String = "io.kotlintest:kotlintest-runner-junit5:" +
             Versions.kotlintest_runner_junit5
+
+    /**
+     * http://github.com/mangstadt/biweekly */
+    const val biweekly: String = "net.sf.biweekly:biweekly:" + Versions.biweekly
 
     const val org_jetbrains_kotlin_jvm_gradle_plugin: String =
             "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:" +

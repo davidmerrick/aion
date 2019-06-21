@@ -30,7 +30,8 @@ dependencies {
     implementation(Libs.jackson_databind)
     implementation(Libs.jackson_annotations)
     implementation(Libs.jackson_module_kotlin)
-    implementation("net.sf.biweekly:biweekly:0.6.3")
+    implementation(Libs.biweekly)
+    implementation(Libs.guava)
 
     testImplementation(Libs.testng)
     testImplementation(Libs.koin_test)
