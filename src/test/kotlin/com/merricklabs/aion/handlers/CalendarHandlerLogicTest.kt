@@ -6,7 +6,7 @@ import org.testng.annotations.Test
 
 class CalendarHandlerLogicTest : AionIntegrationTestBase() {
 
-    private val calendarHandlerLogic by inject<CalendarHandlerLogic>()
+    private val calendarHandlerLogic by inject<CalendarExportHandlerLogic>()
 
     @Test
     private fun `Test GET`(){

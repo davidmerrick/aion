@@ -3,8 +3,6 @@ package com.merricklabs.aion.handlers
 import biweekly.Biweekly
 import biweekly.ICalendar
 import biweekly.component.VEvent
-import com.amazonaws.HttpMethod.GET
-import com.amazonaws.HttpMethod.POST
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestHandler
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
@@ -21,16 +19,12 @@ import org.koin.core.inject
 
 private val log = KotlinLogging.logger {}
 
-class CalendarHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
+class CalendarExportHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
 
     private val storage by inject<AionStorage>()
 
     override fun handleRequest(request: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {
-        return when (request.httpMethod) {
-            in GET.toString() -> handleGet(request)
-            in POST.toString() -> handlePost(request)
-            else -> handleGet(request)
-        }
+        return handleGet(request)
     }
 
     private fun handleGet(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
@@ -39,22 +33,6 @@ class CalendarHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGate
             statusCode = HttpStatus.SC_OK
             body = responseBody
             headers = mapOf(HttpHeaders.CONTENT_TYPE to I_CALENDAR_UTF_8.toString())
-        }
-    }
-
-    private fun handlePost(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
-        log.info("Handling POST request")
-        request.queryStringParameters["url"]?.let {
-            log.info("Query string url param: $it")
-
-            storage.saveCalendarFilter(it)
-            return APIGatewayProxyResponseEvent().apply {
-                statusCode = HttpStatus.SC_CREATED
-            }
-        }
-
-        return APIGatewayProxyResponseEvent().apply {
-            statusCode = HttpStatus.SC_BAD_REQUEST
         }
     }
 
