@@ -25,9 +25,10 @@ class CalendarHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGate
 
     private fun handleGet(): APIGatewayProxyResponseEvent {
         // Todo: For now, just returning a dummy filtered calendar
+        val responseBody = getBody()
         return APIGatewayProxyResponseEvent().apply {
             statusCode = HttpStatus.SC_OK
-            body = this.body
+            body = responseBody
         }
     }
 
