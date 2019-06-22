@@ -10,6 +10,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.common.net.MediaType.I_CALENDAR_UTF_8
 import com.merricklabs.aion.exceptions.CalendarNotFoundException
 import com.merricklabs.aion.external.CalendarClient
+import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.storage.AionStorage
 import mu.KotlinLogging
 import org.apache.http.HttpHeaders
@@ -29,15 +30,7 @@ class CalendarExportHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, A
         return try {
             handleGet(request)
         } catch (e: Exception) {
-            // Todo: Add more robust exception handling
-            when (e.cause) {
-                is CalendarNotFoundException -> APIGatewayProxyResponseEvent().apply {
-                    statusCode = HttpStatus.SC_NOT_FOUND
-                }
-                else -> APIGatewayProxyResponseEvent().apply {
-                    statusCode = HttpStatus.SC_BAD_REQUEST
-                }
-            }
+            ResourceHelpers.exceptionToWebAppResponse(e)
         }
     }
 

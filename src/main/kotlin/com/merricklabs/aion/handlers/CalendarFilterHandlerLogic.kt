@@ -7,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.MediaType
+import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.models.AionCalendar
 import com.merricklabs.aion.storage.AionStorage
 import mu.KotlinLogging
@@ -32,10 +33,7 @@ class CalendarFilterHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, A
                 else -> handleGet(request)
             }
         } catch (e: Exception) {
-            // Todo: Add more robust exception handling
-            APIGatewayProxyResponseEvent().apply {
-                statusCode = HttpStatus.SC_BAD_REQUEST
-            }
+            ResourceHelpers.exceptionToWebAppResponse(e)
         }
     }
 
