@@ -8,8 +8,6 @@ Ever subscribe to an iCal calendar (Meetup, Facebook, etc) that has some events 
 
 Aion allows you to proxy iCal calendars and filter out the events you aren't interested in. It also allows filtering by location.
 
-Less noise, more signal.
+Less noise, more signal. Making the world a better place™.
 
-Making the world a better place™.
-
-![](img/gavin.jpg)
+![](img/gavin.png)
