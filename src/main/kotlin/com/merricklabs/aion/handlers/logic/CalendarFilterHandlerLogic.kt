@@ -15,6 +15,7 @@ import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_BAD_REQUEST
 import org.apache.http.HttpStatus.SC_CREATED
+import org.apache.http.client.HttpResponseException
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.util.UUID
@@ -57,11 +58,9 @@ class CalendarFilterHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, A
             storage.saveCalendarFilter(calendar)
             return APIGatewayProxyResponseEvent().apply {
                 statusCode = SC_CREATED
+                body = mapper.writeValueAsString(calendar)
             }
         }
-
-        return APIGatewayProxyResponseEvent().apply {
-            statusCode = SC_BAD_REQUEST
-        }
+        throw HttpResponseException(SC_BAD_REQUEST, "Invalid calendar object.")
     }
 }

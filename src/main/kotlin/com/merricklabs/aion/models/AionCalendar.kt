@@ -10,6 +10,8 @@ data class AionCalendar(val id: UUID, val url: String) {
     companion object {
         fun create(url: String) = AionCalendar(UUID.randomUUID(), url)
     }
+
+    fun sanitizedUrl() = url.replace("webcal://", "http://")
 }
 
 fun DbAionCalendar.toDomain(): AionCalendar {

@@ -47,8 +47,8 @@ class CalendarExportHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, A
     }
 
     private fun getBody(id: String): String {
-        val saved = storage.getCalendar(UUID.fromString(id)) ?: throw CalendarNotFoundException()
-        val fetched = calendarClient.fetchCalendar(saved.url)
+        val saved = storage.getCalendar(UUID.fromString(id)) ?: throw CalendarNotFoundException(id)
+        val fetched = calendarClient.fetchCalendar(saved.sanitizedUrl())
         return Biweekly.write(fetched).go()
     }
 }
