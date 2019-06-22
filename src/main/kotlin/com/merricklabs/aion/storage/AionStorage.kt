@@ -1,11 +1,9 @@
 package com.merricklabs.aion.storage
 
-import com.amazonaws.client.builder.AwsClientBuilder
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
-import com.amazonaws.services.dynamodbv2.document.DynamoDB
-import com.amazonaws.services.dynamodbv2.document.Table
 import com.merricklabs.aion.config.AionConfig
 import com.merricklabs.aion.config.DynamoDbConfig
 import com.merricklabs.aion.models.CalendarFilter
@@ -19,19 +17,14 @@ class AionStorage : KoinComponent {
 
     private val dynamoDbConfig: DynamoDbConfig
     private val client: AmazonDynamoDB
-    private val table: Table
 
     init {
         val config by inject<AionConfig>()
         dynamoDbConfig = config.dynamoDb
         client = AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(
-                        AwsClientBuilder.EndpointConfiguration(dynamoDbConfig.endpoint, dynamoDbConfig.region)
-                )
+                .withEndpointConfiguration(EndpointConfiguration(dynamoDbConfig.endpoint, dynamoDbConfig.region))
                 .build()
 
-        val dynamoDB = DynamoDB(client)
-        this.table = dynamoDB.getTable(dynamoDbConfig.tableName)
     }
 
     fun saveCalendarFilter(url: String) {
