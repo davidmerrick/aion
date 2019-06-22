@@ -1,4 +1,4 @@
-package com.merricklabs.aion.handlers
+package com.merricklabs.aion.handlers.logic
 
 import biweekly.Biweekly
 import biweekly.ICalendar

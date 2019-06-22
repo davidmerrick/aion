@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.merricklabs.aion.AionModule
+import com.merricklabs.aion.handlers.logic.CalendarExportHandlerLogic
 import org.koin.core.context.startKoin
 
 class CalendarExportHandler : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {

@@ -1,15 +1,17 @@
 package com.merricklabs.aion.models
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
+import com.merricklabs.aion.storage.models.DbAionCalendar
 import java.util.UUID
 
 /**
  * Consists of a url for a calendar and filters for it.
  */
-data class AionCalendar(@DynamoDBHashKey val id: UUID,
-                        @DynamoDBAttribute val url: String) {
+data class AionCalendar(val id: UUID, val url: String) {
     companion object {
         fun create(url: String) = AionCalendar(UUID.randomUUID(), url)
     }
+}
+
+fun DbAionCalendar.toDomain(): AionCalendar {
+    return AionCalendar(id = this.id!!, url = this.url!!)
 }

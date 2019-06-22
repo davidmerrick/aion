@@ -1,4 +1,4 @@
-package com.merricklabs.aion.handlers
+package com.merricklabs.aion.handlers.logic
 
 import com.amazonaws.HttpMethod
 import com.amazonaws.services.lambda.runtime.Context
