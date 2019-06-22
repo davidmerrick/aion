@@ -8,27 +8,44 @@ import com.amazonaws.services.lambda.runtime.RequestHandler
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.common.net.MediaType.I_CALENDAR_UTF_8
+import com.merricklabs.aion.exceptions.CalendarNotFoundException
+import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.storage.AionStorage
 import mu.KotlinLogging
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
 class CalendarExportHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
 
     private val storage by inject<AionStorage>()
+    private val calendarClient by inject<CalendarClient>()
 
     override fun handleRequest(request: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {
-        return handleGet(request)
+        return try {
+            handleGet(request)
+        } catch (e: Exception) {
+            // Todo: Add more robust exception handling
+            when (e.cause) {
+                is CalendarNotFoundException -> APIGatewayProxyResponseEvent().apply {
+                    statusCode = HttpStatus.SC_NOT_FOUND
+                }
+                else -> APIGatewayProxyResponseEvent().apply {
+                    statusCode = HttpStatus.SC_BAD_REQUEST
+                }
+            }
+        }
     }
 
     private fun handleGet(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
-        val responseBody = getBody()
+        val id = request.pathParameters["id"] ?: throw IllegalArgumentException()
+        log.info("Fetching calendar with id $id")
+
+        val responseBody = getBody(id)
         return APIGatewayProxyResponseEvent().apply {
             statusCode = HttpStatus.SC_OK
             body = responseBody
@@ -36,24 +53,10 @@ class CalendarExportHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, A
         }
     }
 
-    fun getBody(): String {
-        val url = "https://www.meetup.com/ScienceOnTapORWA/events/ical/"
-        val okHttpClient = OkHttpClient()
-        val request = Request.Builder()
-                .url(url)
-                .get()
-                .build()
-        val response = okHttpClient.newCall(request).execute()
-        val bodyString = response.body()!!.string()
-        val calendar = Biweekly.parse(bodyString).first()
-
-        // Example filter on sold out
-        val filtered = calendar.events.asSequence()
-                .filter { !it.summary.value.toLowerCase().contains("sold out") }
-                .toList()
-
-        val cloned = calendar.copyWithEvents(filtered)
-        return Biweekly.write(cloned).go()
+    private fun getBody(id: String): String {
+        val saved = storage.getCalendar(UUID.fromString(id)) ?: throw CalendarNotFoundException()
+        val fetched = calendarClient.fetchCalendar(saved.url)
+        return Biweekly.write(fetched).go()
     }
 }
 

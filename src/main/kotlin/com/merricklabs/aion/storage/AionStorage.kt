@@ -1,42 +1,48 @@
 package com.merricklabs.aion.storage
 
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression
 import com.merricklabs.aion.config.AionConfig
-import com.merricklabs.aion.config.DynamoDbConfig
-import com.merricklabs.aion.models.CalendarFilter
+import com.merricklabs.aion.models.AionCalendar
 import mu.KotlinLogging
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
 class AionStorage : KoinComponent {
 
-    private val dynamoDbConfig: DynamoDbConfig
-    private val client: AmazonDynamoDB
-    private val mapperConfig: DynamoDBMapperConfig
+    private val mapper: DynamoDBMapper
 
     init {
         val config by inject<AionConfig>()
-        dynamoDbConfig = config.dynamoDb
-        client = AmazonDynamoDBClientBuilder.standard()
+        val dynamoDbConfig = config.dynamoDb
+        val client = AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(EndpointConfiguration(dynamoDbConfig.endpoint, dynamoDbConfig.region))
                 .build()
-        mapperConfig = DynamoDBMapperConfig.builder()
+        val mapperConfig = DynamoDBMapperConfig.builder()
                 .withTableNameOverride(DynamoDBMapperConfig.TableNameOverride(dynamoDbConfig.tableName))
                 .build()
-
+        mapper = DynamoDBMapper(client, mapperConfig)
     }
 
-    fun saveCalendarFilter(url: String) {
-        log.info("Saving $url to db")
-        val filter = CalendarFilter.create(url)
-        val mapper = DynamoDBMapper(client)
-        mapper.save(filter, mapperConfig)
-        log.info("Saved $url to db")
+    fun saveCalendarFilter(calendar: AionCalendar) {
+        log.debug("Saving calendar ${calendar.id} to db")
+        mapper.save(calendar)
+        log.debug("Saved ${calendar.id} to db")
+    }
+
+    fun getCalendar(id: UUID): AionCalendar? {
+        val partitionKey = AionCalendar(id, "")
+        val queryExpression = DynamoDBQueryExpression<AionCalendar>()
+                .withHashKeyValues(partitionKey)
+        val resultList = mapper.query(AionCalendar::class.java, queryExpression)
+        return if (resultList.isEmpty()) {
+            null
+        } else resultList[0]
     }
 }
