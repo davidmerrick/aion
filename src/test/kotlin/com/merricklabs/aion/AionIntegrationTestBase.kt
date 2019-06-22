@@ -13,7 +13,7 @@ import org.testng.annotations.BeforeClass
 open class AionIntegrationTestBase : KoinTest {
 
     // Workaround for Mockito in Kotlin. See https://medium.com/@elye.project/befriending-kotlin-and-mockito-1c2e7b0ef791
-    protected fun <T> any(): T {
+    private fun <T> any(): T {
         Mockito.any<T>()
         return uninitialized()
     }
@@ -26,6 +26,7 @@ open class AionIntegrationTestBase : KoinTest {
             modules(AionModule)
         }
         declareMock<AionStorage>()
+
     }
 
     @AfterClass

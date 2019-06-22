@@ -1,5 +1,5 @@
 package com.merricklabs.aion.config
 
-interface AionConfig {
-    val dynamoDb: DynamoDbConfig
+class AionConfig {
+    val dynamoDb = DynamoDbConfig()
 }
