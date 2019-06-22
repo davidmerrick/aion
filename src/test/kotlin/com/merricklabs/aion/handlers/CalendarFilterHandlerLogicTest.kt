@@ -4,10 +4,8 @@ import com.amazonaws.HttpMethod
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.merricklabs.aion.AionIntegrationTestBase
-import com.merricklabs.aion.storage.AionStorage
 import io.kotlintest.shouldBe
-import org.apache.http.HttpStatus
-import org.apache.http.HttpStatus.*
+import org.apache.http.HttpStatus.SC_CREATED
 import org.koin.test.inject
 import org.mockito.Mockito
 import org.testng.annotations.Test

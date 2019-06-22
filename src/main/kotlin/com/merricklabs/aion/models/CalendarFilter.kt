@@ -5,7 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable
 import java.util.UUID
 
-@DynamoDBTable(tableName = "aeon")
+@DynamoDBTable(tableName = "aion-prd")
 data class CalendarFilter(@DynamoDBHashKey val id: UUID,
                           @DynamoDBAttribute val url: String) {
     companion object {
