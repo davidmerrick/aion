@@ -1,0 +1,145 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Meetup//RemoteApi//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-ORIGINAL-URL:https://www.meetup.com/ScienceOnTapORWA/events/ical/
+X-WR-CALNAME:Events - Science on Tap - Oregon & Washington
+BEGIN:VTIMEZONE
+TZID:America/Los_Angeles
+TZURL:http://tzurl.org/zoneinfo-outlook/America/Los_Angeles
+X-LIC-LOCATION:America/Los_Angeles
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+TZNAME:PDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+TZNAME:PST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20190622T161221Z
+DTSTART;TZID=America/Los_Angeles:20190710T190000
+DTEND;TZID=America/Los_Angeles:20190710T210000
+STATUS:CONFIRMED
+SUMMARY:Living in Earthquake Country:  What Can the PNW Learn from Recent
+  Quakes
+DESCRIPTION:Science on Tap - Oregon & Washington\nWednesday\, July 10 at 
+ 7:00 PM\n\nDate: Wednesday\, July 10\, 2019 Time: Doors open at 6:00pm\,
+  Meetup Group at 6:30pm\, Event starts at 7:00pm. Meet inside the theate
+ r at 6:30 p.m. to tal...\n\nhttps://www.meetup.com/ScienceOnTapORWA/even
+ ts/258627668/
+CLASS:PUBLIC
+CREATED:20190202T203528Z
+GEO:45.47;-122.63
+LOCATION:Kiggins Theatre (1011 Main Street\, Vancouver\, WA 98660)
+URL:https://www.meetup.com/ScienceOnTapORWA/events/258627668/
+LAST-MODIFIED:20190325T170412Z
+UID:event_258627668@meetup.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20190622T161221Z
+DTSTART;TZID=America/Los_Angeles:20190716T190000
+DTEND;TZID=America/Los_Angeles:20190716T210000
+STATUS:CONFIRMED
+SUMMARY:As the Crow Flies: Corvid Behavior\, Play\, and Funerals
+DESCRIPTION:Science on Tap - Oregon & Washington\nTuesday\, July 16 at 7:
+ 00 PM\n\nDate: Tuesday\, July 16\, 2019 Time: Doors open at 6:00pm\, Mee
+ tup Group at 6:30pm\, Event starts at 7:00pm. Meet inside the theater at
+  6:30pm to talk wit...\n\nhttps://www.meetup.com/ScienceOnTapORWA/events
+ /260165826/
+CLASS:PUBLIC
+CREATED:20190329T035152Z
+GEO:45.47;-122.63
+LOCATION:Alberta Rose Theater (3000 NE Alberta Street\, Portland\, OR 972
+ 11)
+URL:https://www.meetup.com/ScienceOnTapORWA/events/260165826/
+LAST-MODIFIED:20190330T171729Z
+UID:event_260165826@meetup.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20190622T161221Z
+DTSTART;TZID=America/Los_Angeles:20190808T190000
+DTEND;TZID=America/Los_Angeles:20190808T210000
+STATUS:CONFIRMED
+SUMMARY:X-Ray Imaging in Plant Biology: Seeing the Unseen
+DESCRIPTION:Science on Tap - Oregon & Washington\nThursday\, August 8 at 
+ 7:00 PM\n\nDate: Thursday\, August 8\, 2019 Time: Doors open at 6:00pm\,
+  Meetup Group at 6:30pm\, Event starts at 7:00pm. Meet inside the theate
+ r at 6:30pm to talk w...\n\nhttps://www.meetup.com/ScienceOnTapORWA/even
+ ts/262265676/
+CLASS:PUBLIC
+CREATED:20190612T194737Z
+GEO:45.47;-122.63
+LOCATION:Alberta Rose Theater (3000 NE Alberta Street\, Portland\, OR 972
+ 11)
+URL:https://www.meetup.com/ScienceOnTapORWA/events/262265676/
+LAST-MODIFIED:20190612T194737Z
+UID:event_262265676@meetup.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20190622T161221Z
+DTSTART;TZID=America/Los_Angeles:20190814T190000
+DTEND;TZID=America/Los_Angeles:20190814T210000
+STATUS:CONFIRMED
+SUMMARY:The Science of Gender
+DESCRIPTION:Science on Tap - Oregon & Washington\nWednesday\, August 14 a
+ t 7:00 PM\n\nDate: Wednesday\, August 14\, 2019 Time: Doors open at 6:00
+ pm\, Meetup Group at 6:30pm\, Event starts at 7:00pm. Meet inside the th
+ eater at 6:30 p.m. to t...\n\nhttps://www.meetup.com/ScienceOnTapORWA/ev
+ ents/262146038/
+CLASS:PUBLIC
+CREATED:20190608T030635Z
+GEO:45.47;-122.63
+LOCATION:Kiggins Theatre (1011 Main Street\, Vancouver\, WA 98660)
+URL:https://www.meetup.com/ScienceOnTapORWA/events/262146038/
+LAST-MODIFIED:20190611T014107Z
+UID:event_262146038@meetup.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20190622T161221Z
+DTSTART;TZID=America/Los_Angeles:20190820T190000
+DTEND;TZID=America/Los_Angeles:20190820T210000
+STATUS:CONFIRMED
+SUMMARY:Making Memories: Can Neuroscience Enhance Teaching and Learning?
+DESCRIPTION:Science on Tap - Oregon & Washington\nTuesday\, August 20 at 
+ 7:00 PM\n\nDate: Tuesday\, August 20\, 2019 Time: Doors open at 6:00pm\,
+  Meetup Group at 6:30pm\, Event starts at 7:00pm. Meet inside the theate
+ r at 6:30pm to talk w...\n\nhttps://www.meetup.com/ScienceOnTapORWA/even
+ ts/261490718/
+CLASS:PUBLIC
+CREATED:20190515T202209Z
+GEO:45.47;-122.63
+LOCATION:Alberta Rose Theater (3000 NE Alberta Street\, Portland\, OR 972
+ 11)
+URL:https://www.meetup.com/ScienceOnTapORWA/events/261490718/
+LAST-MODIFIED:20190612T195413Z
+UID:event_261490718@meetup.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20190622T161221Z
+DTSTART;TZID=America/Los_Angeles:20190911T190000
+DTEND;TZID=America/Los_Angeles:20190911T210000
+STATUS:CONFIRMED
+SUMMARY:The Microbiome: Fecal Transplant and Microbial Ecology
+DESCRIPTION:Science on Tap - Oregon & Washington\nWednesday\, September 1
+ 1 at 7:00 PM\n\nDate: Wednesday\, Sept 11\, 2019 Time: Doors open at 6:0
+ 0pm\, Meetup Group at 6:30pm\, Event starts at 7:00pm. Meet inside the t
+ heater at 6:30 p.m. to tal...\n\nhttps://www.meetup.com/ScienceOnTapORWA
+ /events/262215917/
+CLASS:PUBLIC
+CREATED:20190611T013657Z
+GEO:45.47;-122.63
+LOCATION:Kiggins Theatre (1011 Main Street\, Vancouver\, WA 98660)
+URL:https://www.meetup.com/ScienceOnTapORWA/events/262215917/
+LAST-MODIFIED:20190612T232549Z
+UID:event_262215917@meetup.com
+END:VEVENT
+END:VCALENDAR

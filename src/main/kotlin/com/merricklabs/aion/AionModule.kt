@@ -1,6 +1,7 @@
 package com.merricklabs.aion
 
 import com.merricklabs.aion.config.AionConfig
+import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.handlers.CalendarExportHandler
 import com.merricklabs.aion.handlers.CalendarExportHandlerLogic
 import com.merricklabs.aion.handlers.CalendarFilterHandler
@@ -15,4 +16,5 @@ val AionModule = module {
     single { CalendarExportHandlerLogic() }
     single { AionStorage() }
     single { AionConfig() }
+    single { CalendarClient() }
 }

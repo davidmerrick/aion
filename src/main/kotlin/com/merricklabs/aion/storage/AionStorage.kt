@@ -4,6 +4,7 @@ import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig
 import com.merricklabs.aion.config.AionConfig
 import com.merricklabs.aion.config.DynamoDbConfig
 import com.merricklabs.aion.models.CalendarFilter
@@ -17,12 +18,16 @@ class AionStorage : KoinComponent {
 
     private val dynamoDbConfig: DynamoDbConfig
     private val client: AmazonDynamoDB
+    private val mapperConfig: DynamoDBMapperConfig
 
     init {
         val config by inject<AionConfig>()
         dynamoDbConfig = config.dynamoDb
         client = AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(EndpointConfiguration(dynamoDbConfig.endpoint, dynamoDbConfig.region))
+                .build()
+        mapperConfig = DynamoDBMapperConfig.builder()
+                .withTableNameOverride(DynamoDBMapperConfig.TableNameOverride(dynamoDbConfig.tableName))
                 .build()
 
     }
@@ -31,7 +36,7 @@ class AionStorage : KoinComponent {
         log.info("Saving $url to db")
         val filter = CalendarFilter.create(url)
         val mapper = DynamoDBMapper(client)
-        mapper.save(filter)
+        mapper.save(filter, mapperConfig)
         log.info("Saved $url to db")
     }
 }
