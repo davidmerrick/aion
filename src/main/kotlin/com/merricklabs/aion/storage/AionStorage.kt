@@ -37,11 +37,13 @@ class AionStorage : KoinComponent {
     }
 
     fun getCalendar(id: UUID): AionCalendar? {
+        log.debug("Retrieving calendar with id $id from db")
         val partitionKey = AionCalendar(id, "")
         val queryExpression = DynamoDBQueryExpression<AionCalendar>()
                 .withHashKeyValues(partitionKey)
         val resultList = mapper.query(AionCalendar::class.java, queryExpression)
         return if (resultList.isEmpty()) {
+            log.warn("Calendar with id $id not found in db.")
             null
         } else resultList[0]
     }
