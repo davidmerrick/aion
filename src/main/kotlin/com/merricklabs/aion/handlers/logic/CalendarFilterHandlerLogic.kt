@@ -7,17 +7,18 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.MediaType
+import com.merricklabs.aion.exceptions.InvalidCalendarException
 import com.merricklabs.aion.handlers.util.ResourceHelpers
-import com.merricklabs.aion.models.AionCalendar
+import com.merricklabs.aion.models.CreateCalendarPayload
+import com.merricklabs.aion.models.toDomain
 import com.merricklabs.aion.storage.AionStorage
 import mu.KotlinLogging
 import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
-import org.apache.http.HttpStatus.SC_BAD_REQUEST
 import org.apache.http.HttpStatus.SC_CREATED
-import org.apache.http.client.HttpResponseException
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import java.io.IOException
 import java.util.UUID
 
 private val log = KotlinLogging.logger {}
@@ -53,14 +54,17 @@ class CalendarFilterHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, A
 
     private fun handlePost(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
         log.info("Handling POST request")
-        request.queryStringParameters["url"]?.let {
-            val calendar = AionCalendar.create(it)
-            storage.saveCalendarFilter(calendar)
-            return APIGatewayProxyResponseEvent().apply {
-                statusCode = SC_CREATED
-                body = mapper.writeValueAsString(calendar)
-            }
+        val createPayload = try {
+            mapper.convertValue(request.body, CreateCalendarPayload::class.java)
+        } catch (e: IOException) {
+            throw InvalidCalendarException()
         }
-        throw HttpResponseException(SC_BAD_REQUEST, "Invalid calendar object.")
+
+        val calendar = createPayload.toDomain()
+        storage.saveCalendarFilter(calendar)
+        return APIGatewayProxyResponseEvent().apply {
+            statusCode = SC_CREATED
+            body = mapper.writeValueAsString(calendar)
+        }
     }
 }

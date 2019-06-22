@@ -11,5 +11,4 @@ class AionCalendarTest {
         val calendar = AionCalendar.create(url)
         calendar.sanitizedUrl() shouldStartWith "http://"
     }
-
 }

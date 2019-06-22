@@ -17,3 +17,7 @@ data class AionCalendar(val id: UUID, val url: String) {
 fun DbAionCalendar.toDomain(): AionCalendar {
     return AionCalendar(id = this.id!!, url = this.url!!)
 }
+
+fun CreateCalendarPayload.toDomain(): AionCalendar {
+    return AionCalendar(id = UUID.randomUUID(), url = this.url)
+}
