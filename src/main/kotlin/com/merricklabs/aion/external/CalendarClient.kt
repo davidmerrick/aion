@@ -16,7 +16,7 @@ class CalendarClient : KoinComponent {
     fun fetchCalendar(url: String): ICalendar {
         log.info("Fetching calendar with url $url")
         val request = Request.Builder()
-                .url(url)
+                .url(sanitizeUrl(url))
                 .get()
                 .build()
         val response = okHttpClient.newCall(request).execute()
@@ -27,4 +27,6 @@ class CalendarClient : KoinComponent {
 
         throw IllegalArgumentException("Calendar url returned no content.")
     }
+
+    private fun sanitizeUrl(url: String) = url.replace("webcal://", "http://")
 }
