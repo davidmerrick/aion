@@ -11,3 +11,7 @@ Aion allows you to proxy iCal calendars and filter out the events you aren't int
 Less noise, more signal. Making the world a better place™.
 
 ![](img/gavin.png)
+
+# Functionality
+
+v1 is just going to support filtering by event title and location. More fields will be added later.
