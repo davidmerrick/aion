@@ -7,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.MediaType
+import com.merricklabs.aion.exceptions.FilterNotFoundException
 import com.merricklabs.aion.exceptions.InvalidCalendarException
 import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.models.CreateFilterPayload
@@ -46,12 +47,15 @@ class FilterLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyR
         val id = request.pathParameters["id"] ?: throw IllegalArgumentException()
         log.info("Fetching calendar with id $id")
 
-        val calendar = storage.getFilter(UUID.fromString(id))
-        return APIGatewayProxyResponseEvent().apply {
-            statusCode = HttpStatus.SC_OK
-            body = mapper.writeValueAsString(calendar)
-            headers = mapOf(HttpHeaders.CONTENT_TYPE to MediaType.I_CALENDAR_UTF_8.toString())
+        val filter = storage.getFilter(UUID.fromString(id))
+        filter?.let {
+            return APIGatewayProxyResponseEvent().apply {
+                statusCode = HttpStatus.SC_OK
+                body = mapper.writeValueAsString(it)
+                headers = mapOf(HttpHeaders.CONTENT_TYPE to MediaType.I_CALENDAR_UTF_8.toString())
+            }
         }
+        throw FilterNotFoundException(id)
     }
 
     private fun handlePost(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {

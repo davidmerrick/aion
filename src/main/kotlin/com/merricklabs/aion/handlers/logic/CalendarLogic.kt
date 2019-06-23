@@ -1,16 +1,14 @@
 package com.merricklabs.aion.handlers.logic
 
-import biweekly.Biweekly
 import com.amazonaws.HttpMethod
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestHandler
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.net.MediaType.I_CALENDAR_UTF_8
+import com.google.common.net.MediaType
 import com.merricklabs.aion.exceptions.CalendarNotFoundException
 import com.merricklabs.aion.exceptions.InvalidCalendarException
-import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.models.CreateCalendarPayload
 import com.merricklabs.aion.models.toDomain
@@ -29,7 +27,6 @@ class CalendarLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProx
 
     private val storage by inject<CalendarStorage>()
     private val mapper by inject<ObjectMapper>()
-    private val calendarClient by inject<CalendarClient>()
 
     override fun handleRequest(request: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {
         return try {
@@ -67,17 +64,13 @@ class CalendarLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProx
         val id = request.pathParameters["id"] ?: throw IllegalArgumentException()
         log.info("Fetching calendar with id $id")
 
-        val responseBody = getBody(id)
-        return APIGatewayProxyResponseEvent().apply {
-            statusCode = HttpStatus.SC_OK
-            body = responseBody
-            headers = mapOf(HttpHeaders.CONTENT_TYPE to I_CALENDAR_UTF_8.toString())
+        val retrieved = storage.getCalendar(UUID.fromString(id))
+        retrieved?.let {
+            return APIGatewayProxyResponseEvent().apply {
+                statusCode = HttpStatus.SC_OK
+                body = mapper.writeValueAsString(it)
+            }
         }
-    }
-
-    private fun getBody(id: String): String {
-        val saved = storage.getCalendar(UUID.fromString(id)) ?: throw CalendarNotFoundException(id)
-        val fetched = calendarClient.fetchCalendar(saved.sanitizedUrl())
-        return Biweekly.write(fetched).go()
+        throw CalendarNotFoundException(id)
     }
 }
