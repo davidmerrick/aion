@@ -7,14 +7,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.koin.core.KoinComponent
 
-private val log = KotlinLogging.logger {}
+//private val log = KotlinLogging.logger {}
 
 class CalendarClient : KoinComponent {
 
     private val okHttpClient = OkHttpClient()
 
     fun fetchCalendar(url: String): ICalendar {
-        log.info("Fetching calendar with url $url")
+//        log.info("Fetching calendar with url $url")
         val request = Request.Builder()
                 .url(url)
                 .get()

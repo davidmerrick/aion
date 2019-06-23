@@ -5,12 +5,12 @@ import mu.KotlinLogging
 import org.apache.http.HttpStatus
 import org.apache.http.client.HttpResponseException
 
-private val log = KotlinLogging.logger {}
+//private val log = KotlinLogging.logger {}
 
 object ResourceHelpers {
 
     fun exceptionToWebAppResponse(e: Exception): APIGatewayProxyResponseEvent {
-        log.warn("Exception thrown while handling request", e)
+//        log.warn("Exception thrown while handling request", e)
         val cause = e.cause
         return when (cause) {
             is HttpResponseException -> APIGatewayProxyResponseEvent().apply {
