@@ -50,16 +50,12 @@ functions:
           path: /calendars
           method: post
       - http:
-          path: /calendars/{id}
+          path: /calendars/{calendarId}
           method: get
           request:
             parameters:
               paths:
-                id: true
-
-  apply-filter:
-    handler: com.merricklabs.aion.handlers.ApplyFilterHandler
-    events:
+                calendarId: true
       - http:
           path: /calendars/{calendarId}/apply/{filterId}
           method: get
