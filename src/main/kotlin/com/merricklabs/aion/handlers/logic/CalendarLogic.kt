@@ -6,7 +6,6 @@ import com.amazonaws.services.lambda.runtime.RequestHandler
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.net.MediaType
 import com.merricklabs.aion.exceptions.CalendarNotFoundException
 import com.merricklabs.aion.exceptions.InvalidCalendarException
 import com.merricklabs.aion.handlers.util.ResourceHelpers
@@ -14,7 +13,6 @@ import com.merricklabs.aion.models.CreateCalendarPayload
 import com.merricklabs.aion.models.toDomain
 import com.merricklabs.aion.storage.CalendarStorage
 import mu.KotlinLogging
-import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -29,13 +27,9 @@ class CalendarLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProx
     private val mapper by inject<ObjectMapper>()
 
     override fun handleRequest(request: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {
-        return try {
-            when (HttpMethod.valueOf(request.httpMethod)) {
-                HttpMethod.POST -> handlePost(request)
-                else -> handleGet(request)
-            }
-        } catch (e: Exception) {
-            ResourceHelpers.exceptionToWebAppResponse(e)
+        return when (HttpMethod.valueOf(request.httpMethod)) {
+            HttpMethod.POST -> handlePost(request)
+            else -> handleGet(request)
         }
     }
 

@@ -30,13 +30,9 @@ class FilterLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyR
     private val mapper by inject<ObjectMapper>()
 
     override fun handleRequest(request: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {
-        return try {
-            when (HttpMethod.valueOf(request.httpMethod)) {
-                HttpMethod.POST -> handlePost(request)
-                else -> handleGet(request)
-            }
-        } catch (e: Exception) {
-            ResourceHelpers.exceptionToWebAppResponse(e)
+        return when (HttpMethod.valueOf(request.httpMethod)) {
+            HttpMethod.POST -> handlePost(request)
+            else -> handleGet(request)
         }
     }
 
