@@ -15,10 +15,10 @@ import java.util.UUID
  */
 class DbAionFilter @JvmOverloads constructor(
         @DynamoDBHashKey var id: UUID? = null,
-        @DynamoDBAttribute var titleFilters: FieldFilter? = null
+        @DynamoDBAttribute var subjectFilter: FieldFilter? = null
 )
 
 fun AionFilter.toDb(): DbAionFilter {
-    return DbAionFilter(id = this.id, titleFilters = this.titleFilters)
+    return DbAionFilter(id = this.id, subjectFilter = this.subjectFilter)
 }
 

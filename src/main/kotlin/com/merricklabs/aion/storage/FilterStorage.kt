@@ -3,6 +3,7 @@ package com.merricklabs.aion.storage
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression
 import com.merricklabs.aion.config.AionConfig
+import com.merricklabs.aion.exceptions.FilterNotFoundException
 import com.merricklabs.aion.handlers.models.AionFilter
 import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.storage.models.DbAionFilter
@@ -25,20 +26,20 @@ class FilterStorage : KoinComponent {
     }
 
     fun saveFilter(filter: AionFilter) {
-        log.debug("Saving calendar ${filter.id} to db")
+        log.debug("Saving filter ${filter.id} to db")
         mapper.save(filter.toDb())
         log.debug("Saved ${filter.id} to db")
     }
 
-    fun getFilter(id: UUID): AionFilter? {
-        log.debug("Retrieving calendar with id $id from db")
+    fun getFilter(id: UUID): AionFilter {
+        log.debug("Retrieving filter with id $id from db")
         val partitionKey = DbAionFilter(id = id)
         val queryExpression = DynamoDBQueryExpression<DbAionFilter>()
                 .withHashKeyValues(partitionKey)
         val resultList = mapper.query(DbAionFilter::class.java, queryExpression)
         return if (resultList.isEmpty()) {
-            log.warn("Calendar with id $id not found in db.")
-            null
+            log.warn("Filter with id $id not found in db.")
+            throw FilterNotFoundException(id.toString())
         } else resultList[0].toDomain()
     }
 }

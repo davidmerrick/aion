@@ -36,7 +36,7 @@ functions:
           path: /filters
           method: post
       - http:
-          path: /filters/{id}
+          path: /filters/{filterId}
           method: get
           request:
             parameters:
@@ -50,7 +50,7 @@ functions:
           path: /calendars
           method: post
       - http:
-          path: /calendars/{id}
+          path: /calendars/{calendarId}
           method: get
           request:
             parameters:
@@ -61,7 +61,7 @@ functions:
     handler: com.merricklabs.aion.handlers.ApplyFilterHandler
     events:
       - http:
-          path: /calendars/{id}/apply/{filterId}
+          path: /calendars/{calendarId}/apply/{filterId}
           method: get
           request:
             parameters:

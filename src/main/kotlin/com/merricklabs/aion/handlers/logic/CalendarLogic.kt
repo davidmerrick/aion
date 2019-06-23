@@ -5,12 +5,11 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.merricklabs.aion.exceptions.CalendarNotFoundException
 import com.merricklabs.aion.exceptions.InvalidCalendarException
-import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.handlers.models.CreateCalendarPayload
 import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.handlers.util.AionLogic
+import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.storage.CalendarStorage
 import mu.KotlinLogging
 import org.apache.http.HttpStatus
@@ -55,16 +54,18 @@ class CalendarLogic : AionLogic, KoinComponent {
     private fun getCalendar(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
         ResourceHelpers.validateAcceptHeaders(request)
 
-        val id = request.pathParameters["id"] ?: throw IllegalArgumentException()
+        val id = request.getCalendarId()
         log.info("Fetching calendar with id $id")
 
-        val retrieved = storage.getCalendar(UUID.fromString(id))
-        retrieved?.let {
-            return APIGatewayProxyResponseEvent().apply {
-                statusCode = HttpStatus.SC_OK
-                body = mapper.writeValueAsString(it)
-            }
+        val calendar = storage.getCalendar(id)
+        return APIGatewayProxyResponseEvent().apply {
+            statusCode = HttpStatus.SC_OK
+            body = mapper.writeValueAsString(calendar)
         }
-        throw CalendarNotFoundException(id)
     }
+}
+
+fun APIGatewayProxyRequestEvent.getCalendarId(): UUID {
+    val id = this.pathParameters["calendarId"] ?: throw IllegalArgumentException()
+    return UUID.fromString(id)
 }

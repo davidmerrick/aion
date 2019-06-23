@@ -6,11 +6,11 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.MediaType
-import com.merricklabs.aion.exceptions.FilterNotFoundException
 import com.merricklabs.aion.exceptions.InvalidFilterException
 import com.merricklabs.aion.handlers.models.CreateFilterPayload
 import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.handlers.util.AionLogic
+import com.merricklabs.aion.handlers.util.PathParams.FILTER_ID
 import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging
@@ -39,19 +39,14 @@ class FilterLogic : AionLogic, KoinComponent {
     private fun getFilter(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
         ResourceHelpers.validateAcceptHeaders(request)
 
-        log.info("Handling GET request")
-        val id = request.pathParameters["id"] ?: throw IllegalArgumentException()
-        log.info("Fetching calendar with id $id")
+        val id = request.getFilterId()
+        val filter = storage.getFilter(id)
 
-        val filter = storage.getFilter(UUID.fromString(id))
-        filter?.let {
-            return APIGatewayProxyResponseEvent().apply {
-                statusCode = HttpStatus.SC_OK
-                body = mapper.writeValueAsString(it)
-                headers = mapOf(HttpHeaders.CONTENT_TYPE to MediaType.I_CALENDAR_UTF_8.toString())
-            }
+        return APIGatewayProxyResponseEvent().apply {
+            statusCode = HttpStatus.SC_OK
+            body = mapper.writeValueAsString(filter)
+            headers = mapOf(HttpHeaders.CONTENT_TYPE to MediaType.I_CALENDAR_UTF_8.toString())
         }
-        throw FilterNotFoundException(id)
     }
 
     private fun createFilter(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
@@ -72,4 +67,9 @@ class FilterLogic : AionLogic, KoinComponent {
             body = mapper.writeValueAsString(calendar)
         }
     }
+}
+
+fun APIGatewayProxyRequestEvent.getFilterId(): UUID {
+    val id = this.pathParameters[FILTER_ID] ?: throw IllegalArgumentException()
+    return UUID.fromString(id)
 }

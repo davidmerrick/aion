@@ -3,6 +3,7 @@ package com.merricklabs.aion.storage
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression
 import com.merricklabs.aion.config.AionConfig
+import com.merricklabs.aion.exceptions.CalendarNotFoundException
 import com.merricklabs.aion.handlers.models.AionCalendar
 import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.storage.models.DbAionCalendar
@@ -30,7 +31,7 @@ class CalendarStorage : KoinComponent {
         log.debug("Saved ${calendar.id} to db")
     }
 
-    fun getCalendar(id: UUID): AionCalendar? {
+    fun getCalendar(id: UUID): AionCalendar {
         log.debug("Retrieving calendar with id $id from db")
         val partitionKey = DbAionCalendar(id = id)
         val queryExpression = DynamoDBQueryExpression<DbAionCalendar>()
@@ -38,7 +39,7 @@ class CalendarStorage : KoinComponent {
         val resultList = mapper.query(DbAionCalendar::class.java, queryExpression)
         return if (resultList.isEmpty()) {
             log.warn("Calendar with id $id not found in db.")
-            null
+            throw CalendarNotFoundException(id.toString())
         } else resultList[0].toDomain()
     }
 }
