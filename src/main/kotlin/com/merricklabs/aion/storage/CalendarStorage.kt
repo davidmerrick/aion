@@ -1,9 +1,6 @@
 package com.merricklabs.aion.storage
 
-import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression
 import com.merricklabs.aion.config.AionConfig
 import com.merricklabs.aion.models.AionCalendar
@@ -23,14 +20,8 @@ class CalendarStorage : KoinComponent {
 
     init {
         val config by inject<AionConfig>()
-        val dynamoDbConfig = config.dynamoDb
-        val client = AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(EndpointConfiguration(dynamoDbConfig.endpoint, dynamoDbConfig.region))
-                .build()
-        val mapperConfig = DynamoDBMapperConfig.builder()
-                .withTableNameOverride(DynamoDBMapperConfig.TableNameOverride(dynamoDbConfig.calendarTableName))
-                .build()
-        mapper = DynamoDBMapper(client, mapperConfig)
+        val mapperFactory by inject<DynamoMapperFactory>()
+        mapper = mapperFactory.buildMapper(config.dynamoDb.calendarTableName)
     }
 
     fun saveCalendar(calendar: AionCalendar) {
@@ -41,7 +32,7 @@ class CalendarStorage : KoinComponent {
 
     fun getCalendar(id: UUID): AionCalendar? {
         log.debug("Retrieving calendar with id $id from db")
-        val partitionKey = DbAionCalendar(id, "")
+        val partitionKey = DbAionCalendar(id = id)
         val queryExpression = DynamoDBQueryExpression<DbAionCalendar>()
                 .withHashKeyValues(partitionKey)
         val resultList = mapper.query(DbAionCalendar::class.java, queryExpression)

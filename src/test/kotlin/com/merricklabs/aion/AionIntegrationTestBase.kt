@@ -1,5 +1,6 @@
 package com.merricklabs.aion
 
+import com.merricklabs.aion.storage.CalendarStorage
 import com.merricklabs.aion.storage.FilterStorage
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -26,7 +27,7 @@ open class AionIntegrationTestBase : KoinTest {
             modules(AionModule)
         }
         declareMock<FilterStorage>()
-
+        declareMock<CalendarStorage>()
     }
 
     @AfterClass

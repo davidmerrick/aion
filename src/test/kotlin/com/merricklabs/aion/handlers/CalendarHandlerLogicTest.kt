@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.HttpHeaders
 import com.merricklabs.aion.AionIntegrationTestBase
-import com.merricklabs.aion.handlers.logic.FilterHandlerLogic
+import com.merricklabs.aion.handlers.logic.CalendarLogic
 import io.kotlintest.shouldBe
 import org.apache.http.HttpStatus.SC_CREATED
 import org.apache.http.HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE
@@ -15,14 +15,14 @@ import org.koin.test.inject
 import org.mockito.Mockito
 import org.testng.annotations.Test
 
-class CalendarFilterHandlerLogicTest : AionIntegrationTestBase() {
+class CalendarHandlerLogicTest : AionIntegrationTestBase() {
 
-    private val filterHandlerLogic by inject<FilterHandlerLogic>()
+    private val logic by inject<CalendarLogic>()
     private val mockContext = Mockito.mock(Context::class.java)
     private val mapper by inject<ObjectMapper>()
 
     @Test
-    private fun `Test POST`() {
+    private fun `Create a calendar`() {
         val url = "webcal://www.meetup.com/ScienceOnTapORWA/events/ical/"
         val payload = mapper.writeValueAsString(mapOf("url" to url))
         val mockRequest = APIGatewayProxyRequestEvent().apply {
@@ -30,7 +30,7 @@ class CalendarFilterHandlerLogicTest : AionIntegrationTestBase() {
             headers = mapOf(HttpHeaders.CONTENT_TYPE to AionHeaders.V1)
             httpMethod = HttpMethod.POST.toString()
         }
-        val response = filterHandlerLogic.handleRequest(mockRequest, mockContext)
+        val response = logic.handleRequest(mockRequest, mockContext)
         response.statusCode shouldBe SC_CREATED
         val jsonNode = mapper.readValue(response.body, JsonNode::class.java)
         jsonNode.has("id") shouldBe true
@@ -46,7 +46,7 @@ class CalendarFilterHandlerLogicTest : AionIntegrationTestBase() {
             headers = emptyMap()
             httpMethod = HttpMethod.POST.toString()
         }
-        val response = filterHandlerLogic.handleRequest(mockRequest, mockContext)
+        val response = logic.handleRequest(mockRequest, mockContext)
         response.statusCode shouldBe SC_UNSUPPORTED_MEDIA_TYPE
     }
 }

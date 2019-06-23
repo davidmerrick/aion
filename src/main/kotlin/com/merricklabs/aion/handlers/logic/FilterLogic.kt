@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.MediaType
 import com.merricklabs.aion.exceptions.InvalidCalendarException
 import com.merricklabs.aion.handlers.util.ResourceHelpers
-import com.merricklabs.aion.models.CreateCalendarPayload
+import com.merricklabs.aion.models.CreateFilterPayload
 import com.merricklabs.aion.models.toDomain
 import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging
@@ -23,7 +23,7 @@ import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
-class FilterHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
+class FilterLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
 
     private val storage by inject<FilterStorage>()
     private val mapper by inject<ObjectMapper>()
@@ -46,7 +46,7 @@ class FilterHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewa
         val id = request.pathParameters["id"] ?: throw IllegalArgumentException()
         log.info("Fetching calendar with id $id")
 
-        val calendar = storage.getCalendar(UUID.fromString(id))
+        val calendar = storage.getFilter(UUID.fromString(id))
         return APIGatewayProxyResponseEvent().apply {
             statusCode = HttpStatus.SC_OK
             body = mapper.writeValueAsString(calendar)
@@ -60,13 +60,13 @@ class FilterHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewa
         log.info("Handling POST request")
         val createPayload = try {
             val body = request.body
-            mapper.readValue(body, CreateCalendarPayload::class.java)
+            mapper.readValue(body, CreateFilterPayload::class.java)
         } catch (e: IOException) {
             throw InvalidCalendarException()
         }
 
         val calendar = createPayload.toDomain()
-        storage.saveCalendarFilter(calendar)
+        storage.saveFilter(calendar)
         return APIGatewayProxyResponseEvent().apply {
             statusCode = SC_CREATED
             body = mapper.writeValueAsString(calendar)
