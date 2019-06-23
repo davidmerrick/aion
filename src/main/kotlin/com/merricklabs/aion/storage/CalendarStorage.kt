@@ -17,7 +17,7 @@ import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
-class AionStorage : KoinComponent {
+class CalendarStorage : KoinComponent {
 
     private val mapper: DynamoDBMapper
 
@@ -28,12 +28,12 @@ class AionStorage : KoinComponent {
                 .withEndpointConfiguration(EndpointConfiguration(dynamoDbConfig.endpoint, dynamoDbConfig.region))
                 .build()
         val mapperConfig = DynamoDBMapperConfig.builder()
-                .withTableNameOverride(DynamoDBMapperConfig.TableNameOverride(dynamoDbConfig.tableName))
+                .withTableNameOverride(DynamoDBMapperConfig.TableNameOverride(dynamoDbConfig.calendarTableName))
                 .build()
         mapper = DynamoDBMapper(client, mapperConfig)
     }
 
-    fun saveCalendarFilter(calendar: AionCalendar) {
+    fun saveCalendar(calendar: AionCalendar) {
         log.debug("Saving calendar ${calendar.id} to db")
         mapper.save(calendar.toDb())
         log.debug("Saved ${calendar.id} to db")

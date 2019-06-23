@@ -11,7 +11,7 @@ import com.google.common.net.MediaType.I_CALENDAR_UTF_8
 import com.merricklabs.aion.exceptions.CalendarNotFoundException
 import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.handlers.util.ResourceHelpers
-import com.merricklabs.aion.storage.AionStorage
+import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging
 import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
@@ -23,7 +23,7 @@ private val log = KotlinLogging.logger {}
 
 class CalendarLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
 
-    private val storage by inject<AionStorage>()
+    private val storage by inject<FilterStorage>()
     private val calendarClient by inject<CalendarClient>()
 
     override fun handleRequest(request: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {

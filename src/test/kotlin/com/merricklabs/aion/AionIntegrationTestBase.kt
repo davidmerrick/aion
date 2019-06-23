@@ -1,6 +1,6 @@
 package com.merricklabs.aion
 
-import com.merricklabs.aion.storage.AionStorage
+import com.merricklabs.aion.storage.FilterStorage
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
@@ -25,7 +25,7 @@ open class AionIntegrationTestBase : KoinTest {
         startKoin {
             modules(AionModule)
         }
-        declareMock<AionStorage>()
+        declareMock<FilterStorage>()
 
     }
 

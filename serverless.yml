@@ -1,7 +1,8 @@
 service: aion
 
 custom:
-  tableName: ${self:service}-${self:provider.stage}
+  calendarTableName: ${self:service}-${self:provider.stage}-calendar
+  filterTableName: ${self:service}-${self:provider.stage}-filter
   dynamoEndpoint: https://dynamodb.us-west-2.amazonaws.com
 
 provider:
@@ -18,10 +19,11 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:Scan
         - dynamodb:Query
-      Resource: arn:aws:dynamodb:*:*:table/${self:custom.tableName}
+      Resource: "*"
   environment:
     DYNAMODB_ENDPOINT: ${self:custom.dynamoEndpoint}
-    DYNAMODB_TABLE_NAME: ${self:custom.tableName}
+    CALENDAR_TABLE_NAME: ${self:custom.calendarTableName}
+    FILTER_TABLE_NAME: ${self:custom.filterTableName}
 
 package:
   artifact: build/libs/${self:service}.jar
@@ -57,7 +59,7 @@ functions:
 
 resources:
   Resources:
-    RidesDynamoDbTable:
+    CalendarTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
@@ -70,4 +72,18 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.tableName}
+        TableName: ${self:custom.calendarTableName}
+    FilterTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.filterTableName}

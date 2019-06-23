@@ -11,7 +11,7 @@ import com.merricklabs.aion.exceptions.InvalidCalendarException
 import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.models.CreateCalendarPayload
 import com.merricklabs.aion.models.toDomain
-import com.merricklabs.aion.storage.AionStorage
+import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging
 import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
@@ -25,7 +25,7 @@ private val log = KotlinLogging.logger {}
 
 class FilterHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
 
-    private val storage by inject<AionStorage>()
+    private val storage by inject<FilterStorage>()
     private val mapper by inject<ObjectMapper>()
 
     override fun handleRequest(request: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {
