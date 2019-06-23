@@ -15,7 +15,7 @@ abstract class AionHandler : KoinComponent, RequestHandler<APIGatewayProxyReques
 
     init {
         startKoin {
-            AionModule
+            modules(AionModule)
         }
     }
 
