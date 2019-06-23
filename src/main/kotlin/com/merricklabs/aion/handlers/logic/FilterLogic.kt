@@ -2,7 +2,6 @@ package com.merricklabs.aion.handlers.logic
 
 import com.amazonaws.HttpMethod
 import com.amazonaws.services.lambda.runtime.Context
-import com.amazonaws.services.lambda.runtime.RequestHandler
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -32,12 +31,12 @@ class FilterLogic : AionLogic, KoinComponent {
 
     override fun handleRequest(request: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {
         return when (HttpMethod.valueOf(request.httpMethod)) {
-            HttpMethod.POST -> handlePost(request)
-            else -> handleGet(request)
+            HttpMethod.POST -> createFilter(request)
+            else -> getFilter(request)
         }
     }
 
-    private fun handleGet(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
+    private fun getFilter(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
         ResourceHelpers.validateAcceptHeaders(request)
 
         log.info("Handling GET request")
@@ -55,7 +54,7 @@ class FilterLogic : AionLogic, KoinComponent {
         throw FilterNotFoundException(id)
     }
 
-    private fun handlePost(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
+    private fun createFilter(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
         ResourceHelpers.validateContentTypeHeaders(request)
 
         log.info("Handling POST request")
