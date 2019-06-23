@@ -28,7 +28,7 @@ package:
 
 functions:
   filter:
-    handler: com.merricklabs.aion.handlers.CalendarFilterHandler
+    handler: com.merricklabs.aion.handlers.FilterHandler
     events:
       - http:
           path: /filters
@@ -42,10 +42,13 @@ functions:
                 id: true
 
   calendar:
-    handler: com.merricklabs.aion.handlers.CalendarExportHandler
+    handler: com.merricklabs.aion.handlers.CalendarHandler
     events:
       - http:
-          path: /calendars/{id}/ical
+          path: /calendars
+          method: post
+      - http:
+          path: /calendars/{id}
           method: get
           request:
             parameters:
