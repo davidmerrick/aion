@@ -57,6 +57,18 @@ functions:
               paths:
                 id: true
 
+  apply-filter:
+    handler: com.merricklabs.aion.handlers.ApplyFilterHandler
+    events:
+      - http:
+          path: /calendars/{calendarId}/apply/{filterId}
+          method: get
+          request:
+            parameters:
+              paths:
+                calendarId: true
+                filterId: true
+
 resources:
   Resources:
     CalendarTable:

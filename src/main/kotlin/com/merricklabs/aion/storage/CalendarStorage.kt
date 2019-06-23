@@ -3,8 +3,8 @@ package com.merricklabs.aion.storage
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression
 import com.merricklabs.aion.config.AionConfig
-import com.merricklabs.aion.models.AionCalendar
-import com.merricklabs.aion.models.toDomain
+import com.merricklabs.aion.handlers.models.AionCalendar
+import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.storage.models.DbAionCalendar
 import com.merricklabs.aion.storage.models.toDb
 import mu.KotlinLogging

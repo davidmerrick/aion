@@ -8,10 +8,11 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.MediaType
 import com.merricklabs.aion.exceptions.FilterNotFoundException
-import com.merricklabs.aion.exceptions.InvalidCalendarException
+import com.merricklabs.aion.exceptions.InvalidFilterException
+import com.merricklabs.aion.handlers.models.CreateFilterPayload
+import com.merricklabs.aion.handlers.models.toDomain
+import com.merricklabs.aion.handlers.util.AionLogic
 import com.merricklabs.aion.handlers.util.ResourceHelpers
-import com.merricklabs.aion.models.CreateFilterPayload
-import com.merricklabs.aion.models.toDomain
 import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging
 import org.apache.http.HttpHeaders
@@ -24,7 +25,7 @@ import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
-class FilterLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
+class FilterLogic : AionLogic, KoinComponent {
 
     private val storage by inject<FilterStorage>()
     private val mapper by inject<ObjectMapper>()
@@ -62,7 +63,7 @@ class FilterLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyR
             val body = request.body
             mapper.readValue(body, CreateFilterPayload::class.java)
         } catch (e: IOException) {
-            throw InvalidCalendarException()
+            throw InvalidFilterException()
         }
 
         val calendar = createPayload.toDomain()

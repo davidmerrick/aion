@@ -2,8 +2,7 @@ package com.merricklabs.aion.storage.models
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
-import com.merricklabs.aion.models.AionCalendar
-import com.merricklabs.aion.models.CreateCalendarPayload
+import com.merricklabs.aion.handlers.models.AionCalendar
 import java.util.UUID
 
 /**

@@ -9,8 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.exceptions.CalendarNotFoundException
 import com.merricklabs.aion.exceptions.InvalidCalendarException
 import com.merricklabs.aion.handlers.util.ResourceHelpers
-import com.merricklabs.aion.models.CreateCalendarPayload
-import com.merricklabs.aion.models.toDomain
+import com.merricklabs.aion.handlers.models.CreateCalendarPayload
+import com.merricklabs.aion.handlers.models.toDomain
+import com.merricklabs.aion.handlers.util.AionLogic
 import com.merricklabs.aion.storage.CalendarStorage
 import mu.KotlinLogging
 import org.apache.http.HttpStatus
@@ -21,7 +22,7 @@ import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
-class CalendarLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
+class CalendarLogic : AionLogic, KoinComponent {
 
     private val storage by inject<CalendarStorage>()
     private val mapper by inject<ObjectMapper>()

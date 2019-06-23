@@ -4,7 +4,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.merricklabs.aion.exceptions.InvalidAcceptHeadersException
 import com.merricklabs.aion.exceptions.InvalidContentTypeException
-import com.merricklabs.aion.handlers.AionHeaders
 import mu.KotlinLogging
 import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus

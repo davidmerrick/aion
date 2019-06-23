@@ -1,4 +1,4 @@
-package com.merricklabs.aion.models
+package com.merricklabs.aion.handlers.models
 
 import com.merricklabs.aion.storage.models.DbAionFilter
 import java.util.UUID
@@ -6,9 +6,9 @@ import java.util.UUID
 /**
  * Consists of a url for a calendar and filters for it.
  */
-data class AionFilter(val id: UUID, val titleFilters: List<String>) {
+data class AionFilter(val id: UUID, val titleFilters: FieldFilter) {
     companion object {
-        fun create(titleFilters: List<String>) = AionFilter(UUID.randomUUID(), titleFilters)
+        fun create(titleFilters: FieldFilter) = AionFilter(UUID.randomUUID(), titleFilters)
     }
 }
 

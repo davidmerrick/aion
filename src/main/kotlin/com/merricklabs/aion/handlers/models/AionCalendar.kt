@@ -1,4 +1,4 @@
-package com.merricklabs.aion.models
+package com.merricklabs.aion.handlers.models
 
 import com.merricklabs.aion.storage.models.DbAionCalendar
 import java.util.UUID

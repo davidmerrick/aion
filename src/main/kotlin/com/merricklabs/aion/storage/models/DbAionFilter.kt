@@ -2,7 +2,8 @@ package com.merricklabs.aion.storage.models
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
-import com.merricklabs.aion.models.AionFilter
+import com.merricklabs.aion.handlers.models.AionFilter
+import com.merricklabs.aion.handlers.models.FieldFilter
 import java.util.UUID
 
 /**
@@ -14,7 +15,7 @@ import java.util.UUID
  */
 class DbAionFilter @JvmOverloads constructor(
         @DynamoDBHashKey var id: UUID? = null,
-        @DynamoDBAttribute var titleFilters: List<String>? = null
+        @DynamoDBAttribute var titleFilters: FieldFilter? = null
 )
 
 fun AionFilter.toDb(): DbAionFilter {
