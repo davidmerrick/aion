@@ -32,5 +32,5 @@ fun DbAionFilter.toDomain(): AionFilter {
 }
 
 fun CreateFilterPayload.toDomain(): AionFilter {
-    return AionFilter(id = UUID.randomUUID(), subjectFilter = this.titleFilters)
+    return AionFilter(id = UUID.randomUUID(), subjectFilter = this.subjectFilter)
 }
