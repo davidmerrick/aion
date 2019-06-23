@@ -9,6 +9,7 @@ import com.merricklabs.aion.exceptions.InvalidCalendarException
 import com.merricklabs.aion.handlers.models.CreateCalendarPayload
 import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.handlers.util.AionLogic
+import com.merricklabs.aion.handlers.util.PathParams.CALENDAR_ID
 import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.storage.CalendarStorage
 import mu.KotlinLogging
@@ -66,6 +67,6 @@ class CalendarLogic : AionLogic, KoinComponent {
 }
 
 fun APIGatewayProxyRequestEvent.getCalendarId(): UUID {
-    val id = this.pathParameters["calendarId"] ?: throw IllegalArgumentException()
+    val id = this.pathParameters[CALENDAR_ID] ?: throw IllegalArgumentException()
     return UUID.fromString(id)
 }

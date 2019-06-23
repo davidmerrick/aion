@@ -41,7 +41,7 @@ functions:
           request:
             parameters:
               paths:
-                id: true
+                filterId: true
 
   calendar:
     handler: com.merricklabs.aion.handlers.CalendarHandler
@@ -55,7 +55,7 @@ functions:
           request:
             parameters:
               paths:
-                id: true
+                calendarId: true
 
   apply-filter:
     handler: com.merricklabs.aion.handlers.ApplyFilterHandler
@@ -66,7 +66,7 @@ functions:
           request:
             parameters:
               paths:
-                id: true
+                calendarId: true
                 filterId: true
 
 resources:

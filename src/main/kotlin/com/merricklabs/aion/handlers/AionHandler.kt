@@ -7,9 +7,10 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.merricklabs.aion.AionModule
 import com.merricklabs.aion.handlers.util.AionLogic
 import com.merricklabs.aion.handlers.util.ResourceHelpers
+import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 
-abstract class AionHandler: RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+abstract class AionHandler : KoinComponent, RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     protected abstract fun getLogic(): AionLogic
 
     init {
