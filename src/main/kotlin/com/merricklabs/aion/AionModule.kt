@@ -3,19 +3,19 @@ package com.merricklabs.aion
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.config.AionConfig
 import com.merricklabs.aion.external.CalendarClient
-import com.merricklabs.aion.handlers.CalendarExportHandler
-import com.merricklabs.aion.handlers.CalendarFilterHandler
-import com.merricklabs.aion.handlers.logic.CalendarExportHandlerLogic
-import com.merricklabs.aion.handlers.logic.CalendarFilterHandlerLogic
+import com.merricklabs.aion.handlers.CalendarHandler
+import com.merricklabs.aion.handlers.FilterHandler
+import com.merricklabs.aion.handlers.logic.CalendarLogic
+import com.merricklabs.aion.handlers.logic.FilterHandlerLogic
 import com.merricklabs.aion.storage.AionStorage
 import com.merricklabs.aion.util.AionObjectMapper
 import org.koin.dsl.module
 
 val AionModule = module {
-    single { CalendarFilterHandler() }
-    single { CalendarFilterHandlerLogic() }
-    single { CalendarExportHandler() }
-    single { CalendarExportHandlerLogic() }
+    single { FilterHandler() }
+    single { FilterHandlerLogic() }
+    single { CalendarHandler() }
+    single { CalendarLogic() }
     single { AionStorage() }
     single { AionConfig() }
     single { CalendarClient() }

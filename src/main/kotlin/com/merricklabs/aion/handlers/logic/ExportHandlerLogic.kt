@@ -21,7 +21,7 @@ import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
-class CalendarExportHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
+class CalendarLogic : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, KoinComponent {
 
     private val storage by inject<AionStorage>()
     private val calendarClient by inject<CalendarClient>()
@@ -35,6 +35,8 @@ class CalendarExportHandlerLogic : RequestHandler<APIGatewayProxyRequestEvent, A
     }
 
     private fun handleGet(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
+        ResourceHelpers.validateAcceptHeaders(request)
+
         val id = request.pathParameters["id"] ?: throw IllegalArgumentException()
         log.info("Fetching calendar with id $id")
 

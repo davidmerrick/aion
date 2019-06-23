@@ -27,25 +27,25 @@ package:
   artifact: build/libs/${self:service}.jar
 
 functions:
-  calendar-filter:
+  filter:
     handler: com.merricklabs.aion.handlers.CalendarFilterHandler
     events:
       - http:
-          path: /calendar-filter
+          path: /filters
           method: post
       - http:
-          path: /calendar-filter/{id}
+          path: /filters/{id}
           method: get
           request:
             parameters:
               paths:
                 id: true
 
-  calendar-export:
+  calendar:
     handler: com.merricklabs.aion.handlers.CalendarExportHandler
     events:
       - http:
-          path: /calendar-filter/{id}/ical
+          path: /calendars/{id}/ical
           method: get
           request:
             parameters:

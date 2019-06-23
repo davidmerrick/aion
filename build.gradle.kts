@@ -56,10 +56,12 @@ deployPrd.dependsOn(tasks.getByName("shadowJar"))
 tasks.test {
     useTestNG()
 }
+
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
     jvmTarget = "1.8"
 }
+
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
     jvmTarget = "1.8"

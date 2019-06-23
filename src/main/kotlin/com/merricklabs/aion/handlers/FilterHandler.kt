@@ -5,17 +5,17 @@ import com.amazonaws.services.lambda.runtime.RequestHandler
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.merricklabs.aion.AionModule
-import com.merricklabs.aion.handlers.logic.CalendarFilterHandlerLogic
+import com.merricklabs.aion.handlers.logic.FilterHandlerLogic
 import org.koin.core.context.startKoin
 
-class CalendarFilterHandler : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    private val calendarHandlerImpl: CalendarFilterHandlerLogic
+class FilterHandler : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+    private val calendarHandlerImpl: FilterHandlerLogic
 
     init {
         startKoin {
             modules(AionModule)
         }
-        calendarHandlerImpl = CalendarFilterHandlerLogic()
+        calendarHandlerImpl = FilterHandlerLogic()
     }
 
     override fun handleRequest(input: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {
