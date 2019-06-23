@@ -8,6 +8,7 @@ import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.handlers.util.AionLogic
 import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.handlers.util.applyFilter
+import com.merricklabs.aion.handlers.util.getCalendarId
 import com.merricklabs.aion.storage.CalendarStorage
 import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging

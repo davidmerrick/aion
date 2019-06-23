@@ -22,9 +22,12 @@ class FilterLogicTest : AionIntegrationTestBase() {
     private val mockContext = Mockito.mock(Context::class.java)
     private val mapper by inject<ObjectMapper>()
 
+    private val mockPayload by lazy {
+        mapper.writeValueAsString(mapOf("subject_filter" to mapOf("include" to listOf("foo"), "exclude" to listOf("bar"))))
+    }
+
     @Test
     private fun `Create a filter`() {
-        val mockPayload = mapper.writeValueAsString(mapOf("title_filters" to mapOf("include" to listOf("foo"), "exclude" to listOf("bar"))))
         val mockRequest = APIGatewayProxyRequestEvent().apply {
             body = mockPayload
             headers = mapOf(HttpHeaders.CONTENT_TYPE to AionHeaders.V1)
@@ -38,7 +41,7 @@ class FilterLogicTest : AionIntegrationTestBase() {
 
     @Test(expectedExceptions = [InvalidContentTypeException::class])
     private fun `Should validate headers`() {
-        val mockPayload = mapper.writeValueAsString(mapOf("title_filters" to mapOf("include" to listOf("foo"), "exclude" to listOf("bar"))))
+        val mockPayload = mapper.writeValueAsString(mapOf("subject_filter" to mapOf("include" to listOf("foo"), "exclude" to listOf("bar"))))
         val mockRequest = APIGatewayProxyRequestEvent().apply {
             body = mockPayload
             headers = emptyMap()
