@@ -30,7 +30,6 @@ class ApplyFilterLogic : AionLogic, KoinComponent {
 
     private fun getFilteredCalendar(request: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent {
         log.info("Handling apply filter request")
-        ResourceHelpers.validateAcceptHeaders(request)
 
         val calendarId = request.getCalendarId()
         val filterId = request.getFilterId()
