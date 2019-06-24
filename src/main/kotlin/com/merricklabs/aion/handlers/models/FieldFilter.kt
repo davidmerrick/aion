@@ -1,3 +1,8 @@
 package com.merricklabs.aion.handlers.models
 
-data class FieldFilter(val include: List<String>?, val exclude: List<String>?)
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
+
+data class FieldFilter(
+        @DynamoDBAttribute var include: List<String>?,
+        @DynamoDBAttribute var exclude: List<String>?
+)
