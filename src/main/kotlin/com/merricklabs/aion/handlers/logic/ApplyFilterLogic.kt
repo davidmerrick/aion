@@ -4,9 +4,10 @@ import biweekly.Biweekly
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
+import com.google.common.net.HttpHeaders.CONTENT_TYPE
+import com.google.common.net.MediaType.I_CALENDAR_UTF_8
 import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.handlers.util.AionLogic
-import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.handlers.util.applyFilter
 import com.merricklabs.aion.handlers.util.getCalendarId
 import com.merricklabs.aion.storage.CalendarStorage
@@ -43,6 +44,7 @@ class ApplyFilterLogic : AionLogic, KoinComponent {
         return APIGatewayProxyResponseEvent().apply {
             body = returnBody
             statusCode = HttpStatus.SC_OK
+            headers = mapOf(CONTENT_TYPE to I_CALENDAR_UTF_8.toString())
         }
     }
 }
