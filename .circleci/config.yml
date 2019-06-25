@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  - build:
+  build:
     branches:
       only:
         - master
@@ -16,7 +16,7 @@ jobs:
     steps:
       - checkout
       - run: ./gradlew test
-  - deploy:
+  deploy:
     docker:
       - image: circleci/openjdk:11.0.3-stretch
         environment:
@@ -35,3 +35,12 @@ jobs:
             - hold
           name: Deploy to AWS
           command: ./gradlew deployPrd
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
