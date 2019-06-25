@@ -42,11 +42,14 @@ workflows:
             branches:
               only:
                 - master
+      - hold:
+          type: approval
+          requires:
+            - build
       - deploy:
           filters:
             branches:
               only:
                 - master
-          type: approval
           requires:
-            - build
+            - hold
