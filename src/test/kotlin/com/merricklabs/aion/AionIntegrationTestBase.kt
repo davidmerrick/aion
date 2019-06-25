@@ -1,11 +1,11 @@
 package com.merricklabs.aion
 
-import com.merricklabs.aion.storage.CalendarStorage
-import com.merricklabs.aion.storage.FilterStorage
+import com.merricklabs.aion.testutil.AionTestModule
+import com.merricklabs.aion.testutil.DynamoTestClient
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
-import org.koin.test.mock.declareMock
+import org.koin.test.inject
 import org.mockito.Mockito
 import org.testng.annotations.AfterClass
 import org.testng.annotations.BeforeClass
@@ -24,14 +24,19 @@ open class AionIntegrationTestBase : KoinTest {
     @BeforeClass
     protected fun beforeMethod(){
         startKoin {
-            modules(AionModule)
+            modules(listOf(AionModule, AionTestModule))
         }
-        declareMock<FilterStorage>()
-        declareMock<CalendarStorage>()
+
+        initTables()
     }
 
     @AfterClass
     protected fun afterMethod() {
         stopKoin()
+    }
+
+    private fun initTables(){
+        val dynamoClient by inject<DynamoTestClient>()
+        dynamoClient.createTables()
     }
 }
