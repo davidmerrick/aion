@@ -14,6 +14,7 @@ jobs:
       - image: amazon/dynamodb-local
     working_directory: ~/repo
     steps:
+      - checkout
       - run: ./gradlew test
   deploy:
     docker:
