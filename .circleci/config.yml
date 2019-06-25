@@ -8,6 +8,7 @@ jobs:
           TERM: dumb
           DYNAMODB_ENDPOINT: "http://localhost:8000"
           DYNAMODB_REGION: "us-east-1"
+      - image: amazon/dynamodb-local
     working_directory: ~/repo
     steps:
       - checkout
