@@ -17,3 +17,10 @@ Less noise, more signal. Making the world a better place™.
 # Functionality
 
 v1 is just going to support filtering by event title and location. More fields will be added later.
+
+# CircleCI
+
+This project has a relatively more complex CircleCI config, as it needs to run 
+a containerized dynamo local for testing.
+
+CircleCI has a local tool to help validate your config here: https://circleci.com/docs/2.0/local-cli/
