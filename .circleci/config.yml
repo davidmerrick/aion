@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  - build:
     branches:
       only:
         - master
@@ -16,7 +16,7 @@ jobs:
     steps:
       - checkout
       - run: ./gradlew test
-  deploy:
+  - deploy:
     docker:
       - image: circleci/openjdk:11.0.3-stretch
         environment:
