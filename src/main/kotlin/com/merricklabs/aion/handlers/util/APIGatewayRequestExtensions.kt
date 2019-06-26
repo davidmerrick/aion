@@ -5,13 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.exceptions.InvalidBodyException
 import mu.KotlinLogging
 import java.io.IOException
-import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
-fun APIGatewayProxyRequestEvent.getCalendarId(): UUID {
-    val id = this.pathParameters[PathParams.CALENDAR_ID] ?: throw IllegalArgumentException()
-    return UUID.fromString(id)
+fun APIGatewayProxyRequestEvent.getCalendarId(): String {
+    return this.pathParameters[PathParams.CALENDAR_ID] ?: throw IllegalArgumentException()
+}
+
+fun APIGatewayProxyRequestEvent.getFilterId(): String {
+    return this.pathParameters[PathParams.FILTER_ID] ?: throw IllegalArgumentException()
 }
 
 fun <T> APIGatewayProxyRequestEvent.readBody(mapper: ObjectMapper, clazz: Class<T>): T {

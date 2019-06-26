@@ -31,7 +31,7 @@ class CalendarStorage : KoinComponent {
         log.debug("Saved ${calendar.id} to db")
     }
 
-    fun getCalendar(id: UUID): AionCalendar {
+    fun getCalendar(id: String): AionCalendar {
         log.debug("Retrieving calendar with id $id from db")
         val partitionKey = DbAionCalendar(id = id)
         val queryExpression = DynamoDBQueryExpression<DbAionCalendar>()

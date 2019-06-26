@@ -2,12 +2,13 @@ package com.merricklabs.aion.handlers.models
 
 import biweekly.component.VEvent
 import com.merricklabs.aion.storage.models.DbAionFilter
+import com.merricklabs.aion.util.IdUtil
 import java.util.UUID
 
 /**
  * Consists of a url for a calendar and filters for it.
  */
-data class AionFilter(val id: UUID, val subjectFilter: FieldFilter) {
+data class AionFilter(val id: String, val subjectFilter: FieldFilter) {
     fun apply(event: VEvent): Boolean {
         this.subjectFilter.include?.let { filters ->
             filters.asSequence().forEach {
@@ -32,5 +33,5 @@ fun DbAionFilter.toDomain(): AionFilter {
 }
 
 fun CreateFilterPayload.toDomain(): AionFilter {
-    return AionFilter(id = UUID.randomUUID(), subjectFilter = this.subjectFilter)
+    return AionFilter(id = IdUtil.generateId(), subjectFilter = this.subjectFilter)
 }

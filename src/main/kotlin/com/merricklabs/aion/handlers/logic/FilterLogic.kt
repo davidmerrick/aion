@@ -11,6 +11,7 @@ import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.handlers.util.AionLogic
 import com.merricklabs.aion.handlers.util.PathParams.FILTER_ID
 import com.merricklabs.aion.handlers.util.ResourceHelpers
+import com.merricklabs.aion.handlers.util.getFilterId
 import com.merricklabs.aion.handlers.util.readBody
 import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging
@@ -60,9 +61,4 @@ class FilterLogic : AionLogic, KoinComponent {
             body = mapper.writeValueAsString(filter)
         }
     }
-}
-
-fun APIGatewayProxyRequestEvent.getFilterId(): UUID {
-    val id = this.pathParameters[FILTER_ID] ?: throw IllegalArgumentException()
-    return UUID.fromString(id)
 }

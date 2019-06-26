@@ -11,7 +11,6 @@ import com.merricklabs.aion.storage.models.toDb
 import mu.KotlinLogging
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
@@ -31,7 +30,7 @@ class FilterStorage : KoinComponent {
         log.debug("Saved ${filter.id} to db")
     }
 
-    fun getFilter(id: UUID): AionFilter {
+    fun getFilter(id: String): AionFilter {
         log.debug("Retrieving filter with id $id from db")
         val partitionKey = DbAionFilter(id = id)
         val queryExpression = DynamoDBQueryExpression<DbAionFilter>()

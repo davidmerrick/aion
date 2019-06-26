@@ -14,7 +14,7 @@ import java.util.UUID
  * See https://stackoverflow.com/questions/51073135/dynamodbmapper-load-cannot-instantiate-kotlin-data-class
  */
 class DbAionFilter @JvmOverloads constructor(
-        @DynamoDBHashKey var id: UUID? = null,
+        @DynamoDBHashKey var id: String? = null,
         @DynamoDBAttribute var subjectFilter: FieldFilter? = null
 )
 
