@@ -10,6 +10,7 @@ import com.merricklabs.aion.AionIntegrationTestBase
 import com.merricklabs.aion.exceptions.InvalidContentTypeException
 import com.merricklabs.aion.handlers.logic.FilterLogic
 import com.merricklabs.aion.handlers.util.AionHeaders
+import com.merricklabs.aion.params.ID_LENGTH
 import io.kotlintest.shouldBe
 import org.apache.http.HttpStatus.SC_CREATED
 import org.koin.test.inject
@@ -37,6 +38,7 @@ class FilterLogicTest : AionIntegrationTestBase() {
         response.statusCode shouldBe SC_CREATED
         val jsonNode = mapper.readValue(response.body, JsonNode::class.java)
         jsonNode.has("id") shouldBe true
+        jsonNode.get("id").textValue().length shouldBe ID_LENGTH
     }
 
     @Test(expectedExceptions = [InvalidContentTypeException::class])
