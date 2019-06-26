@@ -22,6 +22,7 @@ provider:
       Resource: "*"
   environment:
     DYNAMODB_ENDPOINT: ${self:custom.dynamoEndpoint}
+    DYNAMODB_REGION: ${self:provider.region}
     CALENDAR_TABLE_NAME: ${self:custom.calendarTableName}
     FILTER_TABLE_NAME: ${self:custom.filterTableName}
 
