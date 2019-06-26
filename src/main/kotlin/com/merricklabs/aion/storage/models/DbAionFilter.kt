@@ -4,7 +4,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
 import com.merricklabs.aion.handlers.models.AionFilter
 import com.merricklabs.aion.handlers.models.FieldFilter
-import java.util.UUID
 
 /**
  * The DynamoDB mapper expects a class with an empty
@@ -19,6 +18,6 @@ class DbAionFilter @JvmOverloads constructor(
 )
 
 fun AionFilter.toDb(): DbAionFilter {
-    return DbAionFilter(id = this.id, subjectFilter = this.subjectFilter)
+    return DbAionFilter(id = id.value, subjectFilter = subjectFilter)
 }
 

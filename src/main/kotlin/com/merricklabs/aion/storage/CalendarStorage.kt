@@ -6,6 +6,7 @@ import com.merricklabs.aion.config.AionConfig
 import com.merricklabs.aion.exceptions.CalendarNotFoundException
 import com.merricklabs.aion.handlers.models.AionCalendar
 import com.merricklabs.aion.handlers.models.toDomain
+import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.storage.models.DbAionCalendar
 import com.merricklabs.aion.storage.models.toDb
 import mu.KotlinLogging
@@ -31,9 +32,9 @@ class CalendarStorage : KoinComponent {
         log.debug("Saved ${calendar.id} to db")
     }
 
-    fun getCalendar(id: String): AionCalendar {
+    fun getCalendar(id: EntityId): AionCalendar {
         log.debug("Retrieving calendar with id $id from db")
-        val partitionKey = DbAionCalendar(id = id)
+        val partitionKey = DbAionCalendar(id = id.value)
         val queryExpression = DynamoDBQueryExpression<DbAionCalendar>()
                 .withHashKeyValues(partitionKey)
         val resultList = mapper.query(DbAionCalendar::class.java, queryExpression)

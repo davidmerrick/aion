@@ -1,10 +1,9 @@
 package com.merricklabs.aion.handlers.models
 
 import biweekly.component.VEvent
-import com.merricklabs.aion.util.IdUtil
+import com.merricklabs.aion.params.EntityId
 import io.kotlintest.shouldBe
 import org.testng.annotations.Test
-import java.util.UUID
 
 class AionFilterTest {
 
@@ -13,7 +12,7 @@ class AionFilterTest {
         val event = VEvent()
         event.setSummary("foo")
         val subjectFilters = FieldFilter(listOf("foo"), null)
-        val filter = AionFilter(IdUtil.generateId(), subjectFilters)
+        val filter = AionFilter(EntityId.create(), subjectFilters)
         val result = filter.apply(event)
         result shouldBe true
     }
@@ -23,7 +22,7 @@ class AionFilterTest {
         val event = VEvent()
         event.setSummary("bar")
         val subjectFilters = FieldFilter(listOf("foo"), null)
-        val filter = AionFilter(IdUtil.generateId(), subjectFilters)
+        val filter = AionFilter(EntityId.create(), subjectFilters)
         val result = filter.apply(event)
         result shouldBe false
     }
@@ -33,7 +32,7 @@ class AionFilterTest {
         val event = VEvent()
         event.setSummary("bar")
         val subjectFilters = FieldFilter(null, listOf("bar"))
-        val filter = AionFilter(IdUtil.generateId(), subjectFilters)
+        val filter = AionFilter(EntityId.create(), subjectFilters)
         val result = filter.apply(event)
         result shouldBe false
     }
@@ -43,7 +42,7 @@ class AionFilterTest {
         val event = VEvent()
         event.setSummary("bar")
         val subjectFilters = FieldFilter(null, listOf("foo"))
-        val filter = AionFilter(IdUtil.generateId(), subjectFilters)
+        val filter = AionFilter(EntityId.create(), subjectFilters)
         val result = filter.apply(event)
         result shouldBe true
     }

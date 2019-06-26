@@ -17,6 +17,6 @@ class DbAionCalendar @JvmOverloads constructor(
 )
 
 fun AionCalendar.toDb(): DbAionCalendar {
-    return DbAionCalendar(id = this.id, url = this.url)
+    return DbAionCalendar(id = id.value, url = url)
 }
 

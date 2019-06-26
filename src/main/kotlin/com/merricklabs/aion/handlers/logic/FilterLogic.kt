@@ -9,7 +9,6 @@ import com.google.common.net.MediaType
 import com.merricklabs.aion.handlers.models.CreateFilterPayload
 import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.handlers.util.AionLogic
-import com.merricklabs.aion.handlers.util.PathParams.FILTER_ID
 import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.handlers.util.getFilterId
 import com.merricklabs.aion.handlers.util.readBody
@@ -20,7 +19,6 @@ import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_CREATED
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
