@@ -1,23 +1,23 @@
 package com.merricklabs.aion.handlers.models
 
+import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.storage.models.DbAionCalendar
-import java.util.UUID
 
 /**
  * Consists of a url for a calendar and filters for it.
  */
-data class AionCalendar(val id: UUID, val url: String) {
+data class AionCalendar(val id: EntityId, val url: String) {
     companion object {
-        fun create(url: String) = AionCalendar(UUID.randomUUID(), url)
+        fun create(url: String) = AionCalendar(EntityId.create(), url)
     }
 
     fun sanitizedUrl() = url.replace("webcal://", "http://")
 }
 
 fun DbAionCalendar.toDomain(): AionCalendar {
-    return AionCalendar(id = this.id!!, url = this.url!!)
+    return AionCalendar(id = EntityId(id!!), url = url!!)
 }
 
 fun CreateCalendarPayload.toDomain(): AionCalendar {
-    return AionCalendar(id = UUID.randomUUID(), url = this.url)
+    return AionCalendar(id = EntityId.create(), url = this.url)
 }

@@ -6,12 +6,12 @@ import com.merricklabs.aion.config.AionConfig
 import com.merricklabs.aion.exceptions.FilterNotFoundException
 import com.merricklabs.aion.handlers.models.AionFilter
 import com.merricklabs.aion.handlers.models.toDomain
+import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.storage.models.DbAionFilter
 import com.merricklabs.aion.storage.models.toDb
 import mu.KotlinLogging
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
@@ -31,9 +31,9 @@ class FilterStorage : KoinComponent {
         log.debug("Saved ${filter.id} to db")
     }
 
-    fun getFilter(id: UUID): AionFilter {
+    fun getFilter(id: EntityId): AionFilter {
         log.debug("Retrieving filter with id $id from db")
-        val partitionKey = DbAionFilter(id = id)
+        val partitionKey = DbAionFilter(id = id.value)
         val queryExpression = DynamoDBQueryExpression<DbAionFilter>()
                 .withHashKeyValues(partitionKey)
         val resultList = mapper.query(DbAionFilter::class.java, queryExpression)

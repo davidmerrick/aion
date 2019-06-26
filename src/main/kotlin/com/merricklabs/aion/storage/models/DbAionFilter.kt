@@ -4,7 +4,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
 import com.merricklabs.aion.handlers.models.AionFilter
 import com.merricklabs.aion.handlers.models.FieldFilter
-import java.util.UUID
 
 /**
  * The DynamoDB mapper expects a class with an empty
@@ -14,11 +13,11 @@ import java.util.UUID
  * See https://stackoverflow.com/questions/51073135/dynamodbmapper-load-cannot-instantiate-kotlin-data-class
  */
 class DbAionFilter @JvmOverloads constructor(
-        @DynamoDBHashKey var id: UUID? = null,
+        @DynamoDBHashKey var id: String? = null,
         @DynamoDBAttribute var subjectFilter: FieldFilter? = null
 )
 
 fun AionFilter.toDb(): DbAionFilter {
-    return DbAionFilter(id = this.id, subjectFilter = this.subjectFilter)
+    return DbAionFilter(id = id.value, subjectFilter = subjectFilter)
 }
 
