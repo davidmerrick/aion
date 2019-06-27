@@ -29,7 +29,7 @@ class FilterLogicTest : AionIntegrationTestBase() {
     private val mockPayload by lazy {
         mapper.writeValueAsString(
                 mapOf(
-                        "subject_filter" to mapOf(
+                        "summary_filter" to mapOf(
                                 "include" to listOf("foo"), "exclude" to listOf("bar")
                         )
                 )

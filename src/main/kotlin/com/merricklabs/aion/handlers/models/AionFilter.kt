@@ -11,15 +11,15 @@ import com.merricklabs.aion.storage.models.DbAionFilter
  * Filters for a calendar.
  */
 data class AionFilter(val id: EntityId,
-                      val subjectFilter: FieldFilter? = null,
+                      val summaryFilter: FieldFilter? = null,
                       val locationFilter: LocationFilter? = null
 ) {
     /**
      * Applies location and subject filters
      */
     fun apply(event: VEvent, geocoderClient: GeocoderClient): Boolean {
-        subjectFilter?.let {
-            if (!it.apply(event)) {
+        summaryFilter?.let {
+            if (!it.apply(event.summary.value)) {
                 return false
             }
         }
@@ -35,9 +35,9 @@ data class AionFilter(val id: EntityId,
 }
 
 fun DbAionFilter.toDomain(): AionFilter {
-    return AionFilter(id = id!!, subjectFilter = subjectFilter, locationFilter = locationFilter)
+    return AionFilter(id = id!!, summaryFilter = summaryFilter, locationFilter = locationFilter)
 }
 
 fun CreateFilterPayload.toDomain(): AionFilter {
-    return AionFilter(id = EntityId.create(), subjectFilter = subjectFilter, locationFilter = locationFilter)
+    return AionFilter(id = EntityId.create(), summaryFilter = summaryFilter, locationFilter = locationFilter)
 }

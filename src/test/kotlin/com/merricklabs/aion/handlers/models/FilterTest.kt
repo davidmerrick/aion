@@ -18,7 +18,7 @@ import org.koin.test.mock.declareMock
 import org.mockito.BDDMockito.given
 import org.testng.annotations.Test
 
-class AionFilterTest : AionIntegrationTestBase() {
+class FilterTest : AionIntegrationTestBase() {
 
     @Test
     fun `Apply a filter to an event's subject`() {
@@ -29,6 +29,17 @@ class AionFilterTest : AionIntegrationTestBase() {
         val filter = AionFilter(EntityId.create(), subjectFilters)
         val result = filter.apply(event, geocoderClient)
         result shouldBe true
+    }
+
+    @Test
+    fun `Filter should be case-insensitive`() {
+        val geocoderClient by inject<GeocoderClient>()
+        val event = VEvent()
+        event.setSummary("foo")
+        val subjectFilters = FieldFilter(null, listOf("FOO"))
+        val filter = AionFilter(EntityId.create(), subjectFilters)
+        val result = filter.apply(event, geocoderClient)
+        result shouldBe false
     }
 
     @Test

@@ -19,11 +19,11 @@ import com.merricklabs.aion.storage.util.EntityIdTypeConverter
 class DbAionFilter @JvmOverloads constructor(
         @DynamoDBTypeConverted(converter = EntityIdTypeConverter::class)
         @DynamoDBHashKey var id: EntityId? = null,
-        @DynamoDBAttribute var subjectFilter: FieldFilter? = null,
+        @DynamoDBAttribute var summaryFilter: FieldFilter? = null,
         @DynamoDBAttribute var locationFilter: LocationFilter? = null
 )
 
 fun AionFilter.toDb(): DbAionFilter {
-    return DbAionFilter(id = id, subjectFilter = subjectFilter, locationFilter = locationFilter)
+    return DbAionFilter(id = id, summaryFilter = summaryFilter, locationFilter = locationFilter)
 }
 

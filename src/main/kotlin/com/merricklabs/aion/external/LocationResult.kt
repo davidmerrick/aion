@@ -6,7 +6,7 @@ import com.grum.geocalc.Point
 data class LocationResult(val latitude: Double, val longitude: Double)
 
 fun LocationResult.toPoint(): Point {
-    val lat = Coordinate.fromDegrees(latitude!!)
-    val lng = Coordinate.fromDegrees(longitude!!)
+    val lat = Coordinate.fromDegrees(latitude)
+    val lng = Coordinate.fromDegrees(longitude)
     return Point.at(lat, lng)
 }

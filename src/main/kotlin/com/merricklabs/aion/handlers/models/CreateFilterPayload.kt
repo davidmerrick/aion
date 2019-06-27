@@ -5,4 +5,4 @@ import com.merricklabs.aion.params.FieldFilter
 import com.merricklabs.aion.params.LocationFilter
 
 data class CreateFilterPayload @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-constructor(val subjectFilter: FieldFilter?, val locationFilter: LocationFilter?)
+constructor(val summaryFilter: FieldFilter?, val locationFilter: LocationFilter?)
