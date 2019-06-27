@@ -16,13 +16,13 @@ import com.merricklabs.aion.external.toPoint
 data class LocationFilter @JvmOverloads constructor(
         @DynamoDBAttribute var latitude: Double? = null,
         @DynamoDBAttribute var longitude: Double? = null,
-        @DynamoDBAttribute var radiusKm: Int? = null
+        @DynamoDBAttribute var distanceKm: Int? = null
 ) {
     fun apply(event: VEvent, geocoderClient: GeocoderClient): Boolean {
         geocoderClient.fetchLocation(event.location.value)?.let {
             val sourcePoint = toPoint()
             val targetPoint = it.toPoint()
-            return EarthCalc.harvesineDistance(sourcePoint, targetPoint) / 1000 < radiusKm!!.toDouble()
+            return EarthCalc.harvesineDistance(sourcePoint, targetPoint) / 1000 < distanceKm!!.toDouble()
         }
 
         // If client couldn't geocode the location, fallback to allowing the event through
