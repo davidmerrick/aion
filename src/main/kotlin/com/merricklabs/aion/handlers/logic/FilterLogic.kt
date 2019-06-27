@@ -6,6 +6,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.HttpHeaders.CONTENT_TYPE
+import com.google.common.net.HttpHeaders.HOST
 import com.google.common.net.HttpHeaders.LOCATION
 import com.google.common.net.MediaType
 import com.merricklabs.aion.handlers.models.CreateFilterPayload
@@ -61,7 +62,7 @@ class FilterLogic : AionLogic, KoinComponent {
             body = mapper.writeValueAsString(toCreate)
             headers = mapOf(
                     CONTENT_TYPE to AION_VND,
-                    LOCATION to "${request.requestContext.resourcePath}/${toCreate.id.value}"
+                    LOCATION to "https://${request.headers[HOST]}${request.requestContext.path}/${toCreate.id.value}"
             )
         }
     }

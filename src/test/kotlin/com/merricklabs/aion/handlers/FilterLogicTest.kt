@@ -3,15 +3,15 @@ package com.merricklabs.aion.handlers
 import com.amazonaws.HttpMethod
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent.ProxyRequestContext
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.HttpHeaders.CONTENT_TYPE
+import com.google.common.net.HttpHeaders.HOST
 import com.google.common.net.HttpHeaders.LOCATION
 import com.merricklabs.aion.AionIntegrationTestBase
 import com.merricklabs.aion.exceptions.InvalidContentTypeException
 import com.merricklabs.aion.handlers.logic.FilterLogic
-import com.merricklabs.aion.handlers.util.AionHeaders
+import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.ID_LENGTH
 import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.shouldBe
@@ -38,19 +38,22 @@ class FilterLogicTest : AionIntegrationTestBase() {
 
     @Test
     private fun `Create a filter`() {
-        val resourcePath = "http://localhost/filters"
+        val requestPath = "/filters"
         val mockRequest = APIGatewayProxyRequestEvent().apply {
             body = mockPayload
-            headers = mapOf(CONTENT_TYPE to AionHeaders.AION_VND)
+            headers = mapOf(
+                    CONTENT_TYPE to AION_VND,
+                    HOST to "localhost"
+            )
             httpMethod = HttpMethod.POST.toString()
-            requestContext = ProxyRequestContext().withResourcePath(resourcePath)
+            requestContext = APIGatewayProxyRequestEvent.ProxyRequestContext().withPath(requestPath)
         }
         val response = filterLogic.handleRequest(mockRequest, mockContext)
         response.statusCode shouldBe SC_CREATED
 
         // Validate headers
         response.headers.containsKey(LOCATION) shouldBe true
-        response.headers[LOCATION] shouldContain resourcePath
+        response.headers[LOCATION] shouldContain requestPath
 
         // Validate body
         val jsonNode = mapper.readValue(response.body, JsonNode::class.java)

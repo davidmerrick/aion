@@ -5,7 +5,9 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.net.HttpHeaders
+import com.google.common.net.HttpHeaders.CONTENT_TYPE
+import com.google.common.net.HttpHeaders.HOST
+import com.google.common.net.HttpHeaders.LOCATION
 import com.merricklabs.aion.handlers.models.CreateCalendarPayload
 import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.handlers.util.AionHeaders
@@ -44,8 +46,8 @@ class CalendarLogic : AionLogic, KoinComponent {
             statusCode = HttpStatus.SC_CREATED
             body = mapper.writeValueAsString(toCreate)
             headers = mapOf(
-                    HttpHeaders.CONTENT_TYPE to AionHeaders.AION_VND,
-                    HttpHeaders.LOCATION to "${request.requestContext.resourcePath}/${toCreate.id.value}"
+                    CONTENT_TYPE to AionHeaders.AION_VND,
+                    LOCATION to "https://${request.headers[HOST]}${request.requestContext.path}/${toCreate.id.value}"
             )
         }
     }

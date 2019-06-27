@@ -5,7 +5,9 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.net.HttpHeaders
+import com.google.common.net.HttpHeaders.CONTENT_TYPE
+import com.google.common.net.HttpHeaders.HOST
+import com.google.common.net.HttpHeaders.LOCATION
 import com.merricklabs.aion.AionIntegrationTestBase
 import com.merricklabs.aion.exceptions.InvalidContentTypeException
 import com.merricklabs.aion.handlers.logic.CalendarLogic
@@ -27,20 +29,23 @@ class CalendarLogicTest : AionIntegrationTestBase() {
     @Test
     private fun `Create a calendar`() {
         val url = "webcal://www.meetup.com/ScienceOnTapORWA/events/ical/"
-        val resourcePath = "http://localhost/filters"
+        val requestPath = "/filters"
         val payload = mapper.writeValueAsString(mapOf("url" to url))
         val mockRequest = APIGatewayProxyRequestEvent().apply {
             body = payload
-            headers = mapOf(HttpHeaders.CONTENT_TYPE to AionHeaders.AION_VND)
+            headers = mapOf(
+                    CONTENT_TYPE to AionHeaders.AION_VND,
+                    HOST to "localhost"
+            )
             httpMethod = HttpMethod.POST.toString()
-            requestContext = APIGatewayProxyRequestEvent.ProxyRequestContext().withResourcePath(resourcePath)
+            requestContext = APIGatewayProxyRequestEvent.ProxyRequestContext().withPath(requestPath)
         }
         val response = logic.handleRequest(mockRequest, mockContext)
         response.statusCode shouldBe SC_CREATED
 
         // Validate headers
-        response.headers.containsKey(HttpHeaders.LOCATION) shouldBe true
-        response.headers[HttpHeaders.LOCATION] shouldContain resourcePath
+        response.headers.containsKey(LOCATION) shouldBe true
+        response.headers[LOCATION] shouldContain requestPath
 
         // Validate body
         val jsonNode = mapper.readValue(response.body, JsonNode::class.java)
