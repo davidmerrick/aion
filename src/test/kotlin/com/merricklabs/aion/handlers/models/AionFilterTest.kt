@@ -2,6 +2,7 @@ package com.merricklabs.aion.handlers.models
 
 import biweekly.component.VEvent
 import com.merricklabs.aion.params.EntityId
+import com.merricklabs.aion.params.FieldFilter
 import io.kotlintest.shouldBe
 import org.testng.annotations.Test
 

@@ -6,12 +6,13 @@ import mu.KotlinLogging
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 private val log = KotlinLogging.logger {}
 
 class CalendarClient : KoinComponent {
 
-    private val okHttpClient = OkHttpClient()
+    private val okHttpClient by inject<OkHttpClient>()
 
     fun fetchCalendar(url: String): ICalendar {
         log.info("Fetching calendar with url $url")
