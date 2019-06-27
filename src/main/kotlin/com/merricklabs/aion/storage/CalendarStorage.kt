@@ -12,7 +12,6 @@ import com.merricklabs.aion.storage.models.toDb
 import mu.KotlinLogging
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
@@ -34,7 +33,7 @@ class CalendarStorage : KoinComponent {
 
     fun getCalendar(id: EntityId): AionCalendar {
         log.debug("Retrieving calendar with id $id from db")
-        val partitionKey = DbAionCalendar(id = id.value)
+        val partitionKey = DbAionCalendar(id = id)
         val queryExpression = DynamoDBQueryExpression<DbAionCalendar>()
                 .withHashKeyValues(partitionKey)
         val resultList = mapper.query(DbAionCalendar::class.java, queryExpression)

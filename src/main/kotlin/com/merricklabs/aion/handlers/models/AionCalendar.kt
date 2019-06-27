@@ -15,7 +15,7 @@ data class AionCalendar(val id: EntityId, val url: String) {
 }
 
 fun DbAionCalendar.toDomain(): AionCalendar {
-    return AionCalendar(id = EntityId(id!!), url = url!!)
+    return AionCalendar(id = id!!, url = url!!)
 }
 
 fun CreateCalendarPayload.toDomain(): AionCalendar {

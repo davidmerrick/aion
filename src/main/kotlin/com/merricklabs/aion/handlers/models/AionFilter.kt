@@ -28,7 +28,7 @@ data class AionFilter(val id: EntityId, val subjectFilter: FieldFilter) {
 }
 
 fun DbAionFilter.toDomain(): AionFilter {
-    return AionFilter(id = EntityId(id!!), subjectFilter = subjectFilter!!)
+    return AionFilter(id = id!!, subjectFilter = subjectFilter!!)
 }
 
 fun CreateFilterPayload.toDomain(): AionFilter {

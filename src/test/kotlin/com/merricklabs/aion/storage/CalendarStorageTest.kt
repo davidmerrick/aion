@@ -12,7 +12,7 @@ class CalendarStorageTest : AionIntegrationTestBase() {
     private val calendarStorage by inject<CalendarStorage>()
 
     @Test
-    fun `Save calendar`() {
+    fun `Create calendar`() {
         val toCreate = AionCalendar.create(AionTestData.TEST_URL)
         calendarStorage.saveCalendar(toCreate)
         val retrieved = calendarStorage.getCalendar(toCreate.id)

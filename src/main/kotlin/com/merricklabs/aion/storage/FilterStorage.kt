@@ -33,7 +33,7 @@ class FilterStorage : KoinComponent {
 
     fun getFilter(id: EntityId): AionFilter {
         log.debug("Retrieving filter with id $id from db")
-        val partitionKey = DbAionFilter(id = id.value)
+        val partitionKey = DbAionFilter(id = id)
         val queryExpression = DynamoDBQueryExpression<DbAionFilter>()
                 .withHashKeyValues(partitionKey)
         val resultList = mapper.query(DbAionFilter::class.java, queryExpression)
