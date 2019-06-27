@@ -25,6 +25,7 @@ provider:
     DYNAMODB_REGION: ${self:provider.region}
     CALENDAR_TABLE_NAME: ${self:custom.calendarTableName}
     FILTER_TABLE_NAME: ${self:custom.filterTableName}
+    GEOCODER_API_KEY: ${env:GEOCODER_API_KEY}
 
 package:
   artifact: build/libs/${self:service}.jar
