@@ -2,10 +2,11 @@ package com.merricklabs.aion.handlers.util
 
 import biweekly.ICalendar
 import biweekly.component.VEvent
+import com.merricklabs.aion.external.GeocoderClient
 import com.merricklabs.aion.handlers.models.AionFilter
 
-fun ICalendar.applyFilter(filter: AionFilter): ICalendar {
-    val filtered = this.events.filter { filter.applyWithoutLocation(it) }
+fun ICalendar.applyFilter(filter: AionFilter, geocoderClient: GeocoderClient): ICalendar {
+    val filtered = this.events.filter { filter.apply(it, geocoderClient) }
     return this.copyWithEvents(filtered)
 }
 

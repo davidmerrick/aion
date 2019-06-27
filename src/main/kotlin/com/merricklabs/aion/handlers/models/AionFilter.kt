@@ -14,20 +14,16 @@ data class AionFilter(val id: EntityId,
                       val subjectFilter: FieldFilter? = null,
                       val locationFilter: LocationFilter? = null
 ) {
-    fun applyWithoutLocation(event: VEvent): Boolean {
+    /**
+     * Applies location and subject filters
+     */
+    fun apply(event: VEvent, geocoderClient: GeocoderClient): Boolean {
         subjectFilter?.let {
             if (!it.apply(event)) {
                 return false
             }
         }
-        return true
-    }
 
-    /**
-     * Applies location and subject filters
-     */
-    fun apply(event: VEvent, geocoderClient: GeocoderClient): Boolean {
-        if (!applyWithoutLocation(event)) return false
         locationFilter?.let {
             if (!it.apply(event, geocoderClient)) {
                 return false

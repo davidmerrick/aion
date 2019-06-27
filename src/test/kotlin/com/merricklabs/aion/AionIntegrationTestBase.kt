@@ -1,11 +1,16 @@
 package com.merricklabs.aion
 
+import com.merricklabs.aion.external.GeocoderClient
+import com.merricklabs.aion.external.LocationResult
+import com.merricklabs.aion.testutil.AionTestData
 import com.merricklabs.aion.testutil.AionTestModule
 import com.merricklabs.aion.testutil.DynamoTestClient
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import org.koin.test.mock.declareMock
+import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.testng.annotations.AfterClass
 import org.testng.annotations.BeforeClass
@@ -22,9 +27,14 @@ open class AionIntegrationTestBase : KoinTest {
     private fun <T> uninitialized(): T = null as T
 
     @BeforeClass
-    protected fun beforeMethod(){
+    protected fun beforeClass() {
         startKoin {
             modules(listOf(AionModule, AionTestModule))
+        }
+
+        declareMock<GeocoderClient> {
+            given(this.fetchLocation(any()))
+                    .willReturn(LocationResult(AionTestData.POWELLS_LAT, AionTestData.POWELLS_LONG))
         }
 
         initTables()
@@ -35,7 +45,7 @@ open class AionIntegrationTestBase : KoinTest {
         stopKoin()
     }
 
-    private fun initTables(){
+    private fun initTables() {
         val dynamoClient by inject<DynamoTestClient>()
         dynamoClient.createTables()
     }

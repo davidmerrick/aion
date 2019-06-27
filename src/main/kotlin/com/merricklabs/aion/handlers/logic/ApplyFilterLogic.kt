@@ -7,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.common.net.HttpHeaders.CONTENT_TYPE
 import com.google.common.net.MediaType.I_CALENDAR_UTF_8
 import com.merricklabs.aion.external.CalendarClient
+import com.merricklabs.aion.external.GeocoderClient
 import com.merricklabs.aion.handlers.util.AionLogic
 import com.merricklabs.aion.handlers.util.applyFilter
 import com.merricklabs.aion.handlers.util.getCalendarId
@@ -25,6 +26,7 @@ class ApplyFilterLogic : AionLogic, KoinComponent {
     private val calendarStorage by inject<CalendarStorage>()
     private val filterStorage by inject<FilterStorage>()
     private val calendarClient by inject<CalendarClient>()
+    private val geocoderClient by inject<GeocoderClient>()
 
     override fun handleRequest(request: APIGatewayProxyRequestEvent, context: Context): APIGatewayProxyResponseEvent {
         return getFilteredCalendar(request)
@@ -39,7 +41,7 @@ class ApplyFilterLogic : AionLogic, KoinComponent {
         val calendarUrl = calendarStorage.getCalendar(calendarId).sanitizedUrl()
 
         val filteredCalendar = calendarClient.fetchCalendar(calendarUrl)
-                .applyFilter(filter)
+                .applyFilter(filter, geocoderClient)
         val returnBody = Biweekly.write(filteredCalendar).go()
 
         return APIGatewayProxyResponseEvent().apply {
