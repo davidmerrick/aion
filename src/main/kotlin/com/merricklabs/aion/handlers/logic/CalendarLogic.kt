@@ -5,8 +5,10 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.net.HttpHeaders
 import com.merricklabs.aion.handlers.models.CreateCalendarPayload
 import com.merricklabs.aion.handlers.models.toDomain
+import com.merricklabs.aion.handlers.util.AionHeaders
 import com.merricklabs.aion.handlers.util.AionLogic
 import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.handlers.util.getCalendarId
@@ -35,12 +37,16 @@ class CalendarLogic : AionLogic, KoinComponent {
         log.info("Handling POST request")
         ResourceHelpers.validateContentTypeHeaders(request)
 
-        val calendar = request.readBody(mapper, CreateCalendarPayload::class.java)
+        val toCreate = request.readBody(mapper, CreateCalendarPayload::class.java)
                 .toDomain()
-        storage.saveCalendar(calendar)
+        storage.saveCalendar(toCreate)
         return APIGatewayProxyResponseEvent().apply {
             statusCode = HttpStatus.SC_CREATED
-            body = mapper.writeValueAsString(calendar)
+            body = mapper.writeValueAsString(toCreate)
+            headers = mapOf(
+                    HttpHeaders.CONTENT_TYPE to AionHeaders.AION_VND,
+                    HttpHeaders.LOCATION to "${request.requestContext.resourcePath}/${toCreate.id.value}"
+            )
         }
     }
 

@@ -11,6 +11,7 @@ import com.merricklabs.aion.exceptions.InvalidContentTypeException
 import com.merricklabs.aion.handlers.logic.CalendarLogic
 import com.merricklabs.aion.handlers.util.AionHeaders
 import com.merricklabs.aion.params.ID_LENGTH
+import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.shouldBe
 import org.apache.http.HttpStatus.SC_CREATED
 import org.koin.test.inject
@@ -26,14 +27,22 @@ class CalendarLogicTest : AionIntegrationTestBase() {
     @Test
     private fun `Create a calendar`() {
         val url = "webcal://www.meetup.com/ScienceOnTapORWA/events/ical/"
+        val resourcePath = "http://localhost/filters"
         val payload = mapper.writeValueAsString(mapOf("url" to url))
         val mockRequest = APIGatewayProxyRequestEvent().apply {
             body = payload
-            headers = mapOf(HttpHeaders.CONTENT_TYPE to AionHeaders.V1)
+            headers = mapOf(HttpHeaders.CONTENT_TYPE to AionHeaders.AION_VND)
             httpMethod = HttpMethod.POST.toString()
+            requestContext = APIGatewayProxyRequestEvent.ProxyRequestContext().withResourcePath(resourcePath)
         }
         val response = logic.handleRequest(mockRequest, mockContext)
         response.statusCode shouldBe SC_CREATED
+
+        // Validate headers
+        response.headers.containsKey(HttpHeaders.LOCATION) shouldBe true
+        response.headers[HttpHeaders.LOCATION] shouldContain resourcePath
+
+        // Validate body
         val jsonNode = mapper.readValue(response.body, JsonNode::class.java)
         jsonNode.has("id") shouldBe true
         jsonNode.get("id").textValue().length shouldBe ID_LENGTH

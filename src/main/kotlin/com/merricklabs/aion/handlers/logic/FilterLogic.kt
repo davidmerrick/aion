@@ -5,16 +5,18 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.net.HttpHeaders.CONTENT_TYPE
+import com.google.common.net.HttpHeaders.LOCATION
 import com.google.common.net.MediaType
 import com.merricklabs.aion.handlers.models.CreateFilterPayload
 import com.merricklabs.aion.handlers.models.toDomain
+import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.handlers.util.AionLogic
 import com.merricklabs.aion.handlers.util.ResourceHelpers
 import com.merricklabs.aion.handlers.util.getFilterId
 import com.merricklabs.aion.handlers.util.readBody
 import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging
-import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_CREATED
 import org.koin.core.KoinComponent
@@ -43,7 +45,7 @@ class FilterLogic : AionLogic, KoinComponent {
         return APIGatewayProxyResponseEvent().apply {
             statusCode = HttpStatus.SC_OK
             body = mapper.writeValueAsString(filter)
-            headers = mapOf(HttpHeaders.CONTENT_TYPE to MediaType.I_CALENDAR_UTF_8.toString())
+            headers = mapOf(CONTENT_TYPE to MediaType.I_CALENDAR_UTF_8.toString())
         }
     }
 
@@ -51,12 +53,16 @@ class FilterLogic : AionLogic, KoinComponent {
         ResourceHelpers.validateContentTypeHeaders(request)
 
         log.info("Handling POST request")
-        val filter = request.readBody(mapper, CreateFilterPayload::class.java)
+        val toCreate = request.readBody(mapper, CreateFilterPayload::class.java)
                 .toDomain()
-        storage.saveFilter(filter)
+        storage.saveFilter(toCreate)
         return APIGatewayProxyResponseEvent().apply {
             statusCode = SC_CREATED
-            body = mapper.writeValueAsString(filter)
+            body = mapper.writeValueAsString(toCreate)
+            headers = mapOf(
+                    CONTENT_TYPE to AION_VND,
+                    LOCATION to "${request.requestContext.resourcePath}/${toCreate.id.value}"
+            )
         }
     }
 }

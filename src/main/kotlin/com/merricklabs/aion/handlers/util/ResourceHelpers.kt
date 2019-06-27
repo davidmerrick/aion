@@ -27,13 +27,13 @@ object ResourceHelpers {
     }
 
     fun validateAcceptHeaders(request: APIGatewayProxyRequestEvent) {
-        if (!request.headers.containsKey(HttpHeaders.ACCEPT) || request.headers[HttpHeaders.ACCEPT] != AionHeaders.V1) {
+        if (!request.headers.containsKey(HttpHeaders.ACCEPT) || request.headers[HttpHeaders.ACCEPT] != AionHeaders.AION_VND) {
             throw InvalidAcceptHeadersException()
         }
     }
 
     fun validateContentTypeHeaders(request: APIGatewayProxyRequestEvent) {
-        if (!request.headers.containsKey(HttpHeaders.CONTENT_TYPE) || request.headers[HttpHeaders.CONTENT_TYPE] != AionHeaders.V1) {
+        if (!request.headers.containsKey(HttpHeaders.CONTENT_TYPE) || request.headers[HttpHeaders.CONTENT_TYPE] != AionHeaders.AION_VND) {
             throw InvalidContentTypeException()
         }
     }
