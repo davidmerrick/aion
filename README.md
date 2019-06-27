@@ -28,3 +28,4 @@ CircleCI has a local tool to help validate your config here: https://circleci.co
 # Reference
 
 - Google Maps Geocoding API: https://developers.google.com/maps/documentation/geocoding/intro
+- Google Maps Geocoding SDK: https://github.com/googlemaps/google-maps-services-java

@@ -51,6 +51,10 @@ object Libs {
     const val jackson_module_kotlin: String =
             "com.fasterxml.jackson.module:jackson-module-kotlin:" + Versions.jackson_module_kotlin
 
+    /**
+     * http://www.grumlimited.co.uk */
+    const val geocalc: String = "com.github.grumlimited:geocalc:" + Versions.geocalc
+
     const val com_github_johnrengelman_shadow_gradle_plugin: String =
             "com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:" +
             Versions.com_github_johnrengelman_shadow_gradle_plugin
@@ -58,6 +62,11 @@ object Libs {
     /**
      * https://github.com/google/guava */
     const val guava: String = "com.google.guava:guava:" + Versions.guava
+
+    /**
+     * https://github.com/googlemaps/google-maps-services-java */
+    const val google_maps_services: String = "com.google.maps:google-maps-services:" +
+            Versions.google_maps_services
 
     /**
      * https://github.com/square/okhttp */
