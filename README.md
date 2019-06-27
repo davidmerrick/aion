@@ -24,3 +24,7 @@ This project has a relatively more complex CircleCI config, as it needs to run
 a containerized dynamo local for testing.
 
 CircleCI has a local tool to help validate your config here: https://circleci.com/docs/2.0/local-cli/
+
+# Reference
+
+- Google Maps Geocoding API: https://developers.google.com/maps/documentation/geocoding/intro
