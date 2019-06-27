@@ -1,6 +1,6 @@
 package com.merricklabs.aion.params
 
-import com.merricklabs.aion.hashids.Hashids
+import com.merricklabs.aion.util.hashids.Hashids
 import java.io.Serializable
 import java.util.UUID
 

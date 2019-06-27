@@ -1,4 +1,4 @@
-package com.merricklabs.aion.hashids
+package com.merricklabs.aion.util.hashids
 
 import java.util.ArrayList
 import java.util.regex.Pattern
