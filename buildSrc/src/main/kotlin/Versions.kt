@@ -7,9 +7,9 @@ import kotlin.String
  *
  * YOU are responsible for updating manually the dependency version. */
 object Versions {
-    const val aws_java_sdk_dynamodb: String = "1.11.527" // available: "1.11.577"
+    const val aws_java_sdk_dynamodb: String = "1.11.527" // available: "1.11.581"
 
-    const val aws_java_sdk_sns: String = "1.11.527" // available: "1.11.577"
+    const val aws_java_sdk_sns: String = "1.11.527" // available: "1.11.581"
 
     const val aws_lambda_java_core: String = "1.2.0" 
 
@@ -21,12 +21,16 @@ object Versions {
 
     const val jackson_module_kotlin: String = "2.9.9" 
 
+    const val geocalc: String = "0.5.7"
+
     const val com_github_johnrengelman_shadow_gradle_plugin: String = "4.0.4" 
             // available: "5.0.0"
 
     const val guava: String = "28.0-jre" 
 
-    const val okhttp: String = "3.14.2" 
+    const val google_maps_services: String = "0.9.3" 
+
+    const val okhttp: String = "3.14.2" // available: "4.0.0"
 
     const val de_fayard_buildsrcversions_gradle_plugin: String = "0.3.2" 
 
@@ -58,8 +62,8 @@ object Versions {
 
         const val currentVersion: String = "5.4.1"
 
-        const val nightlyVersion: String = "5.6-20190621000146+0000"
+        const val nightlyVersion: String = "5.6-20190627000039+0000"
 
-        const val releaseCandidate: String = "5.5-rc-3"
+        const val releaseCandidate: String = "5.5-rc-4"
     }
 }

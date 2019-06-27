@@ -16,7 +16,8 @@ plugins {
 
 dependencies {
     implementation(Libs.okhttp)
-    implementation("com.github.grumlimited:geocalc:0.5.8")
+    implementation(Libs.geocalc)
+    implementation(Libs.google_maps_services)
     implementation(Libs.kotlin_stdlib_jdk8)
     implementation(Libs.kotlin_reflect)
     implementation(Libs.slf4j_api)

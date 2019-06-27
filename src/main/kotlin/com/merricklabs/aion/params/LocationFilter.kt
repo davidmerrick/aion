@@ -3,7 +3,7 @@ package com.merricklabs.aion.params
 import biweekly.component.VEvent
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument
-import com.grum.geocalc.DegreeCoordinate
+import com.grum.geocalc.Coordinate
 import com.grum.geocalc.EarthCalc
 import com.grum.geocalc.Point
 import com.merricklabs.aion.external.GeocoderClient
@@ -22,7 +22,7 @@ data class LocationFilter @JvmOverloads constructor(
         geocoderClient.fetchLocation(event.location.value)?.let {
             val sourcePoint = toPoint()
             val targetPoint = it.toPoint()
-            return EarthCalc.getHarvesineDistance(sourcePoint, targetPoint) / 1000 < radiusKm!!.toDouble()
+            return EarthCalc.harvesineDistance(sourcePoint, targetPoint) / 1000 < radiusKm!!.toDouble()
         }
 
         // If client couldn't geocode the location, fallback to allowing the event through
@@ -31,7 +31,7 @@ data class LocationFilter @JvmOverloads constructor(
 }
 
 fun LocationFilter.toPoint(): Point {
-    val lat = DegreeCoordinate(latitude!!)
-    val lng = DegreeCoordinate(longitude!!)
-    return Point(lat, lng)
+    val lat = Coordinate.fromDegrees(latitude!!)
+    val lng = Coordinate.fromDegrees(longitude!!)
+    return Point.at(lat, lng)
 }
