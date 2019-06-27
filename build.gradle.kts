@@ -5,6 +5,7 @@ group = "com.merricklabs.aion"
 repositories {
     mavenCentral()
     jcenter()
+    maven("https://jitpack.io")
 }
 
 plugins {
@@ -15,6 +16,7 @@ plugins {
 
 dependencies {
     implementation(Libs.okhttp)
+    implementation("com.github.grumlimited:geocalc:0.5.8")
     implementation(Libs.kotlin_stdlib_jdk8)
     implementation(Libs.kotlin_reflect)
     implementation(Libs.slf4j_api)

@@ -1,37 +1,47 @@
 package com.merricklabs.aion.handlers.models
 
 import biweekly.component.VEvent
+import com.merricklabs.aion.external.GeocoderClient
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
+import com.merricklabs.aion.params.LocationFilter
 import com.merricklabs.aion.storage.models.DbAionFilter
 
 /**
- * Consists of a url for a calendar and filters for it.
+ * Filters for a calendar.
  */
-data class AionFilter(val id: EntityId, val subjectFilter: FieldFilter) {
-    fun apply(event: VEvent): Boolean {
-        this.subjectFilter.include?.let { filters ->
-            filters.asSequence().forEach {
-                if (!event.summary.value.contains(it)) {
-                    return false
-                }
+data class AionFilter(val id: EntityId,
+                      val subjectFilter: FieldFilter? = null,
+                      val locationFilter: LocationFilter? = null
+) {
+    fun applyWithoutLocation(event: VEvent): Boolean {
+        subjectFilter?.let {
+            if (!it.apply(event)) {
+                return false
             }
         }
-        this.subjectFilter.exclude?.let { filters ->
-            filters.asSequence().forEach {
-                if (event.summary.value.contains(it)) {
-                    return false
-                }
+        return true
+    }
+
+    /**
+     * Applies location and subject filters
+     */
+    fun apply(event: VEvent, geocoderClient: GeocoderClient): Boolean {
+        if (!applyWithoutLocation(event)) return false
+        locationFilter?.let {
+            if (!it.apply(event, geocoderClient)) {
+                return false
             }
         }
+
         return true
     }
 }
 
 fun DbAionFilter.toDomain(): AionFilter {
-    return AionFilter(id = id!!, subjectFilter = subjectFilter!!)
+    return AionFilter(id = id!!, subjectFilter = subjectFilter, locationFilter = locationFilter)
 }
 
 fun CreateFilterPayload.toDomain(): AionFilter {
-    return AionFilter(id = EntityId.create(), subjectFilter = this.subjectFilter)
+    return AionFilter(id = EntityId.create(), subjectFilter = subjectFilter, locationFilter = locationFilter)
 }

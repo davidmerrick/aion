@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted
 import com.merricklabs.aion.handlers.models.AionFilter
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
+import com.merricklabs.aion.params.LocationFilter
 import com.merricklabs.aion.storage.util.EntityIdTypeConverter
 
 /**
@@ -18,10 +19,11 @@ import com.merricklabs.aion.storage.util.EntityIdTypeConverter
 class DbAionFilter @JvmOverloads constructor(
         @DynamoDBTypeConverted(converter = EntityIdTypeConverter::class)
         @DynamoDBHashKey var id: EntityId? = null,
-        @DynamoDBAttribute var subjectFilter: FieldFilter? = null
+        @DynamoDBAttribute var subjectFilter: FieldFilter? = null,
+        @DynamoDBAttribute var locationFilter: LocationFilter? = null
 )
 
 fun AionFilter.toDb(): DbAionFilter {
-    return DbAionFilter(id = id, subjectFilter = subjectFilter)
+    return DbAionFilter(id = id, subjectFilter = subjectFilter, locationFilter = locationFilter)
 }
 

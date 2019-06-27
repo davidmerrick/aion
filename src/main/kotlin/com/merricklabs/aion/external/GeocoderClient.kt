@@ -13,7 +13,8 @@ class GeocoderClient : KoinComponent {
 
     private val okHttpClient by inject<OkHttpClient>()
 
-    fun fetchLocation(address: String) {
+    fun fetchLocation(address: String): LocationResult {
         // Todo: Implement this
+        return LocationResult(0.0, 0.0)
     }
 }
