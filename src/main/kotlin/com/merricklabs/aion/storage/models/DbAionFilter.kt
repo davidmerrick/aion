@@ -20,10 +20,16 @@ class DbAionFilter @JvmOverloads constructor(
         @DynamoDBTypeConverted(converter = EntityIdTypeConverter::class)
         @DynamoDBHashKey var id: EntityId? = null,
         @DynamoDBAttribute var summaryFilter: FieldFilter? = null,
-        @DynamoDBAttribute var locationFilter: LocationFilter? = null
+        @DynamoDBAttribute var locationFilter: LocationFilter? = null,
+        @DynamoDBAttribute var description: String? = null
 )
 
 fun AionFilter.toDb(): DbAionFilter {
-    return DbAionFilter(id = id, summaryFilter = summaryFilter, locationFilter = locationFilter)
+    return DbAionFilter(
+            id = id,
+            summaryFilter = summaryFilter,
+            locationFilter = locationFilter,
+            description = description
+    )
 }
 

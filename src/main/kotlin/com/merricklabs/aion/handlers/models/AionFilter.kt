@@ -12,7 +12,8 @@ import com.merricklabs.aion.storage.models.DbAionFilter
  */
 data class AionFilter(val id: EntityId,
                       val summaryFilter: FieldFilter? = null,
-                      val locationFilter: LocationFilter? = null
+                      val locationFilter: LocationFilter? = null,
+                      val description: String? = null
 ) {
     /**
      * Applies location and subject filters
@@ -35,9 +36,19 @@ data class AionFilter(val id: EntityId,
 }
 
 fun DbAionFilter.toDomain(): AionFilter {
-    return AionFilter(id = id!!, summaryFilter = summaryFilter, locationFilter = locationFilter)
+    return AionFilter(
+            id = id!!,
+            summaryFilter = summaryFilter,
+            locationFilter = locationFilter,
+            description = description
+    )
 }
 
 fun CreateFilterPayload.toDomain(): AionFilter {
-    return AionFilter(id = EntityId.create(), summaryFilter = summaryFilter, locationFilter = locationFilter)
+    return AionFilter(
+            id = EntityId.create(),
+            summaryFilter = summaryFilter,
+            locationFilter = locationFilter,
+            description = description
+    )
 }

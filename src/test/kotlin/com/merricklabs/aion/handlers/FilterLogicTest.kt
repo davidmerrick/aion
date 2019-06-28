@@ -22,6 +22,8 @@ import org.koin.test.inject
 import org.mockito.Mockito
 import org.testng.annotations.Test
 
+const val FILTERS_PATH = "/filters"
+
 class FilterLogicTest : AionIntegrationTestBase() {
 
     private val filterLogic by inject<FilterLogic>()
@@ -40,7 +42,6 @@ class FilterLogicTest : AionIntegrationTestBase() {
 
     @Test
     private fun `Create a summary filter`() {
-        val requestPath = "/filters"
         val mockRequest = APIGatewayProxyRequestEvent().apply {
             body = mockPayload
             headers = mapOf(
@@ -48,14 +49,14 @@ class FilterLogicTest : AionIntegrationTestBase() {
                     HOST to "localhost"
             )
             httpMethod = HttpMethod.POST.toString()
-            requestContext = APIGatewayProxyRequestEvent.ProxyRequestContext().withPath(requestPath)
+            requestContext = APIGatewayProxyRequestEvent.ProxyRequestContext().withPath(FILTERS_PATH)
         }
         val response = filterLogic.handleRequest(mockRequest, mockContext)
         response.statusCode shouldBe SC_CREATED
 
         // Validate headers
         response.headers.containsKey(LOCATION) shouldBe true
-        response.headers[LOCATION] shouldContain requestPath
+        response.headers[LOCATION] shouldContain FILTERS_PATH
 
         // Validate body
         val jsonNode = mapper.readValue(response.body, JsonNode::class.java)
@@ -65,7 +66,6 @@ class FilterLogicTest : AionIntegrationTestBase() {
 
     @Test
     private fun `Create a location filter`() {
-        val requestPath = "/filters"
         val payload = mapper.writeValueAsString(
                 mapOf(
                         "location_filter" to mapOf(
@@ -82,19 +82,41 @@ class FilterLogicTest : AionIntegrationTestBase() {
                     HOST to "localhost"
             )
             httpMethod = HttpMethod.POST.toString()
-            requestContext = APIGatewayProxyRequestEvent.ProxyRequestContext().withPath(requestPath)
+            requestContext = APIGatewayProxyRequestEvent.ProxyRequestContext().withPath(FILTERS_PATH)
         }
         val response = filterLogic.handleRequest(mockRequest, mockContext)
         response.statusCode shouldBe SC_CREATED
 
         // Validate headers
         response.headers.containsKey(LOCATION) shouldBe true
-        response.headers[LOCATION] shouldContain requestPath
+        response.headers[LOCATION] shouldContain FILTERS_PATH
 
         // Validate body
         val jsonNode = mapper.readValue(response.body, JsonNode::class.java)
         jsonNode.has("id") shouldBe true
         jsonNode.get("id").textValue().length shouldBe ID_LENGTH
+    }
+
+    @Test
+    private fun `Create a filter with a location`() {
+        val description = "foo"
+        val payload = mapper.writeValueAsString(mapOf("description" to description))
+        val mockRequest = APIGatewayProxyRequestEvent().apply {
+            body = payload
+            headers = mapOf(
+                    CONTENT_TYPE to AION_VND,
+                    HOST to "localhost"
+            )
+            httpMethod = HttpMethod.POST.toString()
+            requestContext = APIGatewayProxyRequestEvent.ProxyRequestContext().withPath(FILTERS_PATH)
+        }
+        val response = filterLogic.handleRequest(mockRequest, mockContext)
+        response.statusCode shouldBe SC_CREATED
+
+        val jsonNode = mapper.readValue(response.body, JsonNode::class.java)
+        jsonNode.has("description") shouldBe true
+        jsonNode.get("description").textValue() shouldBe description
+
     }
 
     @Test(expectedExceptions = [InvalidContentTypeException::class])
