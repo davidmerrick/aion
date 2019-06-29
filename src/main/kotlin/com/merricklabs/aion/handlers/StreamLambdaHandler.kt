@@ -6,19 +6,27 @@ import com.amazonaws.serverless.proxy.model.AwsProxyResponse
 import com.amazonaws.serverless.proxy.spark.SparkLambdaContainerHandler
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
+import com.merricklabs.aion.AionModule
 import com.merricklabs.aion.resources.SparkResources
+import org.koin.core.KoinComponent
+import org.koin.core.context.startKoin
+import org.koin.core.get
 import spark.Spark
 import java.io.InputStream
 import java.io.OutputStream
 
-class StreamLambdaHandler : RequestStreamHandler {
+class StreamLambdaHandler : RequestStreamHandler, KoinComponent {
 
     private val handler: SparkLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse>
 
     init {
         try {
+            startKoin {
+                modules(AionModule)
+            }
             handler = SparkLambdaContainerHandler.getAwsProxyHandler()
-            SparkResources.defineResources()
+            val sparkResources: SparkResources = get()
+            sparkResources.defineResources()
             Spark.awaitInitialization()
         } catch (e: ContainerInitializationException) {
             // if we fail here. We re-throw the exception to force another cold start

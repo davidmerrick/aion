@@ -7,9 +7,11 @@ import com.merricklabs.aion.external.GeocoderClient
 import com.merricklabs.aion.handlers.ApplyFilterHandler
 import com.merricklabs.aion.handlers.CalendarHandler
 import com.merricklabs.aion.handlers.FilterHandler
+import com.merricklabs.aion.handlers.HelloModule
 import com.merricklabs.aion.handlers.logic.ApplyFilterLogic
 import com.merricklabs.aion.handlers.logic.CalendarLogic
 import com.merricklabs.aion.handlers.logic.FilterLogic
+import com.merricklabs.aion.resources.SparkResources
 import com.merricklabs.aion.storage.CalendarStorage
 import com.merricklabs.aion.storage.DynamoMapperFactory
 import com.merricklabs.aion.storage.FilterStorage
@@ -33,9 +35,12 @@ val AionModule = module {
     single { ApplyFilterLogic() }
     single { CalendarHandler() }
     single { CalendarLogic() }
+    single { SparkResources() }
 
     // Storage
     single { FilterStorage() }
     single { CalendarStorage() }
     single { DynamoMapperFactory() }
+
+    single { HelloModule() }
 }

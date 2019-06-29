@@ -1,9 +1,14 @@
 package com.merricklabs.aion.resources
 
+import com.merricklabs.aion.handlers.HelloModule
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import spark.Spark
 
-object SparkResources {
+class SparkResources : KoinComponent {
     fun defineResources() {
-        Spark.get("/hello") { _, _ -> "Hello World" }
+        val helloModule by inject<HelloModule>()
+
+        Spark.get("/hello") { _, _ -> helloModule.sayHello() }
     }
 }
