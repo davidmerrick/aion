@@ -7,7 +7,7 @@ import com.amazonaws.serverless.proxy.spark.SparkLambdaContainerHandler
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import com.merricklabs.aion.AionModule
-import com.merricklabs.aion.resources.SparkResources
+import com.merricklabs.aion.resources.CalendarResource
 import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 import org.koin.core.get
@@ -25,8 +25,8 @@ class StreamLambdaHandler : RequestStreamHandler, KoinComponent {
                 modules(AionModule)
             }
             handler = SparkLambdaContainerHandler.getAwsProxyHandler()
-            val sparkResources: SparkResources = get()
-            sparkResources.defineResources()
+            val calendarResource: CalendarResource = get()
+            calendarResource.defineResources()
             Spark.awaitInitialization()
         } catch (e: ContainerInitializationException) {
             // if we fail here. We re-throw the exception to force another cold start
