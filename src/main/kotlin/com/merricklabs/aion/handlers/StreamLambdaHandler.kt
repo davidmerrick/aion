@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import com.merricklabs.aion.AionModule
 import com.merricklabs.aion.resources.CalendarResource
+import com.merricklabs.aion.resources.FilterResource
 import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 import org.koin.core.get
@@ -25,14 +26,21 @@ class StreamLambdaHandler : RequestStreamHandler, KoinComponent {
                 modules(AionModule)
             }
             handler = SparkLambdaContainerHandler.getAwsProxyHandler()
-            val calendarResource: CalendarResource = get()
-            calendarResource.defineResources()
+            defineResources()
             Spark.awaitInitialization()
         } catch (e: ContainerInitializationException) {
             // if we fail here. We re-throw the exception to force another cold start
             e.printStackTrace()
             throw RuntimeException("Could not initialize Spark container", e)
         }
+    }
+
+    private fun defineResources() {
+        val calendarResource: CalendarResource = get()
+        calendarResource.defineResources()
+
+        val filterResource: FilterResource = get()
+        filterResource.defineResources()
     }
 
     override fun handleRequest(inputStream: InputStream, outputStream: OutputStream, context: Context) {

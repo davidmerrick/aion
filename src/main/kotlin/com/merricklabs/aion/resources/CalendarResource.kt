@@ -1,6 +1,7 @@
 package com.merricklabs.aion.resources
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.net.MediaType
 import com.merricklabs.aion.handlers.logic.CalendarLogic
 import com.merricklabs.aion.handlers.models.CreateCalendarPayload
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
@@ -28,6 +29,13 @@ class CalendarResource : KoinComponent {
             response.type(AION_VND)
             response.status(HttpStatus.SC_CREATED)
             mapper.writeValueAsString(created)
+        }
+
+        Spark.get("/calendars/:calendarId/apply/:filterId") { request, response ->
+            val calendarId = EntityId(request.params("calendarId"))
+            val filterId = EntityId(request.params("filterId"))
+            response.type(MediaType.I_CALENDAR_UTF_8.toString())
+            logic.getFilteredCalendar(calendarId, filterId)
         }
     }
 
