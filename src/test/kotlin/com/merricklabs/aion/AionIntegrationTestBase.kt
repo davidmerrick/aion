@@ -15,7 +15,9 @@ import org.koin.test.mock.declareMock
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.testng.annotations.AfterClass
+import org.testng.annotations.AfterSuite
 import org.testng.annotations.BeforeClass
+import org.testng.annotations.BeforeSuite
 import spark.Spark
 
 const val BASE_URL = "http://localhost:4567"
@@ -31,8 +33,8 @@ open class AionIntegrationTestBase : KoinTest {
 
     private fun <T> uninitialized(): T = null as T
 
-    @BeforeClass
-    protected fun beforeClass() {
+    @BeforeSuite
+    protected fun beforeSuite() {
         startKoin {
             modules(listOf(AionModule, AionTestModule))
         }
@@ -46,8 +48,8 @@ open class AionIntegrationTestBase : KoinTest {
         initResources()
     }
 
-    @AfterClass
-    protected fun afterMethod() {
+    @AfterSuite
+    protected fun afterSuite() {
         stopKoin()
     }
 
