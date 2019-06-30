@@ -5,6 +5,7 @@ import com.merricklabs.aion.handlers.logic.FilterLogic
 import com.merricklabs.aion.handlers.models.CreateFilterPayload
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
+import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
 import org.apache.http.client.HttpResponseException
 import org.koin.core.KoinComponent
@@ -30,6 +31,7 @@ class FilterResource : KoinComponent {
             val created = logic.createFilter(createPayload)
             response.type(AION_VND)
             response.status(HttpStatus.SC_CREATED)
+            response.header(HttpHeaders.LOCATION, "${request.url()}/${created.id}")
             mapper.writeValueAsString(created)
         }
 

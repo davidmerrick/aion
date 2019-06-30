@@ -6,13 +6,13 @@ import com.merricklabs.aion.handlers.logic.CalendarLogic
 import com.merricklabs.aion.handlers.models.CreateCalendarPayload
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
+import org.apache.http.HttpHeaders.LOCATION
 import org.apache.http.HttpStatus
 import org.apache.http.client.HttpResponseException
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import spark.Spark
 import spark.Spark.exception
-
 
 
 class CalendarResource : KoinComponent {
@@ -32,6 +32,7 @@ class CalendarResource : KoinComponent {
             val created = logic.createCalendar(createPayload)
             response.type(AION_VND)
             response.status(HttpStatus.SC_CREATED)
+            response.header(LOCATION, "${request.url()}/${created.id}")
             mapper.writeValueAsString(created)
         }
 
