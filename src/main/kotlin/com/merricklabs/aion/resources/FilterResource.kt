@@ -6,9 +6,12 @@ import com.merricklabs.aion.handlers.models.CreateFilterPayload
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
 import org.apache.http.HttpStatus
+import org.apache.http.client.HttpResponseException
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import spark.Spark
+import spark.Spark.exception
+import spark.Spark.get
+import spark.Spark.post
 
 class FilterResource : KoinComponent {
 
@@ -16,18 +19,23 @@ class FilterResource : KoinComponent {
     private val mapper by inject<ObjectMapper>()
 
     fun defineResources() {
-        Spark.get("/filters/:id") { request, response ->
+        get("/filters/:id") { request, response ->
             val filter = logic.getFilter(EntityId(request.params("id")))
             response.type(AION_VND)
             mapper.writeValueAsString(filter)
         }
 
-        Spark.post("/filters") { request, response ->
+        post("/filters") { request, response ->
             val createPayload = mapper.readValue(request.body(), CreateFilterPayload::class.java)
             val created = logic.createFilter(createPayload)
             response.type(AION_VND)
             response.status(HttpStatus.SC_CREATED)
             mapper.writeValueAsString(created)
+        }
+
+        exception(HttpResponseException::class.java) { e, _, response ->
+            response.status(e.statusCode)
+            response.body("Resource not found")
         }
     }
 

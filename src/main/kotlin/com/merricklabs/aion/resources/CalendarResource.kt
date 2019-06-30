@@ -7,9 +7,13 @@ import com.merricklabs.aion.handlers.models.CreateCalendarPayload
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
 import org.apache.http.HttpStatus
+import org.apache.http.client.HttpResponseException
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import spark.Spark
+import spark.Spark.exception
+
+
 
 class CalendarResource : KoinComponent {
 
@@ -36,6 +40,11 @@ class CalendarResource : KoinComponent {
             val filterId = EntityId(request.params("filterId"))
             response.type(MediaType.I_CALENDAR_UTF_8.toString())
             logic.getFilteredCalendar(calendarId, filterId)
+        }
+
+        exception(HttpResponseException::class.java) { e, _, response ->
+            response.status(e.statusCode)
+            response.body("Resource not found")
         }
     }
 
