@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.config.AionConfig
 import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.external.GeocoderClient
-import com.merricklabs.aion.handlers.ApplyFilterHandler
-import com.merricklabs.aion.handlers.CalendarHandler
-import com.merricklabs.aion.handlers.FilterHandler
-import com.merricklabs.aion.handlers.logic.ApplyFilterLogic
 import com.merricklabs.aion.handlers.logic.CalendarLogic
 import com.merricklabs.aion.handlers.logic.FilterLogic
+import com.merricklabs.aion.resources.CalendarResource
+import com.merricklabs.aion.resources.FilterResource
 import com.merricklabs.aion.storage.CalendarStorage
 import com.merricklabs.aion.storage.DynamoMapperFactory
 import com.merricklabs.aion.storage.FilterStorage
@@ -26,12 +24,12 @@ val AionModule = module {
     single { CalendarClient() }
     single { GeocoderClient() }
 
-    // Handlers
-    single { FilterHandler() }
+    // Resources
+    single { CalendarResource() }
+    single { FilterResource() }
+
+    // Logic
     single { FilterLogic() }
-    single { ApplyFilterHandler() }
-    single { ApplyFilterLogic() }
-    single { CalendarHandler() }
     single { CalendarLogic() }
 
     // Storage

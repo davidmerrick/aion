@@ -16,6 +16,8 @@ plugins {
 
 dependencies {
     implementation(Libs.okhttp)
+    implementation("com.sparkjava:spark-core:2.9.1")
+    implementation("com.amazonaws.serverless:aws-serverless-java-container-spark:1.3.2")
     implementation(Libs.geocalc)
     implementation(Libs.google_maps_services)
     implementation(Libs.kotlin_stdlib_jdk8)

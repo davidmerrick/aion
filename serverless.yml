@@ -31,45 +31,12 @@ package:
   artifact: build/libs/${self:service}.jar
 
 functions:
-  filter:
-    handler: com.merricklabs.aion.handlers.FilterHandler
+  handler:
+    handler: com.merricklabs.aion.handlers.StreamLambdaHandler
     events:
       - http:
-          path: /filters
-          method: post
-      - http:
-          path: /filters/{filterId}
-          method: get
-          request:
-            parameters:
-              paths:
-                filterId: true
-
-  calendar:
-    handler: com.merricklabs.aion.handlers.CalendarHandler
-    events:
-      - http:
-          path: /calendars
-          method: post
-      - http:
-          path: /calendars/{calendarId}
-          method: get
-          request:
-            parameters:
-              paths:
-                calendarId: true
-
-  apply-filter:
-    handler: com.merricklabs.aion.handlers.ApplyFilterHandler
-    events:
-      - http:
-          path: /calendars/{calendarId}/apply/{filterId}
-          method: get
-          request:
-            parameters:
-              paths:
-                calendarId: true
-                filterId: true
+          path: /{proxy+}
+          method: any
 
 resources:
   Resources:
