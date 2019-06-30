@@ -1,25 +1,22 @@
 package com.merricklabs.aion.resources
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.handlers.logic.FilterLogic
 import com.merricklabs.aion.handlers.models.CreateFilterPayload
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
 import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
-import org.apache.http.client.HttpResponseException
-import org.koin.core.KoinComponent
 import org.koin.core.inject
-import spark.Spark.exception
 import spark.Spark.get
 import spark.Spark.post
 
-class FilterResource : KoinComponent {
+class FilterResource : AionResource() {
 
     private val logic by inject<FilterLogic>()
-    private val mapper by inject<ObjectMapper>()
 
-    fun defineResources() {
+    override fun defineResources() {
+        super.defineResources()
+
         get("/filters/:id") { request, response ->
             val filter = logic.getFilter(EntityId(request.params("id")))
             response.type(AION_VND)
@@ -33,11 +30,6 @@ class FilterResource : KoinComponent {
             response.status(HttpStatus.SC_CREATED)
             response.header(HttpHeaders.LOCATION, "${request.url()}/${created.id}")
             mapper.writeValueAsString(created)
-        }
-
-        exception(HttpResponseException::class.java) { e, _, response ->
-            response.status(e.statusCode)
-            response.body("Resource not found")
         }
     }
 
