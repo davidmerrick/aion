@@ -19,12 +19,15 @@ class CalendarResource : AionResource() {
         super.defineResources()
 
         Spark.get("/calendars/:id") { request, response ->
+            validateAcceptHeaders(request)
             val calendar = logic.getCalendar(EntityId(request.params("id")))
             response.type(AION_VND)
             mapper.writeValueAsString(calendar)
         }
 
         Spark.post("/calendars") { request, response ->
+            validateAcceptHeaders(request)
+            validateContentTypeHeaders(request)
             val createPayload = mapper.readValue(request.body(), CreateCalendarPayload::class.java)
             val created = logic.createCalendar(createPayload)
             response.type(AION_VND)

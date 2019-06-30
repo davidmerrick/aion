@@ -18,12 +18,15 @@ class FilterResource : AionResource() {
         super.defineResources()
 
         get("/filters/:id") { request, response ->
+            validateAcceptHeaders(request)
             val filter = logic.getFilter(EntityId(request.params("id")))
             response.type(AION_VND)
             mapper.writeValueAsString(filter)
         }
 
         post("/filters") { request, response ->
+            validateAcceptHeaders(request)
+            validateContentTypeHeaders(request)
             val createPayload = mapper.readValue(request.body(), CreateFilterPayload::class.java)
             val created = logic.createFilter(createPayload)
             response.type(AION_VND)

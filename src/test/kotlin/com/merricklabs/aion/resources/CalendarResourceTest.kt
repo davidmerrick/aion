@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.AionIntegrationTestBase
 import com.merricklabs.aion.BASE_URL
+import com.merricklabs.aion.handlers.models.AionCalendar
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
+import com.merricklabs.aion.storage.CalendarStorage
 import com.merricklabs.aion.testutil.AionTestData.TEST_URL
 import io.kotlintest.matchers.string.contain
 import io.kotlintest.shouldBe
@@ -14,17 +16,21 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import org.apache.http.HttpHeaders.ACCEPT
+import org.apache.http.HttpHeaders.CONTENT_TYPE
 import org.apache.http.HttpHeaders.LOCATION
 import org.apache.http.HttpStatus
 import org.koin.test.inject
 import org.testng.annotations.Test
 
 const val CALENDAR_ENDPOINT = "calendars"
+const val JSON_TYPE = "application/json"
 
 class CalendarResourceTest : AionIntegrationTestBase() {
 
     private val okHttpClient by inject<OkHttpClient>()
     private val mapper by inject<ObjectMapper>()
+    private val calendarStorage by inject<CalendarStorage>()
 
     @Test
     fun `Create a calendar`() {
@@ -32,6 +38,8 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val body = RequestBody.create(MediaType.parse(AION_VND), mapper.writeValueAsString(payload))
         val request = Request.Builder()
                 .url("$BASE_URL/$CALENDAR_ENDPOINT")
+                .header(ACCEPT, AION_VND)
+                .header(CONTENT_TYPE, AION_VND)
                 .post(body)
                 .build()
         val response = okHttpClient.newCall(request).execute()
@@ -43,9 +51,60 @@ class CalendarResourceTest : AionIntegrationTestBase() {
     }
 
     @Test
+    fun `Get a calendar`() {
+        val toCreate = AionCalendar.create(TEST_URL)
+        calendarStorage.saveCalendar(toCreate)
+        val request = Request.Builder()
+                .url("$BASE_URL/$CALENDAR_ENDPOINT/${toCreate.id}")
+                .header(ACCEPT, AION_VND)
+                .get()
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_OK
+    }
+
+    @Test
+    fun `Get calendar should validate accept headers`() {
+        val toCreate = AionCalendar.create(TEST_URL)
+        calendarStorage.saveCalendar(toCreate)
+        val request = Request.Builder()
+                .url("$BASE_URL/$CALENDAR_ENDPOINT/${toCreate.id}")
+                .get()
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_NOT_ACCEPTABLE
+    }
+
+    @Test
+    fun `Should validate Accept header on create`() {
+        val payload = mapOf("url" to TEST_URL)
+        val body = RequestBody.create(MediaType.parse(AION_VND), mapper.writeValueAsString(payload))
+        val request = Request.Builder()
+                .url("$BASE_URL/$CALENDAR_ENDPOINT")
+                .post(body)
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_NOT_ACCEPTABLE
+    }
+
+    @Test
+    fun `Should validate Content Type header on create`() {
+        val payload = mapOf("url" to TEST_URL)
+        val body = RequestBody.create(MediaType.parse(JSON_TYPE), mapper.writeValueAsString(payload))
+        val request = Request.Builder()
+                .url("$BASE_URL/$CALENDAR_ENDPOINT")
+                .header(ACCEPT, AION_VND)
+                .post(body)
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE
+    }
+
+    @Test
     fun `Get invalid calendar should 404`() {
         val request = Request.Builder()
                 .url("$BASE_URL/$CALENDAR_ENDPOINT/${EntityId.create()}")
+                .header(ACCEPT, AION_VND)
                 .get()
                 .build()
         val response = okHttpClient.newCall(request).execute()
