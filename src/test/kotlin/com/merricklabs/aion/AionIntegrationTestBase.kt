@@ -2,6 +2,8 @@ package com.merricklabs.aion
 
 import com.merricklabs.aion.external.GeocoderClient
 import com.merricklabs.aion.external.LocationResult
+import com.merricklabs.aion.resources.CalendarResource
+import com.merricklabs.aion.resources.FilterResource
 import com.merricklabs.aion.testutil.AionTestData
 import com.merricklabs.aion.testutil.AionTestModule
 import com.merricklabs.aion.testutil.DynamoTestClient
@@ -14,6 +16,9 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.testng.annotations.AfterClass
 import org.testng.annotations.BeforeClass
+import spark.Spark
+
+const val BASE_URL = "http://localhost:4567"
 
 @Suppress("UNCHECKED_CAST")
 open class AionIntegrationTestBase : KoinTest {
@@ -38,6 +43,7 @@ open class AionIntegrationTestBase : KoinTest {
         }
 
         initTables()
+        initResources()
     }
 
     @AfterClass
@@ -48,5 +54,14 @@ open class AionIntegrationTestBase : KoinTest {
     private fun initTables() {
         val dynamoClient by inject<DynamoTestClient>()
         dynamoClient.createTables()
+    }
+
+    private fun initResources() {
+        val calendarResource by inject<CalendarResource>()
+        calendarResource.defineResources()
+
+        val filterResource by inject<FilterResource>()
+        filterResource.defineResources()
+        Spark.awaitInitialization()
     }
 }
