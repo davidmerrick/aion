@@ -25,6 +25,13 @@ a containerized dynamo local for testing.
 
 CircleCI has a local tool to help validate your config here: https://circleci.com/docs/2.0/local-cli/
 
+# Stack
+- AWS Lambda
+- [Spark](http://sparkjava.com/) web framework
+- Kotlin
+- Google Geocoder API
+- [Serverless Framework](https://serverless.com/) for deployment
+
 # Reference
 
 - Google Maps Geocoding API: https://developers.google.com/maps/documentation/geocoding/intro
