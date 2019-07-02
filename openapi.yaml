@@ -17,10 +17,7 @@ paths:
               schema:
                 type: object
                 example:
-                  calendar:
-                    summary: Example of a calendar
-                    value:
-                      url: webcal://www.meetup.com/ScienceOnTapORWA/events/ical/
+                  url: webcal://www.meetup.com/ScienceOnTapORWA/events/ical/
                 properties:
                   url:
                     type: string
