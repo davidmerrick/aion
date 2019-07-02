@@ -6,7 +6,7 @@ info:
 servers:
   - url: http://api.example.com/v1
 paths:
-  /calendars/id:
+  /calendars:
     post:
       summary: Create a calendar.
       responses:
@@ -21,6 +21,7 @@ paths:
                 properties:
                   url:
                     type: string
+  /calendars/{id}:
     get:
       summary: Get a calendar by id.
       responses:
