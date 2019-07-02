@@ -1,5 +1,6 @@
 package com.merricklabs.aion.resources
 
+import io.swagger.annotations.Info
 import io.swagger.jaxrs.Reader
 import io.swagger.jaxrs.config.BeanConfig
 import org.reflections.Reflections
@@ -18,9 +19,9 @@ class SwaggerResource : AionResource() {
             beanConfig.scanAndRead()
 
             val reflections = Reflections(packageName)
-            val classes = reflections.t
+            val classes = reflections.getTypesAnnotatedWith(Info::class.java)
             val swagger = Reader(beanConfig.swagger)
-                    .read()
+                    .read(classes)
             mapper.writeValueAsString(swagger)
         }
     }

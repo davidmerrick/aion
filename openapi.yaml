@@ -1,0 +1,20 @@
+openapi: 3.0.0
+info:
+  title: Aion
+  description: iCal proxy and filter service
+  version: 1.0.0
+servers:
+  - url: http://api.example.com/v1
+paths:
+  /calendars/id:
+    get:
+      summary: Get a calendar by id.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
