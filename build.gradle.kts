@@ -16,6 +16,8 @@ plugins {
 
 dependencies {
     implementation(Libs.okhttp)
+    implementation("io.swagger.core.v3:swagger-annotations:2.0.8")
+    implementation("io.swagger:swagger-jaxrs:1.5.22")
     implementation("com.sparkjava:spark-core:2.9.1")
     implementation("com.amazonaws.serverless:aws-serverless-java-container-spark:1.3.2")
     implementation(Libs.geocalc)

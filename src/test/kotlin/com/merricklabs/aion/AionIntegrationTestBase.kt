@@ -5,6 +5,7 @@ import com.grum.geocalc.Point
 import com.merricklabs.aion.external.GeocoderClient
 import com.merricklabs.aion.resources.CalendarResource
 import com.merricklabs.aion.resources.FilterResource
+import com.merricklabs.aion.resources.SwaggerResource
 import com.merricklabs.aion.testutil.AionTestData
 import com.merricklabs.aion.testutil.AionTestModule
 import com.merricklabs.aion.testutil.DynamoTestClient
@@ -68,6 +69,9 @@ open class AionIntegrationTestBase : KoinTest {
 
         val filterResource by inject<FilterResource>()
         filterResource.defineResources()
+
+        val swaggerResource by inject<SwaggerResource>()
+        swaggerResource.defineResources()
         Spark.awaitInitialization()
     }
 }
