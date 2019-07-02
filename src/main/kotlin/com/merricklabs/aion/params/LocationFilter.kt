@@ -7,7 +7,6 @@ import com.grum.geocalc.Coordinate
 import com.grum.geocalc.EarthCalc
 import com.grum.geocalc.Point
 import com.merricklabs.aion.external.GeocoderClient
-import com.merricklabs.aion.external.toPoint
 
 /**
  * Filters out any points outside of a radius in km
@@ -21,8 +20,7 @@ data class LocationFilter @JvmOverloads constructor(
     fun apply(event: VEvent, geocoderClient: GeocoderClient): Boolean {
         geocoderClient.fetchLocation(event.location.value)?.let {
             val sourcePoint = toPoint()
-            val targetPoint = it.toPoint()
-            return EarthCalc.harvesineDistance(sourcePoint, targetPoint) / 1000 < distanceKm!!.toDouble()
+            return EarthCalc.harvesineDistance(sourcePoint, it) / 1000 < distanceKm!!.toDouble()
         }
 
         // If client couldn't geocode the location, fallback to allowing the event through

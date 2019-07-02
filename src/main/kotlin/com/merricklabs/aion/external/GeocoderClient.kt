@@ -2,6 +2,8 @@ package com.merricklabs.aion.external
 
 import com.google.maps.GeoApiContext
 import com.google.maps.GeocodingApi
+import com.grum.geocalc.Coordinate
+import com.grum.geocalc.Point
 import com.merricklabs.aion.config.AionConfig
 import mu.KotlinLogging
 import org.koin.core.KoinComponent
@@ -18,7 +20,7 @@ class GeocoderClient : KoinComponent {
         apiKey = config.geocoder.apiKey
     }
 
-    fun fetchLocation(address: String): LocationResult? {
+    fun fetchLocation(address: String): Point? {
         log.info("Fetching address from geocoder: $address")
 
         val context = GeoApiContext.Builder()
@@ -29,6 +31,9 @@ class GeocoderClient : KoinComponent {
             return null
         }
 
-        return LocationResult(results[0].geometry.location.lat, results[0].geometry.location.lng)
+        return Point.at(
+                Coordinate.fromDegrees(results[0].geometry.location.lat),
+                Coordinate.fromDegrees(results[0].geometry.location.lng)
+        )
     }
 }

@@ -1,7 +1,8 @@
 package com.merricklabs.aion
 
+import com.grum.geocalc.Coordinate
+import com.grum.geocalc.Point
 import com.merricklabs.aion.external.GeocoderClient
-import com.merricklabs.aion.external.LocationResult
 import com.merricklabs.aion.resources.CalendarResource
 import com.merricklabs.aion.resources.FilterResource
 import com.merricklabs.aion.testutil.AionTestData
@@ -14,9 +15,7 @@ import org.koin.test.inject
 import org.koin.test.mock.declareMock
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
-import org.testng.annotations.AfterClass
 import org.testng.annotations.AfterSuite
-import org.testng.annotations.BeforeClass
 import org.testng.annotations.BeforeSuite
 import spark.Spark
 
@@ -41,7 +40,12 @@ open class AionIntegrationTestBase : KoinTest {
 
         declareMock<GeocoderClient> {
             given(this.fetchLocation(any()))
-                    .willReturn(LocationResult(AionTestData.POWELLS_LAT, AionTestData.POWELLS_LONG))
+                    .willReturn(
+                            Point.at(
+                                    Coordinate.fromDegrees(AionTestData.POWELLS_LAT),
+                                    Coordinate.fromDegrees(AionTestData.POWELLS_LONG)
+                            )
+                    )
         }
 
         initTables()
