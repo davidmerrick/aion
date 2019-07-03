@@ -10,7 +10,6 @@ import org.apache.http.HttpStatus
 import org.koin.core.inject
 import spark.Spark
 
-
 class CalendarResource : AionResource() {
 
     private val logic by inject<CalendarLogic>()
@@ -43,5 +42,4 @@ class CalendarResource : AionResource() {
             logic.getFilteredCalendar(calendarId, filterId)
         }
     }
-
 }

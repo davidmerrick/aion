@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  title: Aion
+  description: iCal proxy and filter service
+  version: 1.0.0
+paths:
+  /filters:
+    post:
+      summary: Create a filter.
+      tags:
+        - Filters
+      responses:
+        '201':
+          description: Success
+          content:
+            application/vnd.merricklabs.aion.v1+json:
+              schema:
+                type: object
+                properties:
+                  summary_filter:
+                    type: object
+                    properties:
+                      include:
+                        type: array
+                      exclude:
+                        type: array
+  /filters/{filterId}:
+    post:
+      summary: Get a filter.
+      tags:
+        - Filters
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.merricklabs.aion.v1+json:
+              schema:
+                type: object
+                properties:
+                  summary_filter:
+                    type: object
+
+  /calendars:
+    post:
+      summary: Create a calendar.
+      tags:
+        - Calendars
+      responses:
+        '201':
+          description: Success
+          content:
+            application/vnd.merricklabs.aion.v1+json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                example:
+                  url: webcal://www.meetup.com/ScienceOnTapORWA/events/ical/
+  /calendars/{calendarId}:
+    get:
+      summary: Get a calendar by id.
+      tags:
+        - Calendars
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.merricklabs.aion.v1+json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  id:
+                    type: string
+  /calendars/{calendarId}/apply/{filterId}:
+    get:
+      summary: Get filtered calendar.
+      tags:
+        - Calendars
+      responses:
+        '200':
+          description: Success
+          content:
+            text/calendar:

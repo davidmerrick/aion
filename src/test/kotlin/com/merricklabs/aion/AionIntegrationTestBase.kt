@@ -68,6 +68,7 @@ open class AionIntegrationTestBase : KoinTest {
 
         val filterResource by inject<FilterResource>()
         filterResource.defineResources()
+
         Spark.awaitInitialization()
     }
 }
