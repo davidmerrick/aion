@@ -4,6 +4,8 @@
 
 Also an iCal proxy and filtering service.
 
+[Swagger docs](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/davidmerrick/aion/master/openapi.yaml)
+
 # The problem
 
 Ever subscribe to an iCal calendar (Meetup, Facebook, etc) that has some events that aren't in your area? Or just a subset that you aren't interested in?
