@@ -1,10 +1,12 @@
 package com.merricklabs.aion.resources
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.merricklabs.aion.handlers.logic.CalendarLogic
-import com.merricklabs.aion.handlers.models.CreateCalendarPayload
-import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
+import com.merricklabs.aion.resources.logic.CalendarLogic
+import com.merricklabs.aion.resources.models.CreateCalendarPayload
+import com.merricklabs.aion.resources.util.AionHeaders.AION_VND
+import com.merricklabs.aion.resources.util.PathParams.CALENDAR_ID
+import com.merricklabs.aion.resources.util.PathParams.FILTER_ID
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.net.URI
@@ -24,8 +26,8 @@ class CalendarResource : KoinComponent {
 
     @GET
     @Produces(AION_VND)
-    @Path("/{calendarId}")
-    fun getCalendar(@PathParam("calendarId") calendarId: String): Response {
+    @Path("/{$CALENDAR_ID}")
+    fun getCalendar(@PathParam(CALENDAR_ID) calendarId: String): Response {
         val calendar = logic.getCalendar(EntityId(calendarId))
         return Response.ok(mapper.writeValueAsString(calendar)).build()
     }
@@ -43,9 +45,9 @@ class CalendarResource : KoinComponent {
 
     @GET
     @Produces("text/calendar")
-    @Path("/{calendarId}/apply/{filterId}")
-    fun getFilteredCalendar(@PathParam("calendarId") calendarId: String,
-                            @PathParam("filterId") filterId: String): Response {
+    @Path("/{$CALENDAR_ID}/apply/{$FILTER_ID}")
+    fun getFilteredCalendar(@PathParam(CALENDAR_ID) calendarId: String,
+                            @PathParam(FILTER_ID) filterId: String): Response {
 
         val body = logic.getFilteredCalendar(EntityId(calendarId), EntityId(filterId))
         return Response.ok(body).build()

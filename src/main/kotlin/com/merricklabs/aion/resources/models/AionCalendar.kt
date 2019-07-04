@@ -1,4 +1,4 @@
-package com.merricklabs.aion.handlers.models
+package com.merricklabs.aion.resources.models
 
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.storage.models.DbAionCalendar

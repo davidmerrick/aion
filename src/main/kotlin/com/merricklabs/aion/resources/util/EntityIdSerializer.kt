@@ -1,4 +1,4 @@
-package com.merricklabs.aion.handlers.util
+package com.merricklabs.aion.resources.util
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider

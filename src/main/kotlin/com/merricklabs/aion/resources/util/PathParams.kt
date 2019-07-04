@@ -1,4 +1,4 @@
-package com.merricklabs.aion.handlers.util
+package com.merricklabs.aion.resources.util
 
 object PathParams {
     const val CALENDAR_ID = "calendarId"

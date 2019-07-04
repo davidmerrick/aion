@@ -1,13 +1,18 @@
 package com.merricklabs.aion.resources
 
+import biweekly.Biweekly
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.AionIntegrationTestBase
 import com.merricklabs.aion.BASE_URI
-import com.merricklabs.aion.handlers.models.AionCalendar
-import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
+import com.merricklabs.aion.params.FieldFilter
+import com.merricklabs.aion.resources.models.AionCalendar
+import com.merricklabs.aion.resources.models.AionFilter
+import com.merricklabs.aion.resources.util.AionHeaders.AION_VND
 import com.merricklabs.aion.storage.CalendarStorage
+import com.merricklabs.aion.storage.FilterStorage
+import com.merricklabs.aion.testutil.AionTestData
 import com.merricklabs.aion.testutil.AionTestData.TEST_URL
 import io.kotlintest.matchers.string.contain
 import io.kotlintest.shouldBe
@@ -32,6 +37,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
     private val okHttpClient by inject<OkHttpClient>()
     private val mapper by inject<ObjectMapper>()
     private val calendarStorage by inject<CalendarStorage>()
+    private val filterStorage by inject<FilterStorage>()
 
     @Test
     fun `Create a calendar`() {
@@ -113,5 +119,49 @@ class CalendarResourceTest : AionIntegrationTestBase() {
                 .build()
         val response = okHttpClient.newCall(request).execute()
         response.code() shouldBe HttpStatus.SC_NOT_FOUND
+    }
+
+    @Test
+    fun `Filter a calendar with include text`() {
+        val includeWord = "earthquake"
+        val summaryFilter = FieldFilter(listOf(includeWord), emptyList())
+        val toCreateFilter = AionFilter(EntityId.create(), summaryFilter)
+        filterStorage.saveFilter(toCreateFilter)
+
+        val toCreateCalendar = AionCalendar.create(AionTestData.TEST_URL)
+        calendarStorage.saveCalendar(toCreateCalendar)
+
+        val request = Request.Builder()
+                .url("$BASE_URI/$CALENDAR_ENDPOINT/${toCreateCalendar.id}/apply/${toCreateFilter.id}")
+                .get()
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_OK
+        val calendar = Biweekly.parse(response.body()!!.string()).first()
+        calendar.events.size shouldBe 1
+        calendar.events[0].summary.value.toLowerCase() shouldHave contain(includeWord)
+    }
+
+    @Test
+    fun `Filter a calendar with exclude text`() {
+        val excludeWord = "earthquake"
+        val summaryFilter = FieldFilter(emptyList(), listOf(excludeWord))
+        val toCreateFilter = AionFilter(EntityId.create(), summaryFilter)
+        filterStorage.saveFilter(toCreateFilter)
+
+        val toCreateCalendar = AionCalendar.create(AionTestData.TEST_URL)
+        calendarStorage.saveCalendar(toCreateCalendar)
+
+        val request = Request.Builder()
+                .url("$BASE_URI/$CALENDAR_ENDPOINT/${toCreateCalendar.id}/apply/${toCreateFilter.id}")
+                .get()
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_OK
+        val calendar = Biweekly.parse(response.body()!!.string()).first()
+        calendar.events.size shouldBe 5
+        calendar.events.asSequence().any {
+            it.summary.value.toLowerCase().contains(excludeWord)
+        } shouldBe false
     }
 }

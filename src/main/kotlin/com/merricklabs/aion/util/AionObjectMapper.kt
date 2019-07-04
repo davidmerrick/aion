@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.merricklabs.aion.handlers.util.EntityIdSerializer
 import com.merricklabs.aion.params.EntityId
+import com.merricklabs.aion.resources.util.EntityIdSerializer
 import org.koin.core.KoinComponent
 
 class AionObjectMapper : ObjectMapper(), KoinComponent {

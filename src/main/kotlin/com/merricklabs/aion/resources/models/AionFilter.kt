@@ -1,4 +1,4 @@
-package com.merricklabs.aion.handlers.models
+package com.merricklabs.aion.resources.models
 
 import biweekly.component.VEvent
 import com.merricklabs.aion.external.GeocoderClient

@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.HttpHeaders.CONTENT_TYPE
 import com.merricklabs.aion.AionIntegrationTestBase
 import com.merricklabs.aion.BASE_URI
-import com.merricklabs.aion.handlers.models.AionFilter
-import com.merricklabs.aion.handlers.util.AionHeaders
-import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
+import com.merricklabs.aion.resources.models.AionFilter
+import com.merricklabs.aion.resources.util.AionHeaders
+import com.merricklabs.aion.resources.util.AionHeaders.AION_VND
 import com.merricklabs.aion.storage.FilterStorage
 import io.kotlintest.matchers.string.contain
 import io.kotlintest.shouldBe

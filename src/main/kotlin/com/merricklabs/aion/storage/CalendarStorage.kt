@@ -4,9 +4,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression
 import com.merricklabs.aion.config.AionConfig
 import com.merricklabs.aion.exceptions.CalendarNotFoundException
-import com.merricklabs.aion.handlers.models.AionCalendar
-import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.params.EntityId
+import com.merricklabs.aion.resources.models.AionCalendar
+import com.merricklabs.aion.resources.models.toDomain
 import com.merricklabs.aion.storage.models.DbAionCalendar
 import com.merricklabs.aion.storage.models.toDb
 import mu.KotlinLogging

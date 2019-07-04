@@ -3,10 +3,10 @@ package com.merricklabs.aion.storage.models
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted
-import com.merricklabs.aion.handlers.models.AionFilter
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
 import com.merricklabs.aion.params.LocationFilter
+import com.merricklabs.aion.resources.models.AionFilter
 import com.merricklabs.aion.storage.util.EntityIdTypeConverter
 
 /**

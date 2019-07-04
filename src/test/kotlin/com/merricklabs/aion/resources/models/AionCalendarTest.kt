@@ -1,4 +1,4 @@
-package com.merricklabs.aion.handlers.models
+package com.merricklabs.aion.resources.models
 
 import io.kotlintest.matchers.string.shouldStartWith
 import org.testng.annotations.Test

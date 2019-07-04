@@ -1,7 +1,7 @@
 package com.merricklabs.aion.storage
 
 import com.merricklabs.aion.AionIntegrationTestBase
-import com.merricklabs.aion.handlers.models.AionCalendar
+import com.merricklabs.aion.resources.models.AionCalendar
 import com.merricklabs.aion.testutil.AionTestData
 import io.kotlintest.shouldBe
 import org.koin.test.inject

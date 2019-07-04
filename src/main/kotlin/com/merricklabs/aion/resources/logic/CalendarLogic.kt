@@ -1,13 +1,13 @@
-package com.merricklabs.aion.handlers.logic
+package com.merricklabs.aion.resources.logic
 
 import biweekly.Biweekly
 import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.external.GeocoderClient
-import com.merricklabs.aion.handlers.models.AionCalendar
-import com.merricklabs.aion.handlers.models.CreateCalendarPayload
-import com.merricklabs.aion.handlers.models.toDomain
-import com.merricklabs.aion.handlers.util.applyFilter
 import com.merricklabs.aion.params.EntityId
+import com.merricklabs.aion.resources.models.AionCalendar
+import com.merricklabs.aion.resources.models.CreateCalendarPayload
+import com.merricklabs.aion.resources.models.toDomain
+import com.merricklabs.aion.resources.util.applyFilter
 import com.merricklabs.aion.storage.CalendarStorage
 import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging

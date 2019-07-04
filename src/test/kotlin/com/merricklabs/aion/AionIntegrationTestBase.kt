@@ -1,16 +1,16 @@
 package com.merricklabs.aion
 
+import biweekly.Biweekly
+import com.google.common.io.Resources
 import com.grum.geocalc.Coordinate
 import com.grum.geocalc.Point
+import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.external.GeocoderClient
-import com.merricklabs.aion.resources.AionExceptionMapper
-import com.merricklabs.aion.resources.CalendarResource
-import com.merricklabs.aion.resources.FilterResource
+import com.merricklabs.aion.resources.ResourceConfigBuilder
 import com.merricklabs.aion.testutil.AionTestData
 import com.merricklabs.aion.testutil.AionTestModule
 import com.merricklabs.aion.testutil.DynamoTestClient
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory
-import org.glassfish.jersey.server.ResourceConfig
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
@@ -51,6 +51,11 @@ open class AionIntegrationTestBase : KoinTest {
                     )
         }
 
+        declareMock<CalendarClient> {
+            val fileContent: String = Resources.getResource("meetup.ics").readText()
+            given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
+        }
+
         initTables()
         initResources()
     }
@@ -66,12 +71,8 @@ open class AionIntegrationTestBase : KoinTest {
     }
 
     private fun initResources() {
-        val calendarResource by inject<CalendarResource>()
-        val filterResource by inject<FilterResource>()
-        val resourceConfig = ResourceConfig()
-                .register(calendarResource)
-                .register(filterResource)
-                .register(AionExceptionMapper::class.java)
+        val resourceConfigBuilder by inject<ResourceConfigBuilder>()
+        val resourceConfig = resourceConfigBuilder.build()
         GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), resourceConfig)
     }
 }

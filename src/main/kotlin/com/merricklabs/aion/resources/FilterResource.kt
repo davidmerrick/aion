@@ -1,10 +1,11 @@
 package com.merricklabs.aion.resources
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.merricklabs.aion.handlers.logic.FilterLogic
-import com.merricklabs.aion.handlers.models.CreateFilterPayload
-import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
+import com.merricklabs.aion.resources.logic.FilterLogic
+import com.merricklabs.aion.resources.models.CreateFilterPayload
+import com.merricklabs.aion.resources.util.AionHeaders.AION_VND
+import com.merricklabs.aion.resources.util.PathParams.FILTER_ID
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.net.URI
@@ -24,8 +25,8 @@ class FilterResource : KoinComponent {
 
     @GET
     @Produces(AION_VND)
-    @Path("/{filterId}")
-    fun getFilter(@PathParam("filterId") filterId: String): Response {
+    @Path("/{$FILTER_ID}")
+    fun getFilter(@PathParam(FILTER_ID) filterId: String): Response {
         val filter = logic.getFilter(EntityId(filterId))
         return Response.ok(URI(filter.id.value)).build()
     }

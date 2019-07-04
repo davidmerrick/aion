@@ -1,4 +1,4 @@
-package com.merricklabs.aion.handlers.models
+package com.merricklabs.aion.resources.models
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.merricklabs.aion.params.FieldFilter

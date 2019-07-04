@@ -1,10 +1,10 @@
-package com.merricklabs.aion.handlers.logic
+package com.merricklabs.aion.resources.logic
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.merricklabs.aion.handlers.models.AionFilter
-import com.merricklabs.aion.handlers.models.CreateFilterPayload
-import com.merricklabs.aion.handlers.models.toDomain
 import com.merricklabs.aion.params.EntityId
+import com.merricklabs.aion.resources.models.AionFilter
+import com.merricklabs.aion.resources.models.CreateFilterPayload
+import com.merricklabs.aion.resources.models.toDomain
 import com.merricklabs.aion.storage.FilterStorage
 import mu.KotlinLogging
 import org.koin.core.KoinComponent

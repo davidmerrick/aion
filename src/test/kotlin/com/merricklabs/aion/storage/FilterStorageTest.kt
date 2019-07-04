@@ -1,9 +1,9 @@
 package com.merricklabs.aion.storage
 
 import com.merricklabs.aion.AionIntegrationTestBase
-import com.merricklabs.aion.handlers.models.AionFilter
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
+import com.merricklabs.aion.resources.models.AionFilter
 import io.kotlintest.shouldBe
 import org.koin.test.inject
 import org.testng.annotations.Test

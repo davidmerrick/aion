@@ -6,11 +6,7 @@ import com.amazonaws.serverless.proxy.model.AwsProxyResponse
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import com.merricklabs.aion.AionModule
-import com.merricklabs.aion.resources.AionExceptionMapper
-import com.merricklabs.aion.resources.CalendarResource
-import com.merricklabs.aion.resources.FilterResource
-import org.glassfish.jersey.jackson.JacksonFeature
-import org.glassfish.jersey.server.ResourceConfig
+import com.merricklabs.aion.resources.ResourceConfigBuilder
 import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 import org.koin.core.get
@@ -27,15 +23,9 @@ class StreamLambdaHandler : RequestStreamHandler, KoinComponent {
             modules(AionModule)
         }
 
-        val calendarResource: CalendarResource = get()
-        val filterResource: FilterResource = get()
+        val resourceConfigBuilder: ResourceConfigBuilder = get()
 
-        val jerseyApplication = ResourceConfig()
-                .register(JacksonFeature::class.java)
-                .register(calendarResource)
-                .register(filterResource)
-                .register(AionExceptionMapper::class.java)
-
+        val jerseyApplication = resourceConfigBuilder.build()
         handler = JerseyLambdaContainerHandler.getAwsProxyHandler(jerseyApplication)
     }
 
