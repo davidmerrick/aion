@@ -2,8 +2,9 @@ package com.merricklabs.aion.resources
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.net.HttpHeaders.CONTENT_TYPE
 import com.merricklabs.aion.AionIntegrationTestBase
-import com.merricklabs.aion.BASE_URL
+import com.merricklabs.aion.BASE_URI
 import com.merricklabs.aion.handlers.models.AionFilter
 import com.merricklabs.aion.handlers.util.AionHeaders
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
@@ -20,6 +21,7 @@ import okhttp3.RequestBody
 import org.apache.http.HttpHeaders.ACCEPT
 import org.apache.http.HttpHeaders.LOCATION
 import org.apache.http.HttpStatus
+import org.apache.http.entity.ContentType
 import org.koin.test.inject
 import org.testng.annotations.Test
 
@@ -40,7 +42,7 @@ class FilterResourceTest : AionIntegrationTestBase() {
         )
         val body = RequestBody.create(MediaType.parse(AionHeaders.AION_VND), mapper.writeValueAsString(payload))
         val request = Request.Builder()
-                .url("$BASE_URL/$FILTER_ENDPOINT")
+                .url("$BASE_URI/$FILTER_ENDPOINT")
                 .header(ACCEPT, AION_VND)
                 .post(body)
                 .build()
@@ -61,7 +63,9 @@ class FilterResourceTest : AionIntegrationTestBase() {
         )
         val body = RequestBody.create(MediaType.parse(AionHeaders.AION_VND), mapper.writeValueAsString(payload))
         val request = Request.Builder()
-                .url("$BASE_URL/$FILTER_ENDPOINT")
+                .url("$BASE_URI/$FILTER_ENDPOINT")
+                .header(ACCEPT, ContentType.APPLICATION_JSON.toString())
+                .header(CONTENT_TYPE, AION_VND)
                 .post(body)
                 .build()
         val response = okHttpClient.newCall(request).execute()
@@ -77,8 +81,9 @@ class FilterResourceTest : AionIntegrationTestBase() {
         )
         val body = RequestBody.create(MediaType.parse(JSON_TYPE), mapper.writeValueAsString(payload))
         val request = Request.Builder()
-                .url("$BASE_URL/$FILTER_ENDPOINT")
+                .url("$BASE_URI/$FILTER_ENDPOINT")
                 .header(ACCEPT, AION_VND)
+                .header(CONTENT_TYPE, ContentType.APPLICATION_JSON.toString())
                 .post(body)
                 .build()
         val response = okHttpClient.newCall(request).execute()
@@ -90,7 +95,8 @@ class FilterResourceTest : AionIntegrationTestBase() {
         val toCreate = AionFilter(id = EntityId.create(), summaryFilter = FieldFilter(include = listOf("foo")))
         filterStorage.saveFilter(toCreate)
         val request = Request.Builder()
-                .url("$BASE_URL/$FILTER_ENDPOINT/${toCreate.id}")
+                .url("$BASE_URI/$FILTER_ENDPOINT/${toCreate.id}")
+                .header(ACCEPT, ContentType.APPLICATION_JSON.toString())
                 .get()
                 .build()
         val response = okHttpClient.newCall(request).execute()
@@ -100,7 +106,7 @@ class FilterResourceTest : AionIntegrationTestBase() {
     @Test
     fun `Get invalid filter should 404`() {
         val request = Request.Builder()
-                .url("$BASE_URL/$FILTER_ENDPOINT/${EntityId.create()}")
+                .url("$BASE_URI/$FILTER_ENDPOINT/${EntityId.create()}")
                 .header(ACCEPT, AION_VND)
                 .get()
                 .build()
