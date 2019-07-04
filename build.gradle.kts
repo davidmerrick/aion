@@ -17,7 +17,9 @@ plugins {
 dependencies {
     implementation(Libs.okhttp)
     implementation("com.sparkjava:spark-core:2.9.1")
-    implementation("com.amazonaws.serverless:aws-serverless-java-container-spark:1.3.2")
+    implementation("com.amazonaws.serverless:aws-serverless-java-container-jersey:1.3.2")
+    implementation("org.glassfish.jersey.media:jersey-media-json-jackson:2.29")
+    implementation("org.glassfish.jersey.inject:jersey-hk2:2.29")
     implementation(Libs.geocalc)
     implementation(Libs.google_maps_services)
     implementation(Libs.kotlin_stdlib_jdk8)
@@ -38,9 +40,16 @@ dependencies {
     implementation(Libs.biweekly)
     implementation(Libs.guava)
 
+    // JAX-B dependencies for JDK 9+
+    implementation("javax.xml.bind:jaxb-api:2.2.11")
+    implementation("com.sun.xml.bind:jaxb-core:2.2.11")
+    implementation("com.sun.xml.bind:jaxb-impl:2.2.11")
+    implementation("javax.activation:activation:1.1.1")
+
     testImplementation(Libs.testng)
     testImplementation(Libs.koin_test)
     testImplementation(Libs.kotlintest_runner_junit5)
+    testImplementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:2.29")
 }
 
 val deployDev = tasks.create<Exec>("deployDev") {

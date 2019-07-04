@@ -3,7 +3,7 @@ package com.merricklabs.aion.resources
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.AionIntegrationTestBase
-import com.merricklabs.aion.BASE_URL
+import com.merricklabs.aion.BASE_URI
 import com.merricklabs.aion.handlers.models.AionCalendar
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
@@ -20,6 +20,7 @@ import org.apache.http.HttpHeaders.ACCEPT
 import org.apache.http.HttpHeaders.CONTENT_TYPE
 import org.apache.http.HttpHeaders.LOCATION
 import org.apache.http.HttpStatus
+import org.apache.http.entity.ContentType
 import org.koin.test.inject
 import org.testng.annotations.Test
 
@@ -37,7 +38,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val payload = mapOf("url" to TEST_URL)
         val body = RequestBody.create(MediaType.parse(AION_VND), mapper.writeValueAsString(payload))
         val request = Request.Builder()
-                .url("$BASE_URL/$CALENDAR_ENDPOINT")
+                .url("$BASE_URI/$CALENDAR_ENDPOINT")
                 .header(ACCEPT, AION_VND)
                 .header(CONTENT_TYPE, AION_VND)
                 .post(body)
@@ -48,6 +49,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val jsonNode = mapper.readValue(response.body()!!.string(), JsonNode::class.java)
         jsonNode.has("id") shouldBe true
         response.header(LOCATION) shouldHave contain(jsonNode.get("id").textValue())
+        response.header(CONTENT_TYPE) shouldHave contain(AION_VND)
     }
 
     @Test
@@ -55,7 +57,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val toCreate = AionCalendar.create(TEST_URL)
         calendarStorage.saveCalendar(toCreate)
         val request = Request.Builder()
-                .url("$BASE_URL/$CALENDAR_ENDPOINT/${toCreate.id}")
+                .url("$BASE_URI/$CALENDAR_ENDPOINT/${toCreate.id}")
                 .header(ACCEPT, AION_VND)
                 .get()
                 .build()
@@ -68,7 +70,8 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val toCreate = AionCalendar.create(TEST_URL)
         calendarStorage.saveCalendar(toCreate)
         val request = Request.Builder()
-                .url("$BASE_URL/$CALENDAR_ENDPOINT/${toCreate.id}")
+                .url("$BASE_URI/$CALENDAR_ENDPOINT/${toCreate.id}")
+                .header(ACCEPT, ContentType.APPLICATION_JSON.toString())
                 .get()
                 .build()
         val response = okHttpClient.newCall(request).execute()
@@ -80,7 +83,8 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val payload = mapOf("url" to TEST_URL)
         val body = RequestBody.create(MediaType.parse(AION_VND), mapper.writeValueAsString(payload))
         val request = Request.Builder()
-                .url("$BASE_URL/$CALENDAR_ENDPOINT")
+                .url("$BASE_URI/$CALENDAR_ENDPOINT")
+                .header(ACCEPT, ContentType.APPLICATION_JSON.toString())
                 .post(body)
                 .build()
         val response = okHttpClient.newCall(request).execute()
@@ -92,8 +96,8 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val payload = mapOf("url" to TEST_URL)
         val body = RequestBody.create(MediaType.parse(JSON_TYPE), mapper.writeValueAsString(payload))
         val request = Request.Builder()
-                .url("$BASE_URL/$CALENDAR_ENDPOINT")
-                .header(ACCEPT, AION_VND)
+                .url("$BASE_URI/$CALENDAR_ENDPOINT")
+                .header(CONTENT_TYPE, ContentType.APPLICATION_JSON.toString())
                 .post(body)
                 .build()
         val response = okHttpClient.newCall(request).execute()
@@ -103,7 +107,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
     @Test
     fun `Get invalid calendar should 404`() {
         val request = Request.Builder()
-                .url("$BASE_URL/$CALENDAR_ENDPOINT/${EntityId.create()}")
+                .url("$BASE_URI/$CALENDAR_ENDPOINT/${EntityId.create()}")
                 .header(ACCEPT, AION_VND)
                 .get()
                 .build()

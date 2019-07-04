@@ -1,45 +1,53 @@
 package com.merricklabs.aion.resources
 
-import com.google.common.net.MediaType
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.handlers.logic.CalendarLogic
 import com.merricklabs.aion.handlers.models.CreateCalendarPayload
 import com.merricklabs.aion.handlers.util.AionHeaders.AION_VND
 import com.merricklabs.aion.params.EntityId
-import org.apache.http.HttpHeaders.LOCATION
-import org.apache.http.HttpStatus
+import org.koin.core.KoinComponent
 import org.koin.core.inject
-import spark.Spark
+import java.net.URI
+import javax.ws.rs.Consumes
+import javax.ws.rs.GET
+import javax.ws.rs.POST
+import javax.ws.rs.Path
+import javax.ws.rs.PathParam
+import javax.ws.rs.Produces
+import javax.ws.rs.core.Response
 
-class CalendarResource : AionResource() {
+@Path("/calendars")
+class CalendarResource : KoinComponent {
 
     private val logic by inject<CalendarLogic>()
+    private val mapper by inject<ObjectMapper>()
 
-    override fun defineResources() {
-        super.defineResources()
+    @GET
+    @Produces(AION_VND)
+    @Path("/{calendarId}")
+    fun getCalendar(@PathParam("calendarId") calendarId: String): Response {
+        val calendar = logic.getCalendar(EntityId(calendarId))
+        return Response.ok(mapper.writeValueAsString(calendar)).build()
+    }
 
-        Spark.get("/calendars/:id") { request, response ->
-            validateAcceptHeaders(request)
-            val calendar = logic.getCalendar(EntityId(request.params("id")))
-            response.type(AION_VND)
-            mapper.writeValueAsString(calendar)
-        }
+    @POST
+    @Consumes(AION_VND)
+    @Produces(AION_VND)
+    fun createCalendar(body: String): Response {
+        val createPayload = mapper.readValue(body, CreateCalendarPayload::class.java)
+        val created = logic.createCalendar(createPayload)
+        return Response.created(URI(created.id.value))
+                .entity(mapper.writeValueAsString(created))
+                .build()
+    }
 
-        Spark.post("/calendars") { request, response ->
-            validateAcceptHeaders(request)
-            validateContentTypeHeaders(request)
-            val createPayload = mapper.readValue(request.body(), CreateCalendarPayload::class.java)
-            val created = logic.createCalendar(createPayload)
-            response.type(AION_VND)
-            response.status(HttpStatus.SC_CREATED)
-            response.header(LOCATION, "${request.url()}/${created.id}")
-            mapper.writeValueAsString(created)
-        }
+    @GET
+    @Produces("text/calendar")
+    @Path("/{calendarId}/apply/{filterId}")
+    fun getFilteredCalendar(@PathParam("calendarId") calendarId: String,
+                            @PathParam("filterId") filterId: String): Response {
 
-        Spark.get("/calendars/:calendarId/apply/:filterId") { request, response ->
-            val calendarId = EntityId(request.params("calendarId"))
-            val filterId = EntityId(request.params("filterId"))
-            response.type(MediaType.I_CALENDAR_UTF_8.toString())
-            logic.getFilteredCalendar(calendarId, filterId)
-        }
+        val body = logic.getFilteredCalendar(EntityId(calendarId), EntityId(filterId))
+        return Response.ok(body).build()
     }
 }

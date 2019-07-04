@@ -3,11 +3,14 @@ package com.merricklabs.aion
 import com.grum.geocalc.Coordinate
 import com.grum.geocalc.Point
 import com.merricklabs.aion.external.GeocoderClient
+import com.merricklabs.aion.resources.AionExceptionMapper
 import com.merricklabs.aion.resources.CalendarResource
 import com.merricklabs.aion.resources.FilterResource
 import com.merricklabs.aion.testutil.AionTestData
 import com.merricklabs.aion.testutil.AionTestModule
 import com.merricklabs.aion.testutil.DynamoTestClient
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory
+import org.glassfish.jersey.server.ResourceConfig
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
@@ -17,9 +20,9 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.testng.annotations.AfterSuite
 import org.testng.annotations.BeforeSuite
-import spark.Spark
+import java.net.URI
 
-const val BASE_URL = "http://localhost:4567"
+const val BASE_URI = "http://localhost:8080"
 
 @Suppress("UNCHECKED_CAST")
 open class AionIntegrationTestBase : KoinTest {
@@ -64,11 +67,11 @@ open class AionIntegrationTestBase : KoinTest {
 
     private fun initResources() {
         val calendarResource by inject<CalendarResource>()
-        calendarResource.defineResources()
-
         val filterResource by inject<FilterResource>()
-        filterResource.defineResources()
-
-        Spark.awaitInitialization()
+        val resourceConfig = ResourceConfig()
+                .register(calendarResource)
+                .register(filterResource)
+                .register(AionExceptionMapper::class.java)
+        GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), resourceConfig)
     }
 }
