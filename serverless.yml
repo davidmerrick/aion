@@ -37,6 +37,7 @@ functions:
       - http:
           path: /{proxy+}
           method: any
+          cors: true
 
 resources:
   Resources:
