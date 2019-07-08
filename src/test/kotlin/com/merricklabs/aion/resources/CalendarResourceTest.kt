@@ -3,6 +3,7 @@ package com.merricklabs.aion.resources
 import biweekly.Biweekly
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN
 import com.merricklabs.aion.AionIntegrationTestBase
 import com.merricklabs.aion.BASE_URI
 import com.merricklabs.aion.params.EntityId
@@ -82,6 +83,19 @@ class CalendarResourceTest : AionIntegrationTestBase() {
                 .build()
         val response = okHttpClient.newCall(request).execute()
         response.code() shouldBe HttpStatus.SC_NOT_ACCEPTABLE
+    }
+
+    @Test
+    fun `Confirm CORS filter is working`() {
+        val toCreate = AionCalendar.create(TEST_URL)
+        calendarStorage.saveCalendar(toCreate)
+        val request = Request.Builder()
+                .url("$BASE_URI/$CALENDAR_ENDPOINT/${toCreate.id}")
+                .header(ACCEPT, ContentType.APPLICATION_JSON.toString())
+                .get()
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.header(ACCESS_CONTROL_ALLOW_ORIGIN) shouldBe "*"
     }
 
     @Test
