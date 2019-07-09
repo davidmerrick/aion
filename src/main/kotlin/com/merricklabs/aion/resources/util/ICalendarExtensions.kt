@@ -3,6 +3,7 @@ package com.merricklabs.aion.resources.util
 import biweekly.ICalendar
 import biweekly.component.VEvent
 import com.merricklabs.aion.external.GeocoderClient
+import com.merricklabs.aion.params.RsvpStatus
 import com.merricklabs.aion.resources.models.AionFilter
 
 fun ICalendar.applyFilter(filter: AionFilter, geocoderClient: GeocoderClient): ICalendar {
@@ -15,4 +16,8 @@ fun ICalendar.copyWithEvents(events: List<VEvent>): ICalendar {
     newCalendar.setComponent(VEvent::class.java, null)
     events.forEach { newCalendar.addEvent(it) }
     return newCalendar
+}
+
+fun VEvent.getPartStat() = this.getExperimentalProperty("PARTSTAT").let {
+    RsvpStatus.from(it.value)
 }

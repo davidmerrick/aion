@@ -13,7 +13,6 @@ import com.merricklabs.aion.resources.models.AionFilter
 import com.merricklabs.aion.resources.util.AionHeaders.AION_VND
 import com.merricklabs.aion.storage.CalendarStorage
 import com.merricklabs.aion.storage.FilterStorage
-import com.merricklabs.aion.testutil.AionTestData
 import com.merricklabs.aion.testutil.AionTestData.TEST_URL
 import io.kotlintest.matchers.string.contain
 import io.kotlintest.shouldBe
@@ -142,7 +141,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val toCreateFilter = AionFilter(EntityId.create(), summaryFilter)
         filterStorage.saveFilter(toCreateFilter)
 
-        val toCreateCalendar = AionCalendar.create(AionTestData.TEST_URL)
+        val toCreateCalendar = AionCalendar.create(TEST_URL)
         calendarStorage.saveCalendar(toCreateCalendar)
 
         val request = Request.Builder()
@@ -163,7 +162,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val toCreateFilter = AionFilter(EntityId.create(), summaryFilter)
         filterStorage.saveFilter(toCreateFilter)
 
-        val toCreateCalendar = AionCalendar.create(AionTestData.TEST_URL)
+        val toCreateCalendar = AionCalendar.create(TEST_URL)
         calendarStorage.saveCalendar(toCreateCalendar)
 
         val request = Request.Builder()
