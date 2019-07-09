@@ -19,8 +19,8 @@ import org.koin.test.mock.declareMock
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.testng.annotations.AfterSuite
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.BeforeSuite
-import org.testng.annotations.BeforeTest
 import java.net.URI
 
 const val BASE_URI = "http://localhost:8080"
@@ -29,6 +29,8 @@ const val FACEBOOK_CAL_FILENAME = "facebook.ics"
 
 @Suppress("UNCHECKED_CAST")
 open class AionIntegrationTestBase : KoinTest {
+
+    var mockCalendarClient: CalendarClient? = null
 
     // Workaround for Mockito in Kotlin. See https://medium.com/@elye.project/befriending-kotlin-and-mockito-1c2e7b0ef791
     protected fun <T> any(): T {
@@ -58,9 +60,9 @@ open class AionIntegrationTestBase : KoinTest {
         initResources()
     }
 
-    @BeforeTest
+    @BeforeMethod
     protected fun beforeTest() {
-        declareMock<CalendarClient> {
+        mockCalendarClient = declareMock {
             val fileContent: String = Resources.getResource(MEETUP_CAL_FILENAME).readText()
             given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
         }

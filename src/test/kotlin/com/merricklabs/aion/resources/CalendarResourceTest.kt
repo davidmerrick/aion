@@ -3,23 +3,16 @@ package com.merricklabs.aion.resources
 import biweekly.Biweekly
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.io.Resources
 import com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN
 import com.merricklabs.aion.AionIntegrationTestBase
 import com.merricklabs.aion.BASE_URI
-import com.merricklabs.aion.FACEBOOK_CAL_FILENAME
-import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
-import com.merricklabs.aion.params.PartStatFilter
-import com.merricklabs.aion.params.RsvpStatus.ACCEPTED
 import com.merricklabs.aion.resources.models.AionCalendar
 import com.merricklabs.aion.resources.models.AionFilter
 import com.merricklabs.aion.resources.util.AionHeaders.AION_VND
-import com.merricklabs.aion.resources.util.getPartStat
 import com.merricklabs.aion.storage.CalendarStorage
 import com.merricklabs.aion.storage.FilterStorage
-import com.merricklabs.aion.testutil.AionTestData
 import com.merricklabs.aion.testutil.AionTestData.TEST_URL
 import io.kotlintest.matchers.string.contain
 import io.kotlintest.shouldBe
@@ -34,8 +27,6 @@ import org.apache.http.HttpHeaders.LOCATION
 import org.apache.http.HttpStatus
 import org.apache.http.entity.ContentType
 import org.koin.test.inject
-import org.koin.test.mock.declareMock
-import org.mockito.BDDMockito.given
 import org.testng.annotations.Test
 
 const val CALENDAR_ENDPOINT = "calendars"
@@ -150,7 +141,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val toCreateFilter = AionFilter(EntityId.create(), summaryFilter)
         filterStorage.saveFilter(toCreateFilter)
 
-        val toCreateCalendar = AionCalendar.create(AionTestData.TEST_URL)
+        val toCreateCalendar = AionCalendar.create(TEST_URL)
         calendarStorage.saveCalendar(toCreateCalendar)
 
         val request = Request.Builder()
@@ -171,7 +162,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         val toCreateFilter = AionFilter(EntityId.create(), summaryFilter)
         filterStorage.saveFilter(toCreateFilter)
 
-        val toCreateCalendar = AionCalendar.create(AionTestData.TEST_URL)
+        val toCreateCalendar = AionCalendar.create(TEST_URL)
         calendarStorage.saveCalendar(toCreateCalendar)
 
         val request = Request.Builder()
@@ -184,33 +175,6 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         calendar.events.size shouldBe 5
         calendar.events.asSequence().any {
             it.summary.value.toLowerCase().contains(excludeWord)
-        } shouldBe false
-    }
-
-    @Test
-    fun `Filter a calendar by partstat`() {
-        declareMock<CalendarClient> {
-            val fileContent: String = Resources.getResource(FACEBOOK_CAL_FILENAME).readText()
-            given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
-        }
-
-        val partStatFilter = PartStatFilter(listOf(ACCEPTED))
-        val toCreateFilter = AionFilter(EntityId.create(), partStatFilter = partStatFilter)
-        filterStorage.saveFilter(toCreateFilter)
-
-        val toCreateCalendar = AionCalendar.create(AionTestData.TEST_URL)
-        calendarStorage.saveCalendar(toCreateCalendar)
-
-        val request = Request.Builder()
-                .url("$BASE_URI/$CALENDAR_ENDPOINT/${toCreateCalendar.id}/apply/${toCreateFilter.id}")
-                .get()
-                .build()
-        val response = okHttpClient.newCall(request).execute()
-        response.code() shouldBe HttpStatus.SC_OK
-        val calendar = Biweekly.parse(response.body()!!.string()).first()
-        calendar.events.size shouldBe 8
-        calendar.events.asSequence().any {
-            it.getPartStat() != ACCEPTED
         } shouldBe false
     }
 }
