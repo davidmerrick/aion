@@ -23,6 +23,8 @@ import org.testng.annotations.BeforeSuite
 import java.net.URI
 
 const val BASE_URI = "http://localhost:8080"
+const val MEETUP_CAL_FILENAME = "meetup.ics"
+const val FACEBOOK_CAL_FILENAME = "facebook.ics"
 
 @Suppress("UNCHECKED_CAST")
 open class AionIntegrationTestBase : KoinTest {
@@ -52,7 +54,7 @@ open class AionIntegrationTestBase : KoinTest {
         }
 
         declareMock<CalendarClient> {
-            val fileContent: String = Resources.getResource("meetup.ics").readText()
+            val fileContent: String = Resources.getResource(MEETUP_CAL_FILENAME).readText()
             given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
         }
 

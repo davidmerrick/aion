@@ -5,6 +5,7 @@ import com.merricklabs.aion.external.GeocoderClient
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
 import com.merricklabs.aion.params.LocationFilter
+import com.merricklabs.aion.params.PartStatFilter
 import com.merricklabs.aion.storage.models.DbAionFilter
 
 /**
@@ -13,6 +14,7 @@ import com.merricklabs.aion.storage.models.DbAionFilter
 data class AionFilter(val id: EntityId,
                       val summaryFilter: FieldFilter? = null,
                       val locationFilter: LocationFilter? = null,
+                      val facebookFilter: PartStatFilter? = null,
                       val description: String? = null
 ) {
     /**
@@ -29,6 +31,10 @@ data class AionFilter(val id: EntityId,
             if (!it.apply(event, geocoderClient)) {
                 return false
             }
+        }
+
+        facebookFilter?.let {
+            return false
         }
 
         return true
