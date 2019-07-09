@@ -20,6 +20,7 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.testng.annotations.AfterSuite
 import org.testng.annotations.BeforeSuite
+import org.testng.annotations.BeforeTest
 import java.net.URI
 
 const val BASE_URI = "http://localhost:8080"
@@ -53,13 +54,16 @@ open class AionIntegrationTestBase : KoinTest {
                     )
         }
 
+        initTables()
+        initResources()
+    }
+
+    @BeforeTest
+    protected fun beforeTest() {
         declareMock<CalendarClient> {
             val fileContent: String = Resources.getResource(MEETUP_CAL_FILENAME).readText()
             given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
         }
-
-        initTables()
-        initResources()
     }
 
     @AfterSuite

@@ -1,6 +1,11 @@
 package com.merricklabs.aion.params
 
-enum class RsvpStatus(val value: String) {
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped
+
+@DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
+enum class RsvpStatus(@DynamoDBAttribute var value: String) {
     ACCEPTED("ACCEPTED"),
     DECLINED("DECLINED"),
     TENTATIVE("TENTATIVE"),
