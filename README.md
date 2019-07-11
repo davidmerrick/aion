@@ -38,6 +38,7 @@ CircleCI has a local tool to help validate your config here: https://circleci.co
 
 - Google Maps Geocoding API: https://developers.google.com/maps/documentation/geocoding/intro
 - Google Maps Geocoding SDK: https://github.com/googlemaps/google-maps-services-java
+- [Forwarding a CloudFlare subdomain to AWS for use with API Gateway](https://medium.com/@bobthomas295/combining-aws-serverless-with-cloudflare-sub-domains-338a1b7b2bd).
 
 # Tools
 - [Swagger Editor](https://editor.swagger.io/)
