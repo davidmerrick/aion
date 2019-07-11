@@ -16,9 +16,9 @@ Less noise, more signal. Making the world a better place™.
 
 ![](img/gavin.png)
 
-# Functionality
+# Endpoints
 
-v1 is just going to support filtering by event title and location. More fields will be added later.
+Currently, I have the service running at https://vx4o2p9fuk.execute-api.us-west-2.amazonaws.com/prd. Not the most friendly URL, but not to fear--I'll get a domain set up for it soon.
 
 # CircleCI
 
