@@ -7,7 +7,6 @@ import com.merricklabs.aion.FACEBOOK_CAL_FILENAME
 import com.merricklabs.aion.external.GeocoderClient
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
-import com.merricklabs.aion.params.PartStatFilter
 import com.merricklabs.aion.params.RsvpStatus
 import com.merricklabs.aion.resources.models.AionFilter
 import io.kotlintest.shouldBe
@@ -30,8 +29,7 @@ class FilterStorageTest : AionIntegrationTestBase() {
 
     @Test
     fun `Filter by partstat`() {
-        val partStatFilter = PartStatFilter(listOf(RsvpStatus.ACCEPTED))
-        val toCreate = AionFilter(EntityId.create(), partStatFilter = partStatFilter)
+        val toCreate = AionFilter(EntityId.create(), rsvpStatuses = listOf(RsvpStatus.ACCEPTED))
         filterStorage.saveFilter(toCreate)
         val created = filterStorage.getFilter(toCreate.id)
 

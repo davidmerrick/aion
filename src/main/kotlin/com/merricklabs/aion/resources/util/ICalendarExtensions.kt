@@ -18,6 +18,6 @@ fun ICalendar.copyWithEvents(events: List<VEvent>): ICalendar {
     return newCalendar
 }
 
-fun VEvent.getPartStat() = this.getExperimentalProperty("PARTSTAT").let {
+fun VEvent.getRsvpStatus() = this.getExperimentalProperty("PARTSTAT").let {
     RsvpStatus.from(it.value)
 }

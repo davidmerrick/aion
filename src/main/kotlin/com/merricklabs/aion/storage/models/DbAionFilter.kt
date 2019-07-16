@@ -6,7 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
 import com.merricklabs.aion.params.LocationFilter
-import com.merricklabs.aion.params.PartStatFilter
+import com.merricklabs.aion.params.RsvpStatus
 import com.merricklabs.aion.resources.models.AionFilter
 import com.merricklabs.aion.storage.util.EntityIdTypeConverter
 
@@ -22,7 +22,7 @@ class DbAionFilter @JvmOverloads constructor(
         @DynamoDBHashKey var id: EntityId? = null,
         @DynamoDBAttribute var summaryFilter: FieldFilter? = null,
         @DynamoDBAttribute var locationFilter: LocationFilter? = null,
-        @DynamoDBAttribute var partStatFilter: PartStatFilter? = null,
+        @DynamoDBAttribute var rsvpStatuses: List<RsvpStatus>? = null,
         @DynamoDBAttribute var description: String? = null
 )
 
@@ -31,7 +31,7 @@ fun AionFilter.toDb(): DbAionFilter {
             id = id,
             summaryFilter = summaryFilter,
             locationFilter = locationFilter,
-            partStatFilter = partStatFilter,
+            rsvpStatuses = rsvpStatuses,
             description = description
     )
 }
