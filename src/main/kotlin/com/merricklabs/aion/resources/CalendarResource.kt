@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.resources.logic.CalendarLogic
 import com.merricklabs.aion.resources.models.CreateCalendarPayload
+import com.merricklabs.aion.resources.models.ValidationMessage
 import com.merricklabs.aion.resources.util.AionHeaders.AION_VND
 import com.merricklabs.aion.resources.util.PathParams.CALENDAR_ID
 import com.merricklabs.aion.resources.util.PathParams.FILTER_ID
+import org.eclipse.jetty.http.HttpStatus
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.net.URI
@@ -37,6 +39,13 @@ class CalendarResource : KoinComponent {
     @Produces(AION_VND)
     fun createCalendar(body: String): Response {
         val createPayload = mapper.readValue(body, CreateCalendarPayload::class.java)
+        validate(createPayload)?.let {
+            return Response
+                    .status(HttpStatus.BAD_REQUEST_400)
+                    .entity(mapper.writeValueAsString(it))
+                    .build()
+        }
+
         val created = logic.createCalendar(createPayload)
         return Response.created(URI(created.id.value))
                 .entity(mapper.writeValueAsString(created))
@@ -51,5 +60,10 @@ class CalendarResource : KoinComponent {
 
         val body = logic.getFilteredCalendar(EntityId(calendarId), EntityId(filterId))
         return Response.ok(body).build()
+    }
+
+    private fun validate(payload: CreateCalendarPayload): ValidationMessage? {
+        // Todo: Implement this
+        return null
     }
 }
