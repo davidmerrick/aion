@@ -29,7 +29,7 @@ const val FILTER_ENDPOINT = "filters"
 
 class FilterResourceTest : AionIntegrationTestBase() {
 
-    private val okHttpClient by inject<OkHttpClient>()
+    private val okHttpClient = OkHttpClient()
     private val mapper by inject<ObjectMapper>()
     private val filterStorage by inject<FilterStorage>()
 

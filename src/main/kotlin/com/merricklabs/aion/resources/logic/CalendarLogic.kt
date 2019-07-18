@@ -24,6 +24,8 @@ class CalendarLogic : KoinComponent {
     private val geocoderClient by inject<GeocoderClient>()
 
     fun createCalendar(createPayload: CreateCalendarPayload): AionCalendar {
+        calendarClient.validateCalendar(createPayload.url)
+
         val toCreate = createPayload.toDomain()
         calendarStorage.saveCalendar(toCreate)
         return calendarStorage.getCalendar(toCreate.id)

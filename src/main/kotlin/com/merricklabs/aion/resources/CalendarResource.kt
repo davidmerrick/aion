@@ -37,6 +37,7 @@ class CalendarResource : KoinComponent {
     @Produces(AION_VND)
     fun createCalendar(body: String): Response {
         val createPayload = mapper.readValue(body, CreateCalendarPayload::class.java)
+
         val created = logic.createCalendar(createPayload)
         return Response.created(URI(created.id.value))
                 .entity(mapper.writeValueAsString(created))
