@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN
 import com.merricklabs.aion.AionIntegrationTestBase
 import com.merricklabs.aion.BASE_URI
+import com.merricklabs.aion.exceptions.InvalidCalendarException
+import com.merricklabs.aion.external.CalendarClient
 import com.merricklabs.aion.params.EntityId
 import com.merricklabs.aion.params.FieldFilter
 import com.merricklabs.aion.resources.models.AionCalendar
@@ -27,6 +29,8 @@ import org.apache.http.HttpHeaders.LOCATION
 import org.apache.http.HttpStatus
 import org.apache.http.entity.ContentType
 import org.koin.test.inject
+import org.koin.test.mock.declareMock
+import org.mockito.BDDMockito.given
 import org.testng.annotations.Test
 
 const val CALENDAR_ENDPOINT = "calendars"
@@ -41,6 +45,11 @@ class CalendarResourceTest : AionIntegrationTestBase() {
 
     @Test
     fun `Create a calendar`() {
+        declareMock<CalendarClient> {
+            val fileContent: String = com.google.common.io.Resources.getResource(com.merricklabs.aion.MEETUP_CAL_FILENAME).readText()
+            org.mockito.BDDMockito.given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
+        }
+
         val payload = mapOf("url" to TEST_URL)
         val body = RequestBody.create(MediaType.parse(AION_VND), mapper.writeValueAsString(payload))
         val request = Request.Builder()
@@ -56,6 +65,38 @@ class CalendarResourceTest : AionIntegrationTestBase() {
         jsonNode.has("id") shouldBe true
         response.header(LOCATION) shouldHave contain(jsonNode.get("id").textValue())
         response.header(CONTENT_TYPE) shouldHave contain(AION_VND)
+    }
+
+    @Test
+    fun `Create invalid calendar should fail`() {
+        declareMock<CalendarClient> {
+            given(this.validateCalendar(any())).willThrow(InvalidCalendarException("foo", "bar"))
+        }
+
+        val payload = mapOf("url" to TEST_URL)
+        val body = RequestBody.create(MediaType.parse(AION_VND), mapper.writeValueAsString(payload))
+        val request = Request.Builder()
+                .url("$BASE_URI/$CALENDAR_ENDPOINT")
+                .header(ACCEPT, AION_VND)
+                .header(CONTENT_TYPE, AION_VND)
+                .post(body)
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_BAD_REQUEST
+    }
+
+    @Test
+    fun `Create calendar with unparseable url should fail`() {
+        val payload = mapOf("url" to "this is garbage")
+        val body = RequestBody.create(MediaType.parse(AION_VND), mapper.writeValueAsString(payload))
+        val request = Request.Builder()
+                .url("$BASE_URI/$CALENDAR_ENDPOINT")
+                .header(ACCEPT, AION_VND)
+                .header(CONTENT_TYPE, AION_VND)
+                .post(body)
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_BAD_REQUEST
     }
 
     @Test
@@ -136,6 +177,11 @@ class CalendarResourceTest : AionIntegrationTestBase() {
 
     @Test
     fun `Filter a calendar with include text`() {
+        declareMock<CalendarClient> {
+            val fileContent: String = com.google.common.io.Resources.getResource(com.merricklabs.aion.MEETUP_CAL_FILENAME).readText()
+            org.mockito.BDDMockito.given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
+        }
+
         val includeWord = "earthquake"
         val summaryFilter = FieldFilter(listOf(includeWord), emptyList())
         val toCreateFilter = AionFilter(EntityId.create(), summaryFilter)
@@ -157,6 +203,11 @@ class CalendarResourceTest : AionIntegrationTestBase() {
 
     @Test
     fun `Filter a calendar with exclude text`() {
+        declareMock<CalendarClient> {
+            val fileContent: String = com.google.common.io.Resources.getResource(com.merricklabs.aion.MEETUP_CAL_FILENAME).readText()
+            org.mockito.BDDMockito.given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
+        }
+
         val excludeWord = "earthquake"
         val summaryFilter = FieldFilter(emptyList(), listOf(excludeWord))
         val toCreateFilter = AionFilter(EntityId.create(), summaryFilter)
