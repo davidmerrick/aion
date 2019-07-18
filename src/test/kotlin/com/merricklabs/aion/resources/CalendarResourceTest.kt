@@ -38,7 +38,7 @@ const val JSON_TYPE = "application/json"
 
 class CalendarResourceTest : AionIntegrationTestBase() {
 
-    private val okHttpClient by inject<OkHttpClient>()
+    private val okHttpClient = OkHttpClient()
     private val mapper by inject<ObjectMapper>()
     private val calendarStorage by inject<CalendarStorage>()
     private val filterStorage by inject<FilterStorage>()
