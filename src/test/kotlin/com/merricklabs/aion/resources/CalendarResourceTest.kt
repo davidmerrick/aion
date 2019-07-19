@@ -19,10 +19,12 @@ import com.merricklabs.aion.testutil.AionTestData.TEST_URL
 import io.kotlintest.matchers.string.contain
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldHave
+import okhttp3.Call
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.Response
 import org.apache.http.HttpHeaders.ACCEPT
 import org.apache.http.HttpHeaders.CONTENT_TYPE
 import org.apache.http.HttpHeaders.LOCATION
@@ -31,6 +33,7 @@ import org.apache.http.entity.ContentType
 import org.koin.test.inject
 import org.koin.test.mock.declareMock
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito
 import org.testng.annotations.Test
 
 const val CALENDAR_ENDPOINT = "calendars"
@@ -47,7 +50,7 @@ class CalendarResourceTest : AionIntegrationTestBase() {
     fun `Create a calendar`() {
         declareMock<CalendarClient> {
             val fileContent: String = com.google.common.io.Resources.getResource(com.merricklabs.aion.MEETUP_CAL_FILENAME).readText()
-            org.mockito.BDDMockito.given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
+            given(this.fetchCalendar(any())).willReturn(Biweekly.parse(fileContent).first())
         }
 
         val payload = mapOf("url" to TEST_URL)
@@ -97,6 +100,52 @@ class CalendarResourceTest : AionIntegrationTestBase() {
                 .build()
         val response = okHttpClient.newCall(request).execute()
         response.code() shouldBe HttpStatus.SC_BAD_REQUEST
+    }
+
+    @Test
+    fun `A link to a calendar that doesn't have iCal headers should fail`() {
+        declareMock<OkHttpClient> {
+            val mockCall = Mockito.mock(Call::class.java)
+            val mockResponse = Mockito.mock(Response::class.java)
+            Mockito.`when`(mockResponse.header(CONTENT_TYPE)).thenReturn("text/plain")
+
+            Mockito.`when`(mockCall.execute()).thenReturn(mockResponse)
+            given(this.newCall(any())).willReturn(mockCall)
+        }
+
+        val payload = mapOf("url" to "http://example.com")
+        val body = RequestBody.create(MediaType.parse(AION_VND), mapper.writeValueAsString(payload))
+        val request = Request.Builder()
+                .url("$BASE_URI/$CALENDAR_ENDPOINT")
+                .header(ACCEPT, AION_VND)
+                .header(CONTENT_TYPE, AION_VND)
+                .post(body)
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_BAD_REQUEST
+    }
+
+    @Test
+    fun `A link to a calendar that has valid iCal headers should succeed`() {
+        declareMock<OkHttpClient> {
+            val mockCall = Mockito.mock(Call::class.java)
+            val mockResponse = Mockito.mock(Response::class.java)
+            Mockito.`when`(mockResponse.header(CONTENT_TYPE)).thenReturn("text/calendar;charset=UTF-8")
+
+            Mockito.`when`(mockCall.execute()).thenReturn(mockResponse)
+            given(this.newCall(any())).willReturn(mockCall)
+        }
+
+        val payload = mapOf("url" to "http://example.com")
+        val body = RequestBody.create(MediaType.parse(AION_VND), mapper.writeValueAsString(payload))
+        val request = Request.Builder()
+                .url("$BASE_URI/$CALENDAR_ENDPOINT")
+                .header(ACCEPT, AION_VND)
+                .header(CONTENT_TYPE, AION_VND)
+                .post(body)
+                .build()
+        val response = okHttpClient.newCall(request).execute()
+        response.code() shouldBe HttpStatus.SC_CREATED
     }
 
     @Test
