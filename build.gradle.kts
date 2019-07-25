@@ -32,7 +32,6 @@ dependencies {
     implementation(Libs.aws_lambda_java_log4j2)
     implementation(Libs.aws_lambda_java_events)
     implementation(Libs.aws_java_sdk_dynamodb)
-    implementation(Libs.aws_java_sdk_sns)
     implementation(Libs.jackson_core)
     implementation(Libs.jackson_databind)
     implementation(Libs.jackson_annotations)

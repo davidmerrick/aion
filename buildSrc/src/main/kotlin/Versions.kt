@@ -1,5 +1,3 @@
-import kotlin.String
-
 /**
  * Find which updates are available by running
  *     `$ ./gradlew buildSrcVersions`
@@ -8,8 +6,6 @@ import kotlin.String
  * YOU are responsible for updating manually the dependency version. */
 object Versions {
     const val aws_java_sdk_dynamodb: String = "1.11.527" // available: "1.11.581"
-
-    const val aws_java_sdk_sns: String = "1.11.527" // available: "1.11.581"
 
     const val aws_lambda_java_core: String = "1.2.0" 
 
@@ -48,22 +44,7 @@ object Versions {
 
     const val slf4j_api: String = "1.7.25" // available: "1.7.26"
 
-    const val slf4j_jdk14: String = "1.7.26" 
+    const val slf4j_jdk14: String = "1.7.26"
 
-    const val testng: String = "6.14.3" 
-
-    /**
-     *
-     *   To update Gradle, edit the wrapper file at path:
-     *      ./gradle/wrapper/gradle-wrapper.properties
-     */
-    object Gradle {
-        const val runningVersion: String = "5.4"
-
-        const val currentVersion: String = "5.4.1"
-
-        const val nightlyVersion: String = "5.6-20190627000039+0000"
-
-        const val releaseCandidate: String = "5.5-rc-4"
-    }
+    const val testng: String = "6.14.3"
 }
