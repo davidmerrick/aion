@@ -5,6 +5,12 @@
  *   `$ ./gradlew buildSrcVersions` */
 object Libs {
     /**
+     * https://aws.amazon.com/lambda */
+    const val aws_serverless_java_container_jersey: String =
+            "com.amazonaws.serverless:aws-serverless-java-container-jersey:" +
+                    Versions.aws_serverless_java_container_jersey
+
+    /**
      * https://aws.amazon.com/sdkforjava */
     const val aws_java_sdk_dynamodb: String = "com.amazonaws:aws-java-sdk-dynamodb:" +
             Versions.aws_java_sdk_dynamodb
@@ -62,8 +68,21 @@ object Libs {
             Versions.google_maps_services
 
     /**
+     * https://github.com/nhaarman/mockito-kotlin */
+    const val mockito_kotlin: String = "com.nhaarman.mockitokotlin2:mockito-kotlin:" +
+            Versions.mockito_kotlin
+
+    /**
      * https://github.com/square/okhttp */
     const val okhttp: String = "com.squareup.okhttp3:okhttp:" + Versions.okhttp
+
+    /**
+     * http://jaxb.java.net */
+    const val jaxb_core: String = "com.sun.xml.bind:jaxb-core:" + Versions.com_sun_xml_bind
+
+    /**
+     * http://jaxb.java.net */
+    const val jaxb_impl: String = "com.sun.xml.bind:jaxb-impl:" + Versions.com_sun_xml_bind
 
     const val de_fayard_buildsrcversions_gradle_plugin: String =
             "de.fayard.buildSrcVersions:de.fayard.buildSrcVersions.gradle.plugin:" +
@@ -80,8 +99,32 @@ object Libs {
             Versions.kotlintest_runner_junit5
 
     /**
+     * http://java.sun.com/javase/technologies/desktop/javabeans/jaf/index.jsp */
+    const val activation: String = "javax.activation:activation:" + Versions.activation
+
+    /**
+     * https://github.com/javaee/jaxb-spec */
+    const val jaxb_api: String = "javax.xml.bind:jaxb-api:" + Versions.jaxb_api
+
+    /**
      * http://github.com/mangstadt/biweekly */
     const val biweekly: String = "net.sf.biweekly:biweekly:" + Versions.biweekly
+
+    /**
+     * https://projects.eclipse.org/projects/ee4j.jersey */
+    const val jersey_container_grizzly2_http: String =
+            "org.glassfish.jersey.containers:jersey-container-grizzly2-http:" +
+                    Versions.jersey_container_grizzly2_http
+
+    /**
+     * https://projects.eclipse.org/projects/ee4j.jersey */
+    const val jersey_hk2: String = "org.glassfish.jersey.inject:jersey-hk2:" + Versions.jersey_hk2
+
+    /**
+     * https://projects.eclipse.org/projects/ee4j.jersey */
+    const val jersey_media_json_jackson: String =
+            "org.glassfish.jersey.media:jersey-media-json-jackson:" +
+                    Versions.jersey_media_json_jackson
 
     const val org_jetbrains_kotlin_jvm_gradle_plugin: String =
             "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:" +

@@ -7,6 +7,8 @@ import com.merricklabs.aion.resources.ResourceConfigBuilder
 import com.merricklabs.aion.testutil.AionTestData
 import com.merricklabs.aion.testutil.AionTestModule
 import com.merricklabs.aion.testutil.DynamoTestClient
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.given
 import org.glassfish.grizzly.http.server.HttpServer
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory
 import org.koin.core.context.startKoin
@@ -14,8 +16,6 @@ import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.koin.test.mock.declareMock
-import org.mockito.BDDMockito.given
-import org.mockito.Mockito
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import java.net.URI
@@ -27,15 +27,7 @@ const val FACEBOOK_CAL_FILENAME = "facebook.ics"
 @Suppress("UNCHECKED_CAST")
 open class AionIntegrationTestBase : KoinTest {
 
-    var server: HttpServer? = null
-
-    // Workaround for Mockito in Kotlin. See https://medium.com/@elye.project/befriending-kotlin-and-mockito-1c2e7b0ef791
-    protected fun <T> any(): T {
-        Mockito.any<T>()
-        return uninitialized()
-    }
-
-    private fun <T> uninitialized(): T = null as T
+    private var server: HttpServer? = null
 
     @BeforeMethod
     protected fun beforeMethod() {
@@ -44,7 +36,7 @@ open class AionIntegrationTestBase : KoinTest {
         }
 
         declareMock<GeocoderClient> {
-            given(this.fetchLocation(any()))
+            given { this.fetchLocation(any()) }
                     .willReturn(
                             Point.at(
                                     Coordinate.fromDegrees(AionTestData.POWELLS_LAT),
