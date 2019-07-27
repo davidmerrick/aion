@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 group = "com.merricklabs.aion"
 
 repositories {
@@ -11,7 +9,6 @@ repositories {
 plugins {
     id("de.fayard.buildSrcVersions") version Versions.de_fayard_buildsrcversions_gradle_plugin
     kotlin("jvm") version Versions.org_jetbrains_kotlin
-    id("com.github.johnrengelman.shadow") version Versions.com_github_johnrengelman_shadow_gradle_plugin
 }
 
 dependencies {
@@ -51,31 +48,45 @@ dependencies {
     testImplementation(Libs.mockito_kotlin)
 }
 
-val deployDev = tasks.create<Exec>("deployDev") {
-    commandLine = listOf("serverless", "deploy", "--stage=dev")
-}
+tasks {
 
-val deployPrd = tasks.create<Exec>("deployPrd") {
-    commandLine = listOf("serverless", "deploy", "--stage=prd")
-}
+    val deployPrd by creating(Exec::class) {
+        commandLine = listOf("serverless", "deploy", "--stage=prd")
+    }
 
-// Alias for deploy dev
-val deploy = tasks.create("deploy")
-deploy.dependsOn(deployDev)
+    val deployDev by creating(Exec::class) {
+        commandLine = listOf("serverless", "deploy", "--stage=dev")
+    }
 
-deployDev.dependsOn(tasks.getByName("shadowJar"))
-deployPrd.dependsOn(tasks.getByName("shadowJar"))
+    val deploy by creating {
+        dependsOn(deployDev)
+    }
 
-tasks.test {
-    useTestNG()
-}
+    test {
+        useTestNG()
+    }
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
+    val buildZip by creating(Zip::class) {
+        from(compileKotlin)
+        from(processResources)
+        into("lib") {
+            from(configurations.runtimeClasspath)
+        }
+    }
 
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
+    build {
+        dependsOn(buildZip)
+    }
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
 }

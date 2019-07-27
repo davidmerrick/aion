@@ -28,7 +28,7 @@ provider:
     GEOCODER_API_KEY: ${env:GEOCODER_API_KEY}
 
 package:
-  artifact: build/libs/${self:service}.jar
+  artifact: /tmp/workspace/build/distributions/${self:service}.zip
 
 functions:
   handler:
