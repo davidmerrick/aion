@@ -14,6 +14,8 @@ jobs:
       - checkout
       - run: ./gradlew build
       - run: ./gradlew test
+      - store_test_results:
+          path: build/reports/tests/test
       - persist_to_workspace:
           root: .
           paths:
