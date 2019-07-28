@@ -54,10 +54,6 @@ object Libs {
      * http://www.grumlimited.co.uk */
     const val geocalc: String = "com.github.grumlimited:geocalc:" + Versions.geocalc
 
-    const val com_github_johnrengelman_shadow_gradle_plugin: String =
-            "com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:" +
-            Versions.com_github_johnrengelman_shadow_gradle_plugin
-
     /**
      * https://github.com/google/guava */
     const val guava: String = "com.google.guava:guava:" + Versions.guava

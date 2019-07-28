@@ -8,7 +8,6 @@ import javax.ws.rs.ext.Provider
 @Provider
 class IllegalArgumentExceptionMapper : ExceptionMapper<IllegalArgumentException> {
     override fun toResponse(exception: IllegalArgumentException): Response {
-        return Response.status(HttpStatus.SC_BAD_REQUEST).entity(exception.message)
-                .type("text/plain").build()
+        return Response.status(HttpStatus.SC_BAD_REQUEST).entity(exception.message).build()
     }
 }

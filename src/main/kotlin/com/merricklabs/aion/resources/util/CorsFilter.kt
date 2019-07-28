@@ -1,5 +1,8 @@
 package com.merricklabs.aion.resources.util
 
+import com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS
+import com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS
+import com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN
 import java.io.IOException
 import javax.ws.rs.container.ContainerRequestContext
 import javax.ws.rs.container.ContainerResponseContext
@@ -12,8 +15,8 @@ class CorsFilter : ContainerResponseFilter {
 
         val headers = responseContext.headers
 
-        headers.add("Access-Control-Allow-Origin", "*")
-        headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-        headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type")
+        headers.add(ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+        headers.add(ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, DELETE, PUT")
+        headers.add(ACCESS_CONTROL_ALLOW_HEADERS, "X-Requested-With, Content-Type")
     }
 }

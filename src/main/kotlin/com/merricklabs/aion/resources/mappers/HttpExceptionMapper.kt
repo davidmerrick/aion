@@ -8,7 +8,6 @@ import javax.ws.rs.ext.Provider
 @Provider
 class HttpExceptionMapper : ExceptionMapper<HttpResponseException> {
     override fun toResponse(exception: HttpResponseException): Response {
-        return Response.status(exception.statusCode).entity(exception.message)
-                .type("text/plain").build()
+        return Response.status(exception.statusCode).entity(exception.message).build()
     }
 }
