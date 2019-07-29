@@ -6,9 +6,12 @@ jobs:
         environment:
           JVM_OPTS: -Xmx3200m
           TERM: dumb
-          DYNAMODB_ENDPOINT: "http://localhost:8000"
-          DYNAMODB_REGION: "us-east-1"
-      - image: amazon/dynamodb-local
+          DYNAMODB_ENDPOINT: "http://localhost:4570"
+          DYNAMODB_REGION: "us-west-2"
+      - image: localstack/localstack
+          environment:
+            SERVICES: dynamodb:4570
+            DEFAULT_REGION: us-west-2
     working_directory: ~/repo
     steps:
       - checkout
