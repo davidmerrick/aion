@@ -9,9 +9,9 @@ jobs:
           DYNAMODB_ENDPOINT: "http://localhost:4570"
           DYNAMODB_REGION: "us-west-2"
       - image: localstack/localstack
-          environment:
-            SERVICES: dynamodb:4570
-            DEFAULT_REGION: us-west-2
+        environment:
+          SERVICES: dynamodb:4570
+          DEFAULT_REGION: us-west-2
     working_directory: ~/repo
     steps:
       - checkout
