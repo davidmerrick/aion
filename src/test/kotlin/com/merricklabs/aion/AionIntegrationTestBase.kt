@@ -22,7 +22,7 @@ import org.testng.annotations.BeforeMethod
 import java.net.URI
 import java.util.concurrent.TimeUnit
 
-const val BASE_URI = "http://localhost:8080"
+const val BASE_URI = "http://localhost:8888"
 const val MEETUP_CAL_FILENAME = "meetup.ics"
 const val FACEBOOK_CAL_FILENAME = "facebook.ics"
 
