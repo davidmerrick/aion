@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4570:4570"
+      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - SERVICES=dynamodb:4570
+      - DEFAULT_REGION=us-west-2
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/private${TMPDIR}:/tmp/localstack"
+    networks:
+      - my_awesome_network
+
+  cli:
+    image: mesosphere/aws-cli
+    tty: true
+    volumes:
+      - ./dev_env:/project/dev_env
+    entrypoint: tail -f /dev/null
+    environment:
+      - AWS_ACCESS_KEY_ID=dummyaccess
+      - AWS_SECRET_ACCESS_KEY=dummysecret
+      - AWS_DEFAULT_REGION=us-east-1
+    networks:
+      - my_awesome_network
+    depends_on:
+      - localstack
+
+networks:
+  my_awesome_network:
