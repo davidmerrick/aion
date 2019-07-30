@@ -32,6 +32,19 @@ class DynamoTestClient : KoinComponent {
         dynamo = DynamoDB(client)
     }
 
+    /**
+     * Healthcheck for localstack container
+     */
+    fun isDynamoReady(): Boolean {
+        return try {
+            dynamo.listTables()
+            true
+        } catch (e: Exception) {
+            log.warn("Dynamo healthcheck failed")
+            false
+        }
+    }
+
     fun createTables() {
         deleteTables()
         val calendarTable = dynamo.createTable(
@@ -61,7 +74,7 @@ class DynamoTestClient : KoinComponent {
         try {
             table.delete()
             table.waitForDelete()
-        } catch(e: ResourceNotFoundException){
+        } catch (e: ResourceNotFoundException) {
             // Table doesn't exist, which is fine
         }
     }

@@ -16,6 +16,7 @@ dependencies {
     implementation(Libs.aws_serverless_java_container_jersey)
     implementation(Libs.jersey_media_json_jackson)
     implementation(Libs.jersey_hk2)
+    compile("org.awaitility:awaitility:4.0.0-rc1")
     implementation(Libs.geocalc)
     implementation(Libs.google_maps_services)
     implementation(Libs.kotlin_stdlib_jdk8)

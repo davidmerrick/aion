@@ -9,6 +9,7 @@ import com.merricklabs.aion.testutil.AionTestModule
 import com.merricklabs.aion.testutil.DynamoTestClient
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
+import org.awaitility.Awaitility.await
 import org.glassfish.grizzly.http.server.HttpServer
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory
 import org.koin.core.context.startKoin
@@ -19,6 +20,7 @@ import org.koin.test.mock.declareMock
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import java.net.URI
+import java.util.concurrent.TimeUnit
 
 const val BASE_URI = "http://localhost:8080"
 const val MEETUP_CAL_FILENAME = "meetup.ics"
@@ -28,6 +30,7 @@ const val FACEBOOK_CAL_FILENAME = "facebook.ics"
 open class AionIntegrationTestBase : KoinTest {
 
     private var server: HttpServer? = null
+    private val dynamoClient by inject<DynamoTestClient>()
 
     @BeforeMethod
     protected fun beforeMethod() {
@@ -45,8 +48,8 @@ open class AionIntegrationTestBase : KoinTest {
                     )
         }
 
-        initTables()
         initResources()
+        initTables()
     }
 
     @AfterMethod
@@ -56,7 +59,7 @@ open class AionIntegrationTestBase : KoinTest {
     }
 
     private fun initTables() {
-        val dynamoClient by inject<DynamoTestClient>()
+        await().atMost(30, TimeUnit.SECONDS).until { dynamoClient.isDynamoReady() }
         dynamoClient.createTables()
     }
 
