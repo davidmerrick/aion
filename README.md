@@ -33,6 +33,7 @@ CircleCI has a local tool to help validate your config here: https://circleci.co
 - Kotlin
 - Google Geocoder API
 - [Serverless Framework](https://serverless.com/) for deployment
+- [localstack](https://github.com/localstack/localstack) for testing
 
 # Reference
 
